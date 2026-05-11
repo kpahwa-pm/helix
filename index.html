@@ -4,7 +4,6 @@
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>Helix — AI Portfolio Analytics</title>
-<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 :root{
@@ -29,8 +28,6 @@
 }
 body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg);color:var(--text);height:100vh;overflow:hidden;transition:background .2s,color .2s}
 .app{display:grid;grid-template-columns:var(--sidebar) 1fr;grid-template-rows:var(--topbar) 1fr;height:100vh}
-
-/* Topbar */
 .topbar{grid-column:1/-1;background:var(--card);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 20px;gap:16px;z-index:10}
 .logo{display:flex;align-items:center;gap:8px}
 .logo-icon{width:28px;height:28px;background:var(--blue);border-radius:6px;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:13px}
@@ -44,8 +41,6 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .nav-dot{width:7px;height:7px;border-radius:50%;background:#22c55e}
 .theme-btn{width:32px;height:32px;border-radius:50%;border:1px solid var(--border);background:var(--bg3);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:15px}
 .avatar{width:30px;height:30px;border-radius:50%;background:var(--blue);color:#fff;font-size:12px;font-weight:600;display:flex;align-items:center;justify-content:center}
-
-/* Sidebar */
 .sidebar{background:var(--card);border-right:1px solid var(--border);display:flex;flex-direction:column;padding:16px 0;overflow-y:auto}
 .nav-section{font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:.06em;padding:12px 16px 4px;font-weight:600}
 .nav-item{display:flex;align-items:center;gap:10px;padding:9px 16px;font-size:13px;color:var(--text2);cursor:pointer;border-left:2px solid transparent;transition:all .15s}
@@ -55,15 +50,11 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .sidebar-bottom{margin-top:auto;padding:16px;border-top:1px solid var(--border)}
 .sidebar-credit{font-size:11px;color:var(--text3);line-height:1.8}
 .sidebar-credit em{font-style:italic;color:var(--text2);font-size:12px}
-
-/* Main */
 .main{overflow-y:auto;background:var(--bg)}
 .screen{display:none;padding:28px 32px;min-height:100%}
 .screen.active{display:block}
 .page-title{font-size:22px;font-weight:700;color:var(--text);margin-bottom:2px}
 .page-sub{font-size:13px;color:var(--text2);margin-bottom:24px;display:flex;align-items:center;gap:8px}
-
-/* Metrics */
 .metric-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:24px}
 .metric-card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:16px 20px}
 .metric-label{font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:.05em;font-weight:600;margin-bottom:8px}
@@ -76,34 +67,25 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .bt-green{border-top:3px solid var(--green)}
 .bt-amber{border-top:3px solid var(--amber)}
 .bt-red{border-top:3px solid var(--red)}
-
-/* Cards */
 .card{background:var(--card);border:1px solid var(--border);border-radius:10px;overflow:hidden;margin-bottom:20px}
 .card-header{padding:14px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px}
 .card-title{font-size:14px;font-weight:600;color:var(--text)}
 .card-sub{font-size:12px;color:var(--text3)}
-
-/* Table */
 table{width:100%;border-collapse:collapse;font-size:13px}
 th{padding:10px 14px;text-align:left;font-size:11px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:.04em;border-bottom:1px solid var(--border);background:var(--bg3);white-space:nowrap}
 td{padding:10px 14px;border-bottom:1px solid var(--border);color:var(--text2);white-space:nowrap}
 tr:last-child td{border-bottom:none}
-tr:hover td{background:var(--hover)}
+tr:hover td{background:var(--hover);cursor:pointer}
 .badge{display:inline-flex;align-items:center;padding:2px 8px;border-radius:99px;font-size:11px;font-weight:500}
 .badge-green{background:var(--green-light);color:var(--green)}
 .badge-red{background:var(--red-light);color:var(--red)}
 .badge-blue{background:var(--blue-light);color:var(--blue)}
 .badge-amber{background:var(--amber-light);color:var(--amber)}
-.badge-purple{background:rgba(139,92,246,.15);color:var(--purple)}
-
-/* Filters */
 .filter-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
 .filter-btn{padding:5px 14px;border-radius:99px;border:1px solid var(--border);background:var(--card);font-size:12px;color:var(--text2);cursor:pointer;transition:all .15s}
 .filter-btn:hover,.filter-btn.active{background:var(--blue);color:#fff;border-color:var(--blue)}
 .search-input{padding:6px 12px;border:1px solid var(--border);border-radius:6px;font-size:12px;color:var(--text);background:var(--input);outline:none;width:220px}
 .search-input:focus{border-color:var(--blue)}
-
-/* Charts */
 .charts-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:20px}
 .chart-card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:18px}
 .chart-title{font-size:13px;font-weight:600;color:var(--text);margin-bottom:14px}
@@ -112,32 +94,11 @@ tr:hover td{background:var(--hover)}
 .legend-item{display:flex;align-items:center;justify-content:space-between;font-size:11px;color:var(--text2)}
 .legend-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;margin-right:6px}
 .legend-left{display:flex;align-items:center}
-
-/* Risk bars */
 .risk-bar-wrap{display:flex;flex-direction:column;gap:10px}
 .risk-bar-item{display:flex;flex-direction:column;gap:4px}
 .risk-bar-label{display:flex;justify-content:space-between;font-size:11px;color:var(--text2)}
 .risk-bar-track{height:6px;background:var(--bg3);border-radius:99px;overflow:hidden}
 .risk-bar-fill{height:100%;border-radius:99px}
-
-/* Upload */
-.upload-zone{border:2px dashed var(--border);border-radius:12px;padding:40px;text-align:center;cursor:pointer;transition:all .2s;background:var(--card);display:block}
-.upload-zone:hover{border-color:var(--blue);background:var(--blue-light)}
-.upload-zone input{display:none}
-.loading-overlay{display:none;flex-direction:column;align-items:center;justify-content:center;gap:12px;padding:40px;background:var(--card);border-radius:12px;border:1px solid var(--border)}
-.spinner{width:36px;height:36px;border:3px solid var(--border);border-top-color:var(--blue);border-radius:50%;animation:spin 0.8s linear infinite}
-@keyframes spin{to{transform:rotate(360deg)}}
-.loading-text{font-size:14px;color:var(--text2)}
-.loading-sub{font-size:12px;color:var(--text3)}
-
-/* ESG bar */
-.esg-bar{height:8px;border-radius:99px;background:var(--bg3);overflow:hidden;margin-top:4px}
-.esg-fill{height:100%;border-radius:99px;background:linear-gradient(90deg,var(--red),var(--amber),var(--green))}
-
-/* Analyst bar */
-.analyst-bar{display:flex;height:8px;border-radius:99px;overflow:hidden;margin-top:6px}
-
-/* AI */
 .ai-chat{display:flex;flex-direction:column;height:calc(100vh - var(--topbar) - 260px);min-height:280px}
 .ai-messages{flex:1;overflow-y:auto;display:flex;flex-direction:column;gap:12px;padding:16px;background:var(--bg);border-radius:10px;border:1px solid var(--border);margin-bottom:12px}
 .ai-msg{display:flex;flex-direction:column;gap:4px}
@@ -160,8 +121,6 @@ tr:hover td{background:var(--hover)}
 .thinking span:nth-child(2){animation-delay:.2s}
 .thinking span:nth-child(3){animation-delay:.4s}
 @keyframes blink{0%,80%,100%{opacity:.2}40%{opacity:1}}
-
-/* Signals */
 .signals-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:20px}
 .signal-card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:16px}
 .signal-tag{display:inline-flex;align-items:center;gap:4px;font-size:11px;font-weight:600;padding:2px 8px;border-radius:99px;margin-bottom:10px}
@@ -174,30 +133,22 @@ tr:hover td{background:var(--hover)}
 .signal-actions{display:flex;gap:12px}
 .signal-investigate{font-size:12px;color:var(--blue);cursor:pointer;font-weight:500}
 .signal-dismiss{font-size:12px;color:var(--text3);cursor:pointer}
-
-/* Stress */
 .stress-bar{display:flex;align-items:flex-end;gap:8px;height:140px;margin:16px 0}
 .stress-col{display:flex;flex-direction:column;align-items:center;gap:6px;flex:1}
 .stress-label{font-size:10px;color:var(--text3);text-align:center;line-height:1.3}
 .stress-val{font-size:11px;font-weight:600}
-
 .btn{padding:8px 16px;border-radius:7px;font-size:13px;cursor:pointer;border:none;font-weight:500}
 .btn-primary{background:var(--blue);color:#fff}
 .back-btn{display:inline-flex;align-items:center;gap:6px;font-size:13px;color:var(--text2);cursor:pointer;margin-bottom:16px;background:none;border:none}
 .back-btn:hover{color:var(--blue)}
-
-/* Tab pills */
 .tab-row{display:flex;gap:4px;background:var(--bg3);border-radius:8px;padding:4px;margin-bottom:20px;width:fit-content}
 .tab-btn{padding:6px 16px;border-radius:6px;font-size:12px;cursor:pointer;border:none;background:none;color:var(--text2);font-weight:500;transition:all .15s}
 .tab-btn.active{background:var(--card);color:var(--text);box-shadow:0 1px 3px rgba(0,0,0,.2)}
-
 @media(max-width:900px){.metric-grid{grid-template-columns:1fr 1fr}.charts-grid{grid-template-columns:1fr}.signals-grid{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
 <div class="app">
-
-  <!-- Topbar -->
   <div class="topbar">
     <div class="logo">
       <div class="logo-icon">H</div>
@@ -208,13 +159,12 @@ tr:hover td{background:var(--hover)}
       <input type="text" placeholder="Search portfolios, positions, scenarios..."/>
     </div>
     <div class="topbar-right">
-      <div class="nav-live"><div class="nav-dot"></div><span id="nav-time">Live</span></div>
+      <div class="nav-live"><div class="nav-dot"></div>Live · NAV as of 2026-05-11</div>
       <button class="theme-btn" onclick="toggleTheme()" id="theme-btn">🌙</button>
       <div class="avatar">KP</div>
     </div>
   </div>
 
-  <!-- Sidebar -->
   <div class="sidebar">
     <div class="nav-section">Analytics</div>
     <div class="nav-item active" onclick="nav('overview')">
@@ -237,111 +187,86 @@ tr:hover td{background:var(--hover)}
     </div>
   </div>
 
-  <!-- Main -->
   <div class="main">
 
     <!-- OVERVIEW -->
     <div class="screen active" id="screen-overview">
       <div class="page-title">Overview</div>
-      <div class="page-sub" id="overview-sub">Upload a portfolio to see live analytics</div>
-      <div class="metric-grid" id="overview-metrics">
-        <div class="metric-card bt-blue"><div class="metric-label">Total Portfolio Value</div><div class="metric-value" id="ov-value">—</div><div class="metric-sub" id="ov-positions">Upload a portfolio to begin</div></div>
-        <div class="metric-card bt-green"><div class="metric-label">Day P&L</div><div class="metric-value" id="ov-pnl">—</div><div class="metric-sub" id="ov-pnl-pct">vs yesterday's close</div></div>
-        <div class="metric-card bt-amber"><div class="metric-label">Best Performer</div><div class="metric-value" id="ov-best">—</div><div class="metric-sub" id="ov-best-sub">Today</div></div>
-        <div class="metric-card bt-red"><div class="metric-label">Worst Performer</div><div class="metric-value" id="ov-worst">—</div><div class="metric-sub" id="ov-worst-sub">Today</div></div>
+      <div class="page-sub">7 mandates · $6.84B AUM</div>
+      <div class="metric-grid">
+        <div class="metric-card bt-blue"><div class="metric-label">Total AUM</div><div class="metric-value">$6.84B</div><div class="metric-sub">7 active portfolios</div></div>
+        <div class="metric-card bt-green"><div class="metric-label">Aggregate Day P&L</div><div class="metric-value">$4.21M</div><div class="metric-sub"><span class="up">↑ 0.06%</span> vs yesterday</div></div>
+        <div class="metric-card bt-green"><div class="metric-label">AUM-Weighted YTD</div><div class="metric-value">7.34%</div><div class="metric-sub"><span class="up">↑ 2.16%</span> vs 5.18% benchmark</div></div>
+        <div class="metric-card bt-amber"><div class="metric-label">Active Mandates</div><div class="metric-value">6</div><div class="metric-sub">1 ramping · 0 suspended</div></div>
       </div>
-      <div id="overview-charts" style="display:none">
-        <div class="charts-grid" id="ov-charts"></div>
-      </div>
-      <div class="card" id="overview-table-card">
+      <div class="card">
         <div class="card-header">
-          <div><div class="card-title">Holdings</div><div class="card-sub" id="holdings-sub">Upload a portfolio file to see live positions</div></div>
+          <div><div class="card-title">Portfolios</div><div class="card-sub">Click any row to view full analytics</div></div>
           <div class="filter-row">
-            <input class="search-input" placeholder="Search ticker, name, sector..." oninput="searchHoldings(this.value)" id="holdings-search"/>
-            <button class="filter-btn active" onclick="filterBySector('All',this)" id="sector-all">All</button>
+            <input class="search-input" placeholder="Search portfolio, ID, manager..." oninput="filterPortfolios(this.value)"/>
+            <button class="filter-btn active" onclick="filterStrat('All',this)">All</button>
+            <button class="filter-btn" onclick="filterStrat('Multi-Asset',this)">Multi-Asset</button>
+            <button class="filter-btn" onclick="filterStrat('Equity',this)">Equity</button>
+            <button class="filter-btn" onclick="filterStrat('Fixed Income',this)">Fixed Income</button>
+            <button class="filter-btn" onclick="filterStrat('Macro',this)">Macro</button>
           </div>
         </div>
-        <div style="overflow-x:auto">
-          <table>
-            <thead><tr>
-              <th>Ticker</th><th>Name</th><th>Sector</th><th>Qty</th>
-              <th>Live Price</th><th>Market Value</th><th>Weight</th>
-              <th>Day P&L</th><th>Day %</th>
-              <th>Analyst</th><th>ESG</th><th>Beta</th>
-            </tr></thead>
-            <tbody id="holdings-tbody">
-              <tr><td colspan="12" style="text-align:center;padding:40px;color:var(--text3)">Upload a portfolio file to see live positions →</td></tr>
-            </tbody>
-          </table>
-        </div>
+        <div style="overflow-x:auto"><table><thead><tr><th>ID / Name</th><th>Strategy</th><th>Manager</th><th>AUM ↓</th><th>YTD</th><th>Day P&L</th><th>VaR 95%</th><th>Positions</th><th>Status</th></tr></thead><tbody id="ptbody"></tbody></table></div>
       </div>
     </div>
 
     <!-- UPLOAD -->
     <div class="screen" id="screen-upload">
       <div class="page-title">Upload Portfolio</div>
-      <div class="page-sub">Upload your holdings — Helix fetches live prices and calculates everything automatically</div>
-
-      <div class="card" style="padding:20px;margin-bottom:20px">
-        <div class="card-title" style="margin-bottom:8px">Expected file format</div>
-        <div style="font-size:13px;color:var(--text2);margin-bottom:12px">Your file needs these 3 columns (column names can vary):</div>
-        <table style="width:auto">
-          <thead><tr><th>Name</th><th>Ticker</th><th>Quantity</th></tr></thead>
-          <tbody>
+      <div class="page-sub">Upload your holdings to get instant AI-powered analytics with live market data</div>
+      <div class="card" style="padding:24px;text-align:center">
+        <div style="font-size:36px;margin-bottom:12px">📂</div>
+        <div style="font-size:16px;font-weight:600;color:var(--text);margin-bottom:8px">Connect your portfolio</div>
+        <div style="font-size:13px;color:var(--text2);line-height:1.7;max-width:480px;margin:0 auto 20px">Upload a file with your holdings (Name, Ticker, Quantity) and Helix fetches live prices, calculates market values, P&L, analyst ratings and ESG scores automatically.</div>
+        <div style="background:var(--bg3);border-radius:8px;padding:16px;display:inline-block;text-align:left;margin-bottom:20px">
+          <div style="font-size:11px;color:var(--text3);margin-bottom:8px;text-transform:uppercase;letter-spacing:.05em">Expected format</div>
+          <table style="font-size:12px"><thead><tr><th>Name</th><th>Ticker</th><th>Quantity</th></tr></thead><tbody>
             <tr><td>Persistent Systems</td><td>PERSISTENT.NS</td><td>100</td></tr>
             <tr><td>Bharti Airtel</td><td>BHARTIARTL.NS</td><td>800</td></tr>
             <tr><td>Apple Inc</td><td>AAPL</td><td>50</td></tr>
-          </tbody>
-        </table>
-        <div style="font-size:11px;color:var(--text3);margin-top:10px">NSE tickers end with .NS · BSE with .BO · US stocks use plain ticker · LSE with .L</div>
-      </div>
-
-      <label class="upload-zone" id="upload-zone">
-        <input type="file" accept=".xlsx,.xls,.csv" onchange="handleUpload(this)"/>
-        <div style="font-size:36px;margin-bottom:12px">📂</div>
-        <div style="font-size:15px;font-weight:600;color:var(--text);margin-bottom:6px" id="upload-title">Drop your portfolio file here or click to browse</div>
-        <div style="font-size:13px;color:var(--text3)">Supports Excel (.xlsx, .xls) and CSV</div>
-      </label>
-
-      <div class="loading-overlay" id="loading-overlay">
-        <div class="spinner"></div>
-        <div class="loading-text" id="loading-text">Reading file...</div>
-        <div class="loading-sub" id="loading-sub">Please wait</div>
+          </tbody></table>
+        </div>
+        <div><button class="btn btn-primary" style="font-size:14px;padding:10px 24px" onclick="nav('ai');setTimeout(()=>{document.getElementById('ai-input').value='I want to analyse my portfolio. What information do I need to provide?';aiSend();},300)">Try AI Analysis Instead →</button></div>
       </div>
     </div>
 
-    <!-- PORTFOLIO DETAIL -->
+    <!-- DETAIL -->
     <div class="screen" id="screen-detail">
       <button class="back-btn" onclick="nav('overview')">
-        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>Overview
+        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>All Portfolios
       </button>
       <div style="font-size:22px;font-weight:700;color:var(--text);margin-bottom:2px" id="d-name"></div>
       <div style="font-size:13px;color:var(--text3);margin-bottom:20px" id="d-meta"></div>
       <div class="metric-grid" id="d-metrics"></div>
-
       <div class="tab-row">
         <button class="tab-btn active" onclick="detailTab('exposure',this)">Exposure</button>
         <button class="tab-btn" onclick="detailTab('risk',this)">Risk</button>
         <button class="tab-btn" onclick="detailTab('holdings',this)">Holdings</button>
-        <button class="tab-btn" onclick="detailTab('esg',this)">ESG & Ratings</button>
       </div>
-
-      <div id="dt-exposure">
-        <div class="charts-grid" id="d-charts"></div>
-      </div>
+      <div id="dt-exposure"><div class="charts-grid" id="d-charts"></div></div>
       <div id="dt-risk" style="display:none">
         <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px">
           <div class="card"><div class="card-header"><div class="card-title">Value at Risk</div></div><div style="padding:16px" id="d-var"></div></div>
-          <div class="card"><div class="card-header"><div class="card-title">Credit Quality</div></div><div style="padding:0 0 8px" id="d-credit"></div></div>
+          <div class="card"><div class="card-header"><div class="card-title">Credit Quality</div></div><div id="d-credit"></div></div>
           <div class="card"><div class="card-header"><div class="card-title">Liquidity</div></div><div style="padding:16px" id="d-liq"></div></div>
         </div>
       </div>
       <div id="dt-holdings" style="display:none">
-        <div class="card"><div class="card-header"><div class="card-title" id="d-holdings-title">Holdings</div></div>
-        <div style="overflow-x:auto"><table><thead><tr><th>Ticker</th><th>Name</th><th>Class</th><th>Sector</th><th>Region</th><th>Market Value</th><th>Weight</th><th>Day P&L</th><th>YTD P&L</th><th>Liq(D)</th></tr></thead><tbody id="d-holdings"></tbody></table></div></div>
-      </div>
-      <div id="dt-esg" style="display:none">
-        <div id="d-esg-content"></div>
+        <div class="card"><div class="card-header"><div class="card-title" id="d-holdings-title">Holdings</div>
+          <div class="filter-row">
+            <button class="filter-btn active" onclick="filterH('All',this)">All</button>
+            <button class="filter-btn" onclick="filterH('Equity',this)">Equity</button>
+            <button class="filter-btn" onclick="filterH('Fixed Income',this)">Fixed Income</button>
+            <button class="filter-btn" onclick="filterH('Derivative',this)">Derivative</button>
+            <button class="filter-btn" onclick="filterH('Cash',this)">Cash</button>
+          </div>
+        </div>
+        <div style="overflow-x:auto"><table><thead><tr><th>Ticker</th><th>Name</th><th>Class</th><th>Sector</th><th>Region</th><th>Market Value</th><th>Weight</th><th>Day P&L</th><th>YTD P&L</th><th>Liq(D)</th></tr></thead><tbody id="d-holdings"></tbody></table></div>
       </div>
     </div>
 
@@ -379,6 +304,7 @@ tr:hover td{background:var(--hover)}
               <div class="risk-bar-item"><div class="risk-bar-label"><span>8–30 days</span><span class="neutral">3.1%</span></div><div class="risk-bar-track"><div class="risk-bar-fill" style="width:3.1%;background:var(--amber)"></div></div></div>
               <div class="risk-bar-item"><div class="risk-bar-label"><span>&gt; 90 days</span><span class="down">7.9%</span></div><div class="risk-bar-track"><div class="risk-bar-fill" style="width:7.9%;background:var(--red)"></div></div></div>
             </div>
+            <p style="font-size:11px;color:var(--text2);margin-top:14px;line-height:1.5"><strong>Redemption coverage:</strong> 7-day liquid assets cover <span class="up" style="font-weight:600">72%</span> of NAV — above 25% prospectus floor.</p>
           </div>
         </div>
       </div>
@@ -425,10 +351,10 @@ tr:hover td{background:var(--hover)}
           </div>
         </div>
         <div style="padding:16px">
-          <div class="chips-row" id="ai-chips">
+          <div class="chips-row">
             <button class="chip" onclick="aiAsk(this.textContent)">What's my biggest concentration risk?</button>
-            <button class="chip" onclick="aiAsk(this.textContent)">Which holdings have a Sell rating?</button>
-            <button class="chip" onclick="aiAsk(this.textContent)">Analyse my ESG exposure</button>
+            <button class="chip" onclick="aiAsk(this.textContent)">Which portfolio has the highest VaR?</button>
+            <button class="chip" onclick="aiAsk(this.textContent)">Summarise credit risk on the fixed income book</button>
             <button class="chip" onclick="aiAsk(this.textContent)">What positions suffer most if rates rise 100bps?</button>
             <button class="chip" onclick="aiAsk(this.textContent)">Which portfolios are close to mandate limits?</button>
           </div>
@@ -436,11 +362,11 @@ tr:hover td{background:var(--hover)}
             <div class="ai-messages" id="ai-messages">
               <div class="ai-msg agent">
                 <div class="ai-label">✦ Helix</div>
-                <div class="ai-bubble">Hello! I'm Helix. Upload a portfolio on the Upload screen and I'll give you live AI analysis — concentration risks, analyst ratings, ESG scores, and actionable insights based on real market data.</div>
+                <div class="ai-bubble">Hello! I'm Helix, your AI analytics assistant. I have full visibility into your 7 mandates across $6.84B AUM — positions, risk metrics, compliance exceptions, and market exposures.\n\nAsk me anything about your book.</div>
               </div>
             </div>
             <div class="ai-input-row">
-              <input class="ai-input" id="ai-input" placeholder="Ask anything about your portfolio..." onkeydown="if(event.key==='Enter')aiSend()"/>
+              <input class="ai-input" id="ai-input" placeholder="e.g. What's my exposure to European banks?" onkeydown="if(event.key==='Enter')aiSend()"/>
               <button class="ai-send" id="ai-send-btn" onclick="aiSend()">Send ↗</button>
             </div>
           </div>
@@ -455,27 +381,34 @@ tr:hover td{background:var(--hover)}
 
 <script>
 const WORKER='https://proud-resonance-42fd.k-pahwa14-e82.workers.dev';
-let livePortfolio=null;
-let allHoldings=[];
-let aiHist=[];
-let aiRunning=false;
 let dark=true;
 
-// Theme
 function toggleTheme(){
   dark=!dark;
   document.documentElement.setAttribute('data-theme',dark?'dark':'light');
   document.getElementById('theme-btn').textContent=dark?'🌙':'☀️';
 }
 
-// Live clock
-function updateClock(){
-  const now=new Date();
-  document.getElementById('nav-time').textContent='Live · '+now.toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'});
-}
-setInterval(updateClock,1000);updateClock();
+const portfolios=[
+  {id:'FIC-007',name:'Investment Grade Credit',strat:'Fixed Income',mgr:'Priya Natarajan',aum:'$1.84B',ytd:'+3.12%',pnl:'-$184.2K',var:'0.61%',pos:218,status:'Active',ytdN:3.12,pnlN:-184200},
+  {id:'GMA-001',name:'Global Multi-Asset Fund',strat:'Multi-Asset',mgr:'Helena Park',aum:'$1.52B',ytd:'+7.42%',pnl:'+$1.28M',var:'1.42%',pos:142,status:'Active',ytdN:7.42,pnlN:1280000},
+  {id:'EQL-014',name:'Global Equity Long-Only',strat:'Equity',mgr:'Marcus Chen',aum:'$1.12B',ytd:'+11.24%',pnl:'+$2.84M',var:'2.18%',pos:86,status:'Active',ytdN:11.24,pnlN:2840000},
+  {id:'MAC-003',name:'Global Macro',strat:'Macro',mgr:'James Whitfield',aum:'$892.4M',ytd:'+4.88%',pnl:'+$412K',var:'1.95%',pos:54,status:'Active',ytdN:4.88,pnlN:412000},
+  {id:'ALT-009',name:'Alternatives & Private Equity',strat:'Multi-Asset',mgr:'Sarah Okonkwo',aum:'$812.8M',ytd:'+2.31%',pnl:'+$89K',var:'0.98%',pos:38,status:'Active',ytdN:2.31,pnlN:89000},
+  {id:'EQL-022',name:'US Small Cap Growth',strat:'Equity',mgr:'David Kim',aum:'$484.2M',ytd:'+9.14%',pnl:'+$624K',var:'2.84%',pos:112,status:'Active',ytdN:9.14,pnlN:624000},
+  {id:'EQL-021',name:'EM Equity Growth',strat:'Equity',mgr:'Raj Patel',aum:'$163.4M',ytd:'-1.42%',pnl:'-$42K',var:'3.12%',pos:67,status:'Ramping',ytdN:-1.42,pnlN:-42000},
+];
 
-// Nav
+const holdings=[
+  {ticker:'UST10Y',name:'US Treasury 10Y 4.25%',cls:'Fixed Income',sector:'Sovereign',region:'North America',val:'$312M',wt:'20.52%',dpnl:'-$125K',ytdpnl:'+$1.84M',liq:1},
+  {ticker:'MSFT',name:'Microsoft Corp',cls:'Equity',sector:'Technology',region:'North America',val:'$124.8M',wt:'8.21%',dpnl:'+$3.2M',ytdpnl:'+$18.4M',liq:1},
+  {ticker:'NVDA',name:'NVIDIA Corporation',cls:'Equity',sector:'Technology',region:'North America',val:'$98.4M',wt:'6.47%',dpnl:'+$5.8M',ytdpnl:'+$42.1M',liq:1},
+  {ticker:'BUND10Y',name:'German Bund 10Y 2.5%',cls:'Fixed Income',sector:'Sovereign',region:'Europe',val:'$84.2M',wt:'5.54%',dpnl:'+$420K',ytdpnl:'+$2.8M',liq:1},
+  {ticker:'ASML',name:'ASML Holding NV',cls:'Equity',sector:'Technology',region:'Europe',val:'$68.4M',wt:'4.50%',dpnl:'+$1.8M',ytdpnl:'+$8.4M',liq:1},
+  {ticker:'GLD',name:'SPDR Gold Shares ETF',cls:'Derivative',sector:'Commodity',region:'Global',val:'$62.8M',wt:'4.13%',dpnl:'+$1.2M',ytdpnl:'+$9.2M',liq:1},
+  {ticker:'CASH',name:'USD Cash & Equivalents',cls:'Cash',sector:'Cash',region:'Global',val:'$257.4M',wt:'16.93%',dpnl:'$0',ytdpnl:'$0',liq:1},
+];
+
 function nav(s,data){
   document.querySelectorAll('.screen').forEach(x=>x.classList.remove('active'));
   document.querySelectorAll('.nav-item').forEach(x=>x.classList.remove('active'));
@@ -484,297 +417,28 @@ function nav(s,data){
   if(s==='detail'&&data)loadDetail(data);
 }
 
-// Upload & fetch live prices
-async function handleUpload(input){
-  const file=input.files[0];if(!file)return;
-  document.getElementById('upload-zone').style.display='none';
-  const overlay=document.getElementById('loading-overlay');
-  overlay.style.display='flex';
-  setLoading('Reading file...','Parsing your portfolio');
-
-  const reader=new FileReader();
-  reader.onload=async e=>{
-    try{
-      const wb=XLSX.read(e.target.result,{type:'array',cellDates:true});
-      const ws=wb.Sheets[wb.SheetNames[0]];
-      const data=XLSX.utils.sheet_to_json(ws,{defval:''});
-      if(!data.length){alert('File appears empty');resetUpload();return;}
-
-      // Detect columns
-      const cols=Object.keys(data[0]);
-      const clean=s=>s.toLowerCase().replace(/[\s_\-]/g,'');
-      const findCol=(...v)=>cols.find(c=>v.some(x=>clean(c).includes(x)))||null;
-      const tickerCol=findCol('ticker','symbol','scrip','code');
-      const nameCol=findCol('name','instrument','security','stock');
-      const qtyCol=findCol('qty','quantity','units','shares','holding');
-
-      if(!tickerCol||!qtyCol){
-        alert(`Could not find required columns.\nDetected columns: ${cols.join(', ')}\n\nPlease make sure your file has Ticker and Quantity columns.`);
-        resetUpload();return;
-      }
-
-      // Extract positions
-      const positions=data.filter(r=>r[tickerCol]&&r[qtyCol]).map(r=>({
-        name:nameCol?String(r[nameCol]):'',
-        ticker:String(r[tickerCol]).trim().toUpperCase(),
-        qty:parseFloat(String(r[qtyCol]).replace(/,/g,''))||0
-      })).filter(p=>p.qty>0);
-
-      if(!positions.length){alert('No valid positions found.');resetUpload();return;}
-
-      setLoading(`Fetching live prices...`,`Getting market data for ${positions.length} securities`);
-
-      // Fetch live prices in batches of 10
-      const batchSize=10;
-      const priceData={};
-      for(let i=0;i<positions.length;i+=batchSize){
-        const batch=positions.slice(i,i+batchSize);
-        const tickers=batch.map(p=>p.ticker).join(',');
-        setLoading(`Fetching prices...`,`${Math.min(i+batchSize,positions.length)} of ${positions.length} securities`);
-        try{
-          const res=await fetch(`${WORKER}/prices?tickers=${encodeURIComponent(tickers)}`);
-          const d=await res.json();
-          Object.assign(priceData,d);
-        }catch(e){console.error('Price fetch error:',e);}
-      }
-
-      setLoading('Calculating analytics...','Computing positions, P&L and exposure');
-
-      // Build enriched holdings
-      const holdings=positions.map(p=>{
-        const pd=priceData[p.ticker]||{};
-        const price=pd.price||0;
-        const prev=pd.previousClose||0;
-        const mv=price*p.qty;
-        const dpnl=(price-prev)*p.qty;
-        const dpct=prev>0?((price-prev)/prev)*100:0;
-        return{
-          ...p,
-          price,previousClose:prev,
-          marketValue:mv,
-          dayPnl:dpnl,
-          dayPct:dpct,
-          currency:pd.currency||'',
-          shortName:pd.shortName||p.name||p.ticker,
-          sector:pd.sector||'Unknown',
-          industry:pd.industry||'',
-          country:pd.country||'',
-          beta:pd.beta||null,
-          peRatio:pd.peRatio||null,
-          marketCap:pd.marketCap||0,
-          analystRating:pd.analystRating||'N/A',
-          analystCount:pd.analystCount||0,
-          strongBuy:pd.strongBuy||0,
-          buy:pd.buy||0,
-          hold:pd.hold||0,
-          sell:pd.sell||0,
-          strongSell:pd.strongSell||0,
-          targetPrice:pd.targetPrice||null,
-          esgTotal:pd.esgTotal||null,
-          esgEnv:pd.esgEnv||null,
-          esgSocial:pd.esgSocial||null,
-          esgGov:pd.esgGov||null,
-          dividendYield:pd.dividendYield||null,
-          returnOnEquity:pd.returnOnEquity||null,
-          debtToEquity:pd.debtToEquity||null,
-          fiftyTwoWeekHigh:pd.fiftyTwoWeekHigh||0,
-          fiftyTwoWeekLow:pd.fiftyTwoWeekLow||0,
-          error:pd.error||null,
-        };
-      });
-
-      // Calculate total & weights
-      const totalMV=holdings.reduce((s,h)=>s+h.marketValue,0);
-      holdings.forEach(h=>h.weight=totalMV>0?(h.marketValue/totalMV)*100:0);
-      const totalDayPnl=holdings.reduce((s,h)=>s+h.dayPnl,0);
-
-      // Store globally
-      livePortfolio={holdings,totalMV,totalDayPnl,file:file.name,loadedAt:new Date()};
-      allHoldings=[...holdings];
-
-      // Update AI context
-      updateAIContext(holdings,totalMV,totalDayPnl);
-
-      setLoading('Building your dashboard...','Almost ready');
-      await new Promise(r=>setTimeout(r,500));
-
-      overlay.style.display='none';
-      document.getElementById('upload-zone').style.display='block';
-      document.getElementById('upload-title').textContent=`✅ ${file.name} loaded — ${holdings.length} positions`;
-
-      // Update overview
-      updateOverview(holdings,totalMV,totalDayPnl);
-      nav('overview');
-
-    }catch(err){
-      console.error(err);
-      alert('Error processing file: '+err.message);
-      resetUpload();
-    }
-  };
-  reader.readAsArrayBuffer(file);
-}
-
-function setLoading(text,sub){
-  document.getElementById('loading-text').textContent=text;
-  document.getElementById('loading-sub').textContent=sub;
-}
-
-function resetUpload(){
-  document.getElementById('loading-overlay').style.display='none';
-  document.getElementById('upload-zone').style.display='block';
-}
-
-// Format helpers
-const fmtCcy=(v,ccy='')=>{
-  if(!v&&v!==0)return'—';
-  const abs=Math.abs(v);
-  let s=abs>=1e9?(abs/1e9).toFixed(2)+'B':abs>=1e6?(abs/1e6).toFixed(2)+'M':abs>=1e3?(abs/1e3).toFixed(1)+'K':abs.toFixed(2);
-  return(v<0?'-':'')+s+(ccy?' '+ccy:'');
-};
-const fmtPct=v=>v==null?'—':(v>=0?'+':'')+v.toFixed(2)+'%';
-const fmtNum=v=>v==null?'—':v.toLocaleString();
-
-function analystBadge(r){
-  if(!r||r==='N/A')return'<span style="color:var(--text3);font-size:11px">N/A</span>';
-  const map={'Strong Buy':'badge-green','Buy':'badge-green','Hold':'badge-amber','Sell':'badge-red','Strong Sell':'badge-red'};
-  return`<span class="badge ${map[r]||'badge-blue'}" style="font-size:10px">${r}</span>`;
-}
-
-function esgPill(score){
-  if(!score)return'<span style="color:var(--text3);font-size:11px">N/A</span>';
-  const color=score<20?'var(--green)':score<30?'var(--amber)':'var(--red)';
-  return`<span style="font-size:11px;font-weight:600;color:${color}">${score.toFixed(0)}</span>`;
-}
-
-// Update overview after upload
-function updateOverview(holdings,totalMV,totalDayPnl){
-  const sorted=[...holdings].sort((a,b)=>b.dayPct-a.dayPct);
-  const best=sorted[0],worst=sorted[sorted.length-1];
-  const pnlPct=totalMV>0?(totalDayPnl/(totalMV-totalDayPnl))*100:0;
-
-  document.getElementById('overview-sub').textContent=`${holdings.length} positions · ${new Date().toLocaleDateString('en-GB')}`;
-  document.getElementById('ov-value').textContent=fmtCcy(totalMV);
-  document.getElementById('ov-pnl').textContent=fmtCcy(totalDayPnl);
-  document.getElementById('ov-pnl').className='metric-value '+(totalDayPnl>=0?'up':'down');
-  document.getElementById('ov-pnl-pct').innerHTML=`<span class="${totalDayPnl>=0?'up':'down'}">${fmtPct(pnlPct)}</span> vs yesterday`;
-  document.getElementById('ov-positions').textContent=`${holdings.length} live positions`;
-
-  if(best){
-    document.getElementById('ov-best').textContent=best.ticker;
-    document.getElementById('ov-best').className='metric-value up';
-    document.getElementById('ov-best-sub').textContent=fmtPct(best.dayPct)+' today';
-  }
-  if(worst){
-    document.getElementById('ov-worst').textContent=worst.ticker;
-    document.getElementById('ov-worst').className='metric-value down';
-    document.getElementById('ov-worst-sub').textContent=fmtPct(worst.dayPct)+' today';
-  }
-
-  // Sector filter buttons
-  const sectors=[...new Set(holdings.map(h=>h.sector).filter(Boolean))].sort();
-  const filterRow=document.getElementById('sector-all').parentElement;
-  filterRow.querySelectorAll('.filter-btn:not(#sector-all)').forEach(b=>b.remove());
-  sectors.forEach(s=>{
-    const b=document.createElement('button');
-    b.className='filter-btn';b.textContent=s;
-    b.onclick=()=>filterBySector(s,b);
-    filterRow.appendChild(b);
-  });
-
-  // Charts
-  document.getElementById('overview-charts').style.display='block';
-  buildOverviewCharts(holdings,totalMV);
-
-  // Holdings table
-  document.getElementById('holdings-sub').textContent=`${holdings.length} positions · Total ${fmtCcy(totalMV)}`;
-  renderHoldingsTable(holdings);
-}
-
-function buildOverviewCharts(holdings,totalMV){
-  // Sector breakdown
-  const sectorMap={};
-  holdings.forEach(h=>{const s=h.sector||'Unknown';sectorMap[s]=(sectorMap[s]||0)+h.marketValue;});
-  const sectorData=Object.entries(sectorMap).sort((a,b)=>b[1]-a[1]).slice(0,6).map(([k,v],i)=>([k,parseFloat(((v/totalMV)*100).toFixed(1)),COLORS[i]]));
-
-  // Analyst breakdown
-  const ratingMap={'Strong Buy':0,'Buy':0,'Hold':0,'Sell':0,'Strong Sell':0,'N/A':0};
-  holdings.forEach(h=>{const r=h.analystRating||'N/A';ratingMap[r]=(ratingMap[r]||0)+1;});
-  const analystData=Object.entries(ratingMap).filter(([,v])=>v>0).map(([k,v],i)=>([k,parseFloat(((v/holdings.length)*100).toFixed(1)),['#22c55e','#86efac','#f59e0b','#ef4444','#dc2626','#64748b'][i]]));
-
-  // Country
-  const countryMap={};
-  holdings.forEach(h=>{const c=h.country||'Unknown';countryMap[c]=(countryMap[c]||0)+h.marketValue;});
-  const countryData=Object.entries(countryMap).sort((a,b)=>b[1]-a[1]).slice(0,5).map(([k,v],i)=>([k,parseFloat(((v/totalMV)*100).toFixed(1)),COLORS[i]]));
-
-  document.getElementById('ov-charts').innerHTML=
-    donut('Sector Exposure',sectorData)+
-    donut('Analyst Consensus',analystData)+
-    donut('Country Exposure',countryData);
-}
-
-const COLORS=['#3b82f6','#22c55e','#f59e0b','#8b5cf6','#ef4444','#06b6d4','#f43f5e','#84cc16'];
-
-function renderHoldingsTable(list){
-  document.getElementById('holdings-tbody').innerHTML=list.length===0
-    ?'<tr><td colspan="12" style="text-align:center;padding:30px;color:var(--text3)">No positions match your filter</td></tr>'
-    :list.map(h=>`<tr>
-      <td style="font-weight:600;color:var(--blue)">${h.ticker}</td>
-      <td style="max-width:180px;overflow:hidden;text-overflow:ellipsis;color:var(--text)">${h.shortName||h.name||'—'}</td>
-      <td><span style="font-size:11px;color:var(--text3)">${h.sector||'—'}</span></td>
-      <td>${fmtNum(h.qty)}</td>
-      <td>${h.price?h.price.toLocaleString(undefined,{minimumFractionDigits:2,maximumFractionDigits:2})+' '+(h.currency||''):'—'}</td>
-      <td style="font-weight:500">${fmtCcy(h.marketValue,h.currency)}</td>
-      <td>${h.weight?h.weight.toFixed(2)+'%':'—'}</td>
-      <td class="${h.dayPnl>=0?'up':'down'}">${fmtCcy(h.dayPnl,h.currency)}</td>
-      <td class="${h.dayPct>=0?'up':'down'}">${fmtPct(h.dayPct)}</td>
-      <td>${analystBadge(h.analystRating)}</td>
-      <td>${esgPill(h.esgTotal)}</td>
-      <td>${h.beta!=null?h.beta.toFixed(2):'—'}</td>
+function renderP(list){
+  document.getElementById('ptbody').innerHTML=list.map(p=>`
+    <tr onclick='nav("detail",${JSON.stringify(p).replace(/'/g,"&#39;")})'>
+      <td><div style="font-weight:600;color:var(--blue)">${p.id}</div><div style="font-size:11px;color:var(--text3)">${p.name}</div></td>
+      <td>${p.strat}</td><td>${p.mgr}</td>
+      <td style="font-weight:600">${p.aum}</td>
+      <td class="${p.ytdN>=0?'up':'down'}" style="font-weight:500">${p.ytd}</td>
+      <td class="${p.pnlN>=0?'up':'down'}" style="font-weight:500">${p.pnl}</td>
+      <td>${p.var}</td><td>${p.pos}</td>
+      <td><span class="badge ${p.status==='Active'?'badge-green':'badge-blue'}">${p.status}</span></td>
     </tr>`).join('');
 }
 
-function searchHoldings(q){
-  if(!livePortfolio)return;
-  const f=allHoldings.filter(h=>[h.ticker,h.shortName,h.sector,h.name].some(v=>(v||'').toLowerCase().includes(q.toLowerCase())));
-  renderHoldingsTable(f);
+function filterPortfolios(q){
+  renderP(portfolios.filter(p=>[p.id,p.name,p.mgr].some(v=>v.toLowerCase().includes(q.toLowerCase()))));
 }
 
-function filterBySector(s,btn){
+function filterStrat(s,btn){
   document.querySelectorAll('#screen-overview .filter-btn').forEach(b=>b.classList.remove('active'));
   btn.classList.add('active');
-  renderHoldingsTable(s==='All'?allHoldings:allHoldings.filter(h=>h.sector===s));
+  renderP(s==='All'?portfolios:portfolios.filter(p=>p.strat===s));
 }
-
-// Donut chart
-function donut(title,data){
-  const r=38,cx=45,cy=45,circ=2*Math.PI*r;
-  let off=0;
-  const slices=data.map(([lbl,pct,col])=>{
-    const dash=circ*pct/100,gap=circ-dash;
-    const s=`<circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="${col}" stroke-width="14" stroke-dasharray="${dash} ${gap}" stroke-dashoffset="${-off}"/>`;
-    off+=dash;return{s,lbl,pct,col};
-  });
-  return`<div class="chart-card"><div class="chart-title">${title}</div><div class="donut-wrap">
-    <div style="position:relative;width:90px;height:90px;flex-shrink:0"><svg viewBox="0 0 90 90" width="90" height="90" style="transform:rotate(-90deg)">${slices.map(s=>s.s).join('')}</svg></div>
-    <div class="legend">${slices.map(s=>`<div class="legend-item"><div class="legend-left"><div class="legend-dot" style="background:${s.col}"></div>${s.lbl}</div><span style="font-weight:500">${s.pct}%</span></div>`).join('')}</div>
-  </div></div>`;
-}
-
-// Detail view (demo portfolios)
-const demoPortfolios=[
-  {id:'FIC-007',name:'Investment Grade Credit',strat:'Fixed Income',mgr:'Priya Natarajan',aum:'$1.84B',ytd:'+3.12%',pnl:'-$184.2K',var:'0.61%',pos:218,status:'Active',ytdN:3.12,pnlN:-184200},
-  {id:'GMA-001',name:'Global Multi-Asset Fund',strat:'Multi-Asset',mgr:'Helena Park',aum:'$1.52B',ytd:'+7.42%',pnl:'+$1.28M',var:'1.42%',pos:142,status:'Active',ytdN:7.42,pnlN:1280000},
-  {id:'EQL-014',name:'Global Equity Long-Only',strat:'Equity',mgr:'Marcus Chen',aum:'$1.12B',ytd:'+11.24%',pnl:'+$2.84M',var:'2.18%',pos:86,status:'Active',ytdN:11.24,pnlN:2840000},
-];
-
-const demoHoldings=[
-  {ticker:'UST10Y',name:'US Treasury 10Y',cls:'Fixed Income',sector:'Sovereign',region:'North America',val:'$312M',wt:'20.52%',dpnl:'-$125K',ytdpnl:'+$1.84M',liq:1},
-  {ticker:'MSFT',name:'Microsoft Corp',cls:'Equity',sector:'Technology',region:'North America',val:'$124.8M',wt:'8.21%',dpnl:'+$3.2M',ytdpnl:'+$18.4M',liq:1},
-  {ticker:'NVDA',name:'NVIDIA Corporation',cls:'Equity',sector:'Technology',region:'North America',val:'$98.4M',wt:'6.47%',dpnl:'+$5.8M',ytdpnl:'+$42.1M',liq:1},
-  {ticker:'BUND10Y',name:'German Bund 10Y',cls:'Fixed Income',sector:'Sovereign',region:'Europe',val:'$84.2M',wt:'5.54%',dpnl:'+$420K',ytdpnl:'+$2.8M',liq:1},
-  {ticker:'CASH',name:'USD Cash',cls:'Cash',sector:'Cash',region:'Global',val:'$257.4M',wt:'16.93%',dpnl:'$0',ytdpnl:'$0',liq:1},
-];
 
 function loadDetail(p){
   document.getElementById('d-name').textContent=p.name;
@@ -803,23 +467,46 @@ function loadDetail(p){
     <div class="risk-bar-item"><div class="risk-bar-label"><span>2–7 days</span><span>12.6%</span></div><div class="risk-bar-track"><div class="risk-bar-fill" style="width:12.6%;background:var(--blue)"></div></div></div>
     <div class="risk-bar-item"><div class="risk-bar-label"><span>>90 days</span><span class="down">7.9%</span></div><div class="risk-bar-track"><div class="risk-bar-fill" style="width:7.9%;background:var(--red)"></div></div></div>
   </div>`;
-  document.getElementById('d-holdings').innerHTML=demoHoldings.map(h=>`<tr>
+  renderH('All');
+  document.getElementById('d-holdings-title').textContent=`Holdings · ${p.pos} positions`;
+}
+
+function renderH(cls){
+  const f=cls==='All'?holdings:holdings.filter(h=>h.cls===cls);
+  document.getElementById('d-holdings').innerHTML=f.map(h=>`<tr>
     <td style="font-weight:600">${h.ticker}</td><td>${h.name}</td><td>${h.cls}</td><td>${h.sector}</td><td>${h.region}</td>
-    <td>${h.val}</td><td>${h.wt}</td>
+    <td style="font-weight:500">${h.val}</td><td>${h.wt}</td>
     <td class="${h.dpnl.startsWith('-')?'down':'up'}">${h.dpnl}</td>
     <td class="${h.ytdpnl.startsWith('-')?'down':'up'}">${h.ytdpnl}</td>
     <td>${h.liq}</td>
   </tr>`).join('');
-  document.getElementById('d-holdings-title').textContent=`Holdings · ${p.pos} positions`;
+}
+
+function filterH(cls,btn){
+  document.querySelectorAll('#dt-holdings .filter-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');renderH(cls);
 }
 
 function detailTab(tab,btn){
   document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
   btn.classList.add('active');
-  ['exposure','risk','holdings','esg'].forEach(t=>document.getElementById('dt-'+t).style.display=t===tab?'block':'none');
+  ['exposure','risk','holdings'].forEach(t=>document.getElementById('dt-'+t).style.display=t===tab?'block':'none');
 }
 
-// Stress bars
+function donut(title,data){
+  const r=38,cx=45,cy=45,circ=2*Math.PI*r;
+  let off=0;
+  const slices=data.map(([lbl,pct,col])=>{
+    const dash=circ*pct/100,gap=circ-dash;
+    const s=`<circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="${col}" stroke-width="14" stroke-dasharray="${dash} ${gap}" stroke-dashoffset="${-off}"/>`;
+    off+=dash;return{s,lbl,pct,col};
+  });
+  return`<div class="chart-card"><div class="chart-title">${title}</div><div class="donut-wrap">
+    <div style="position:relative;width:90px;height:90px;flex-shrink:0"><svg viewBox="0 0 90 90" width="90" height="90" style="transform:rotate(-90deg)">${slices.map(s=>s.s).join('')}</svg></div>
+    <div class="legend">${slices.map(s=>`<div class="legend-item"><div class="legend-left"><div class="legend-dot" style="background:${s.col}"></div>${s.lbl}</div><span style="font-weight:500">${s.pct}%</span></div>`).join('')}</div>
+  </div></div>`;
+}
+
 const stressData=[
   {l:'2008 GFC',v:-17.8,c:'#ef4444'},{l:'COVID Mar 2020',v:-11.2,c:'#ef4444'},
   {l:'Rates +200bps',v:-4.8,c:'#f59e0b'},{l:'EM Crisis',v:-3.9,c:'#f59e0b'},
@@ -831,10 +518,9 @@ document.getElementById('stress-bars').innerHTML=stressData.map(s=>{
   return`<div class="stress-col"><div class="stress-val" style="color:${s.c}">${s.v}%</div><div style="width:100%;height:${h}px;background:${s.c};border-radius:4px 4px 0 0"></div><div class="stress-label">${s.l}</div></div>`;
 }).join('');
 
-// Signals
 const signals=[
   {type:'alert',title:'Tech concentration above target',body:'Technology sector now represents 8.9% of NAV vs. 6.5% policy target. NVIDIA contributed 67% of YTD tech gains.',ctx:'Tech at 8.9% vs 6.5% target. NVIDIA drove 67% of tech gains. What should I do?'},
-  {type:'risk',title:'Liquidity bucket >90d trending up',body:'Illiquid alternatives reached 16.1% of NAV, approaching the 18% prospectus limit.',ctx:'Illiquid bucket at 16.1% approaching 18% limit. What is the risk and what action should I take?'},
+  {type:'risk',title:'Liquidity bucket >90d trending up',body:'Illiquid alternatives reached 16.1% of NAV, approaching the 18% prospectus limit. New PE capital calls due Q3 2026.',ctx:'Illiquid bucket at 16.1% approaching 18% limit. What is the risk and what action should I take?'},
   {type:'opportunity',title:'Duration mismatch vs. benchmark',body:'Portfolio duration is 1.4y shorter than benchmark. Fed pivoting dovish — extending duration could add ~30bps carry.',ctx:'Duration 1.4y short of benchmark. Fed turning dovish. Should I extend duration and how?'},
   {type:'news',title:'ASML — China export controls',body:'New EUV restrictions effective Q3. Modelled impact: −4 to −7% on ASML revenue. Position +5.8% YTD.',ctx:'ASML faces China EUV export restrictions from Q3. Our position is $68.4M +5.8% YTD. What should I do?'},
 ];
@@ -852,47 +538,19 @@ document.getElementById('signals-grid').innerHTML=signals.map(s=>`
     </div>
   </div>`).join('');
 
-// AI context
-let aiContext=`You are Helix, an AI assistant for an institutional portfolio management and risk analytics platform.
+let aiHist=[],aiRunning=false;
+const AI_CTX=`You are Helix, an AI assistant for an institutional portfolio management and risk analytics platform.
 
-FIRM DATA (demo):
-- 7 mandates, $6.84B AUM
-- Key portfolios: FIC-007 (Investment Grade Credit, $1.84B), GMA-001 (Global Multi-Asset, $1.52B), EQL-014 (Global Equity, $1.12B)
-- Firm VaR 95%: 1.38%, Volatility: 8.94%
-- Open compliance exceptions: 23
+FIRM DATA:
+- Total AUM: $6.84B across 7 mandates
+- Portfolios: FIC-007 (Investment Grade Credit, $1.84B, PM Priya Natarajan, YTD +3.12%), GMA-001 (Global Multi-Asset, $1.52B, PM Helena Park, YTD +7.42%), EQL-014 (Global Equity, $1.12B, PM Marcus Chen, YTD +11.24%), MAC-003 (Global Macro, $892.4M, PM James Whitfield, YTD +4.88%), ALT-009 (Alternatives, $812.8M, PM Sarah Okonkwo, YTD +2.31%), EQL-022 (US Small Cap, $484.2M, PM David Kim, YTD +9.14%), EQL-021 (EM Equity, $163.4M, PM Raj Patel, YTD -1.42%)
+- Firm VaR 95%: 1.38%, Volatility: 8.94%, Max Drawdown: -8.40%
+- Open compliance exceptions: 23, Breach rate: 1.8%
+- Active signals: Tech at 8.9% vs 6.5% target; Illiquid bucket 16.1% approaching 18% limit; Duration 1.4y short of benchmark; ASML China EUV restrictions
 
 Respond like a senior risk analyst. Be concise, specific, and actionable.`;
 
-function updateAIContext(holdings,totalMV,totalDayPnl){
-  const top10=[...holdings].sort((a,b)=>b.marketValue-a.marketValue).slice(0,10);
-  const sectorMap={};holdings.forEach(h=>{const s=h.sector||'Unknown';sectorMap[s]=(sectorMap[s]||0)+h.marketValue;});
-  const sectors=Object.entries(sectorMap).sort((a,b)=>b[1]-a[1]).map(([k,v])=>`${k}: ${((v/totalMV)*100).toFixed(1)}%`).join(', ');
-  const ratingDist={};holdings.forEach(h=>{const r=h.analystRating||'N/A';ratingDist[r]=(ratingDist[r]||0)+1;});
-  const ratings=Object.entries(ratingDist).map(([k,v])=>`${k}: ${v}`).join(', ');
-  const withEsg=holdings.filter(h=>h.esgTotal);
-  const avgEsg=withEsg.length?withEsg.reduce((s,h)=>s+h.esgTotal,0)/withEsg.length:null;
-
-  aiContext=`You are Helix, an AI assistant for an institutional portfolio management and risk analytics platform.
-
-LIVE PORTFOLIO DATA (uploaded by user):
-- Total positions: ${holdings.length}
-- Total market value: ${fmtCcy(totalMV)}
-- Day P&L: ${fmtCcy(totalDayPnl)} (${fmtPct(totalMV>0?(totalDayPnl/(totalMV-totalDayPnl))*100:0)})
-- Sector exposure: ${sectors}
-- Analyst ratings distribution: ${ratings}
-- Average ESG score: ${avgEsg?avgEsg.toFixed(1):'N/A'} (lower = better in Yahoo's methodology)
-
-TOP 10 HOLDINGS:
-${top10.map(h=>`- ${h.ticker} (${h.shortName||h.name}): ${fmtCcy(h.marketValue)} | ${h.weight?.toFixed(1)}% weight | Day: ${fmtPct(h.dayPct)} | Analyst: ${h.analystRating} | ESG: ${h.esgTotal?.toFixed(0)||'N/A'} | Beta: ${h.beta?.toFixed(2)||'N/A'}`).join('\n')}
-
-Respond like a senior risk analyst. Be concise, specific, and actionable. Use real numbers from the data above.`;
-
-  // Reset AI chat with new context
-  aiHist=[];
-  const chat=document.getElementById('ai-messages');
-  chat.innerHTML=`<div class="ai-msg agent"><div class="ai-label">✦ Helix</div><div class="ai-bubble">Portfolio loaded — ${holdings.length} positions, total value ${fmtCcy(totalMV)}.\n\nDay P&L: ${fmtCcy(totalDayPnl)} (${fmtPct(totalMV>0?(totalDayPnl/(totalMV-totalDayPnl))*100:0)})\n\nI can see your live positions, analyst ratings, ESG scores and sector exposure. Ask me anything about your book.</div></div>`;
-}
-
+function aiAsk(q){document.getElementById('ai-input').value=q;aiSend();}
 function investigateSignal(ctx){nav('ai');setTimeout(()=>{document.getElementById('ai-input').value=ctx;aiSend();},300);}
 
 async function aiSend(){
@@ -910,7 +568,7 @@ async function aiSend(){
   aiHist.push({role:'user',content:msg});
   try{
     const res=await fetch(WORKER,{method:'POST',headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({model:'claude-sonnet-4-5',max_tokens:1000,system:aiContext,messages:aiHist})});
+      body:JSON.stringify({model:'claude-sonnet-4-5',max_tokens:1000,system:AI_CTX,messages:aiHist})});
     const data=await res.json();
     document.getElementById('ai-think')?.remove();
     const text=data.content?.[0]?.text||'Sorry, no response.';
@@ -927,6 +585,8 @@ async function aiSend(){
   chat.scrollTop=chat.scrollHeight;
   aiRunning=false;document.getElementById('ai-send-btn').disabled=false;
 }
+
+renderP(portfolios);
 </script>
 </body>
 </html>
