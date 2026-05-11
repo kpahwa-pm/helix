@@ -218,20 +218,29 @@ tr:hover td{background:var(--hover);cursor:pointer}
     <!-- UPLOAD -->
     <div class="screen" id="screen-upload">
       <div class="page-title">Upload Portfolio</div>
-      <div class="page-sub">Upload your holdings to get instant AI-powered analytics with live market data</div>
-      <div class="card" style="padding:24px;text-align:center">
-        <div style="font-size:36px;margin-bottom:12px">📂</div>
-        <div style="font-size:16px;font-weight:600;color:var(--text);margin-bottom:8px">Connect your portfolio</div>
-        <div style="font-size:13px;color:var(--text2);line-height:1.7;max-width:480px;margin:0 auto 20px">Upload a file with your holdings (Name, Ticker, Quantity) and Helix fetches live prices, calculates market values, P&L, analyst ratings and ESG scores automatically.</div>
-        <div style="background:var(--bg3);border-radius:8px;padding:16px;display:inline-block;text-align:left;margin-bottom:20px">
-          <div style="font-size:11px;color:var(--text3);margin-bottom:8px;text-transform:uppercase;letter-spacing:.05em">Expected format</div>
-          <table style="font-size:12px"><thead><tr><th>Name</th><th>Ticker</th><th>Quantity</th></tr></thead><tbody>
-            <tr><td>Persistent Systems</td><td>PERSISTENT.NS</td><td>100</td></tr>
-            <tr><td>Bharti Airtel</td><td>BHARTIARTL.NS</td><td>800</td></tr>
-            <tr><td>Apple Inc</td><td>AAPL</td><td>50</td></tr>
-          </tbody></table>
+      <div class="page-sub">Connect your holdings for live AI-powered analytics</div>
+      <div class="card" style="padding:40px;text-align:center">
+        <div style="font-size:48px;margin-bottom:16px">📡</div>
+        <div style="font-size:18px;font-weight:600;color:var(--text);margin-bottom:10px">Live Portfolio Analytics</div>
+        <div style="font-size:13px;color:var(--text2);line-height:1.8;max-width:520px;margin:0 auto 28px">Upload your holdings file and Helix automatically fetches live market prices, calculates positions, P&L, analyst ratings and ESG scores — powered by real-time market data.</div>
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;max-width:560px;margin:0 auto 28px">
+          <div style="background:var(--bg3);border-radius:10px;padding:16px;text-align:center">
+            <div style="font-size:24px;margin-bottom:8px">📈</div>
+            <div style="font-size:12px;font-weight:600;color:var(--text);margin-bottom:4px">Live Prices</div>
+            <div style="font-size:11px;color:var(--text3)">Real-time from Yahoo Finance</div>
+          </div>
+          <div style="background:var(--bg3);border-radius:10px;padding:16px;text-align:center">
+            <div style="font-size:24px;margin-bottom:8px">🎯</div>
+            <div style="font-size:12px;font-weight:600;color:var(--text);margin-bottom:4px">Analyst Ratings</div>
+            <div style="font-size:11px;color:var(--text3)">Buy / Hold / Sell consensus</div>
+          </div>
+          <div style="background:var(--bg3);border-radius:10px;padding:16px;text-align:center">
+            <div style="font-size:24px;margin-bottom:8px">🌱</div>
+            <div style="font-size:12px;font-weight:600;color:var(--text);margin-bottom:4px">ESG Scores</div>
+            <div style="font-size:11px;color:var(--text3)">Environmental, Social, Governance</div>
+          </div>
         </div>
-        <div><button class="btn btn-primary" style="font-size:14px;padding:10px 24px" onclick="nav('ai');setTimeout(()=>{document.getElementById('ai-input').value='I want to analyse my portfolio. What information do I need to provide?';aiSend();},300)">Try AI Analysis Instead →</button></div>
+        <button class="btn btn-primary" style="font-size:14px;padding:10px 24px" onclick="nav('ai');setTimeout(()=>{document.getElementById('ai-input').value='Tell me about the portfolio upload feature and what analytics Helix provides.';aiSend();},300)">Ask Helix about this feature →</button>
       </div>
     </div>
 
@@ -587,6 +596,39 @@ async function aiSend(){
 }
 
 renderP(portfolios);
+
+// Stress bars
+const stressData=[
+  {l:'2008 GFC',v:-17.8,c:'#ef4444'},{l:'COVID Mar 2020',v:-11.2,c:'#ef4444'},
+  {l:'Rates +200bps',v:-4.8,c:'#f59e0b'},{l:'EM Crisis',v:-3.9,c:'#f59e0b'},
+  {l:'Tech −30%',v:-3.2,c:'#f59e0b'},{l:'USD +10%',v:-2.8,c:'#f59e0b'},
+];
+const maxS=Math.max(...stressData.map(s=>Math.abs(s.v)));
+document.getElementById('stress-bars').innerHTML=stressData.map(s=>{
+  const h=Math.round(Math.abs(s.v)/maxS*120);
+  return`<div class="stress-col"><div class="stress-val" style="color:${s.c}">${s.v}%</div><div style="width:100%;height:${h}px;background:${s.c};border-radius:4px 4px 0 0"></div><div class="stress-label">${s.l}</div></div>`;
+}).join('');
+
+// Signals
+const signals=[
+  {type:'alert',title:'Tech concentration above target',body:'Technology sector now represents 8.9% of NAV vs. 6.5% policy target. NVIDIA contributed 67% of YTD tech gains.',ctx:'Tech at 8.9% vs 6.5% target. NVIDIA drove 67% of tech gains. What should I do?'},
+  {type:'risk',title:'Liquidity bucket >90d trending up',body:'Illiquid alternatives reached 16.1% of NAV, approaching the 18% prospectus limit. New PE capital calls due Q3 2026.',ctx:'Illiquid bucket at 16.1% approaching 18% limit. What is the risk and what action should I take?'},
+  {type:'opportunity',title:'Duration mismatch vs. benchmark',body:'Portfolio duration is 1.4y shorter than benchmark. Fed pivoting dovish — extending duration could add ~30bps carry.',ctx:'Duration 1.4y short of benchmark. Fed turning dovish. Should I extend duration and how?'},
+  {type:'news',title:'ASML — China export controls',body:'New EUV restrictions effective Q3. Modelled impact: −4 to −7% on ASML revenue. Position +5.8% YTD.',ctx:'ASML faces China EUV export restrictions from Q3. Our position is $68.4M +5.8% YTD. What should I do?'},
+];
+document.getElementById('signals-grid').innerHTML=signals.map(s=>`
+  <div class="signal-card">
+    <div style="display:flex;justify-content:space-between;align-items:flex-start">
+      <span class="signal-tag ${s.type}">${s.type.toUpperCase()}</span>
+      <span style="font-size:11px;color:var(--text3)">2h ago</span>
+    </div>
+    <div class="signal-title">${s.title}</div>
+    <div class="signal-body">${s.body}</div>
+    <div class="signal-actions">
+      <span class="signal-investigate" onclick="investigateSignal('${s.ctx.replace(/'/g,"\\'")}')">Investigate →</span>
+      <span class="signal-dismiss" onclick="this.closest('.signal-card').style.opacity='.3'">Dismiss</span>
+    </div>
+  </div>`).join('');
 </script>
 </body>
 </html>
