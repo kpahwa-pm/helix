@@ -8,111 +8,106 @@
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 :root{
-  --blue:#3b82f6;--blue-light:rgba(59,130,246,.12);--blue-mid:rgba(59,130,246,.2);
+  --blue:#3b82f6;--blue-light:rgba(59,130,246,.12);
   --green:#22c55e;--green-light:rgba(34,197,94,.12);
   --red:#ef4444;--red-light:rgba(239,68,68,.12);
   --amber:#f59e0b;--amber-light:rgba(245,158,11,.12);
+  --purple:#8b5cf6;--cyan:#06b6d4;
   --sidebar:224px;--topbar:56px;
-  --transition:background .2s,color .2s,border-color .2s;
 }
 [data-theme="dark"]{
   --bg:#0f1117;--bg2:#161b27;--bg3:#1e2535;
   --border:#2a3347;--border2:#1e2535;
   --text:#e2e8f0;--text2:#94a3b8;--text3:#64748b;
-  --card:#161b27;--card2:#1e2535;
-  --hover:#1e2535;
-  --input:#1e2535;
+  --card:#161b27;--hover:#1e2535;--input:#1e2535;
 }
 [data-theme="light"]{
   --bg:#f8fafc;--bg2:#fff;--bg3:#f1f5f9;
   --border:#e2e8f0;--border2:#f1f5f9;
   --text:#0f172a;--text2:#475569;--text3:#94a3b8;
-  --card:#fff;--card2:#f8fafc;
-  --hover:#f8fafc;
-  --input:#f8fafc;
+  --card:#fff;--hover:#f8fafc;--input:#f8fafc;
 }
-body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg);color:var(--text);height:100vh;overflow:hidden;transition:var(--transition)}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg);color:var(--text);height:100vh;overflow:hidden;transition:background .2s,color .2s}
 .app{display:grid;grid-template-columns:var(--sidebar) 1fr;grid-template-rows:var(--topbar) 1fr;height:100vh}
 
 /* Topbar */
-.topbar{grid-column:1/-1;background:var(--card);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 20px;gap:16px;z-index:10;transition:var(--transition)}
+.topbar{grid-column:1/-1;background:var(--card);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 20px;gap:16px;z-index:10}
 .logo{display:flex;align-items:center;gap:8px}
 .logo-icon{width:28px;height:28px;background:var(--blue);border-radius:6px;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:13px}
-.logo-text{font-size:14px;font-weight:700;color:var(--text);line-height:1}
-.logo-sub{font-size:10px;color:var(--text3);font-weight:400;text-transform:uppercase;letter-spacing:.05em}
-.search-bar{flex:1;max-width:480px;display:flex;align-items:center;gap:8px;background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:0 12px;height:34px;transition:var(--transition)}
+.logo-text{font-size:14px;font-weight:700;color:var(--text)}
+.logo-sub{font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:.05em}
+.search-bar{flex:1;max-width:480px;display:flex;align-items:center;gap:8px;background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:0 12px;height:34px}
 .search-bar input{flex:1;border:none;background:none;font-size:13px;color:var(--text);outline:none}
 .search-bar input::placeholder{color:var(--text3)}
-.topbar-right{display:flex;align-items:center;gap:12px}
+.topbar-right{display:flex;align-items:center;gap:10px}
 .nav-live{font-size:12px;color:var(--text2);display:flex;align-items:center;gap:6px}
 .nav-dot{width:7px;height:7px;border-radius:50%;background:#22c55e}
-.theme-toggle{width:32px;height:32px;border-radius:50%;border:1px solid var(--border);background:var(--bg3);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:15px;transition:var(--transition)}
-.theme-toggle:hover{background:var(--hover)}
+.theme-btn{width:32px;height:32px;border-radius:50%;border:1px solid var(--border);background:var(--bg3);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:15px}
 .avatar{width:30px;height:30px;border-radius:50%;background:var(--blue);color:#fff;font-size:12px;font-weight:600;display:flex;align-items:center;justify-content:center}
 
 /* Sidebar */
-.sidebar{background:var(--card);border-right:1px solid var(--border);display:flex;flex-direction:column;gap:2px;overflow-y:auto;padding:16px 0;transition:var(--transition)}
+.sidebar{background:var(--card);border-right:1px solid var(--border);display:flex;flex-direction:column;padding:16px 0;overflow-y:auto}
 .nav-section{font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:.06em;padding:12px 16px 4px;font-weight:600}
 .nav-item{display:flex;align-items:center;gap:10px;padding:9px 16px;font-size:13px;color:var(--text2);cursor:pointer;border-left:2px solid transparent;transition:all .15s}
 .nav-item:hover{background:var(--hover);color:var(--text)}
 .nav-item.active{background:var(--blue-light);color:var(--blue);border-left-color:var(--blue);font-weight:500}
-.nav-icon{width:16px;height:16px;opacity:.8;flex-shrink:0}
-.sidebar-bottom{margin-top:auto;padding:16px;border-top:1px solid var(--border2)}
-.sidebar-credit{font-size:11px;color:var(--text3);line-height:1.6}
+.nav-icon{width:16px;height:16px;flex-shrink:0}
+.sidebar-bottom{margin-top:auto;padding:16px;border-top:1px solid var(--border)}
+.sidebar-credit{font-size:11px;color:var(--text3);line-height:1.8}
 .sidebar-credit em{font-style:italic;color:var(--text2);font-size:12px}
 
 /* Main */
-.main{overflow-y:auto;background:var(--bg);transition:var(--transition)}
+.main{overflow-y:auto;background:var(--bg)}
 .screen{display:none;padding:28px 32px;min-height:100%}
 .screen.active{display:block}
 .page-title{font-size:22px;font-weight:700;color:var(--text);margin-bottom:2px}
 .page-sub{font-size:13px;color:var(--text2);margin-bottom:24px;display:flex;align-items:center;gap:8px}
 
-/* Metric cards */
+/* Metrics */
 .metric-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:24px}
-.metric-card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:16px 20px;transition:var(--transition)}
+.metric-card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:16px 20px}
 .metric-label{font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:.05em;font-weight:600;margin-bottom:8px}
 .metric-value{font-size:24px;font-weight:700;color:var(--text);margin-bottom:4px}
 .metric-sub{font-size:12px;color:var(--text2)}
 .up{color:var(--green)}
 .down{color:var(--red)}
 .neutral{color:var(--amber)}
-.metric-card.bt-blue{border-top:3px solid var(--blue)}
-.metric-card.bt-green{border-top:3px solid var(--green)}
-.metric-card.bt-amber{border-top:3px solid var(--amber)}
-.metric-card.bt-red{border-top:3px solid var(--red)}
+.bt-blue{border-top:3px solid var(--blue)}
+.bt-green{border-top:3px solid var(--green)}
+.bt-amber{border-top:3px solid var(--amber)}
+.bt-red{border-top:3px solid var(--red)}
 
 /* Cards */
-.card{background:var(--card);border:1px solid var(--border);border-radius:10px;overflow:hidden;margin-bottom:20px;transition:var(--transition)}
-.card-header{padding:14px 20px;border-bottom:1px solid var(--border2);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px}
+.card{background:var(--card);border:1px solid var(--border);border-radius:10px;overflow:hidden;margin-bottom:20px}
+.card-header{padding:14px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px}
 .card-title{font-size:14px;font-weight:600;color:var(--text)}
 .card-sub{font-size:12px;color:var(--text3)}
 
 /* Table */
 table{width:100%;border-collapse:collapse;font-size:13px}
-th{padding:10px 16px;text-align:left;font-size:11px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:.04em;border-bottom:1px solid var(--border);background:var(--bg3)}
-td{padding:11px 16px;border-bottom:1px solid var(--border2);color:var(--text2)}
+th{padding:10px 14px;text-align:left;font-size:11px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:.04em;border-bottom:1px solid var(--border);background:var(--bg3);white-space:nowrap}
+td{padding:10px 14px;border-bottom:1px solid var(--border);color:var(--text2);white-space:nowrap}
 tr:last-child td{border-bottom:none}
-tr:hover td{background:var(--hover);cursor:pointer}
+tr:hover td{background:var(--hover)}
 .badge{display:inline-flex;align-items:center;padding:2px 8px;border-radius:99px;font-size:11px;font-weight:500}
 .badge-green{background:var(--green-light);color:var(--green)}
 .badge-red{background:var(--red-light);color:var(--red)}
 .badge-blue{background:var(--blue-light);color:var(--blue)}
 .badge-amber{background:var(--amber-light);color:var(--amber)}
+.badge-purple{background:rgba(139,92,246,.15);color:var(--purple)}
 
 /* Filters */
 .filter-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
 .filter-btn{padding:5px 14px;border-radius:99px;border:1px solid var(--border);background:var(--card);font-size:12px;color:var(--text2);cursor:pointer;transition:all .15s}
 .filter-btn:hover,.filter-btn.active{background:var(--blue);color:#fff;border-color:var(--blue)}
-.search-input{padding:6px 12px;border:1px solid var(--border);border-radius:6px;font-size:12px;color:var(--text);background:var(--input);outline:none;width:220px;transition:var(--transition)}
+.search-input{padding:6px 12px;border:1px solid var(--border);border-radius:6px;font-size:12px;color:var(--text);background:var(--input);outline:none;width:220px}
 .search-input:focus{border-color:var(--blue)}
 
 /* Charts */
 .charts-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:20px}
-.chart-card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:18px;transition:var(--transition)}
+.chart-card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:18px}
 .chart-title{font-size:13px;font-weight:600;color:var(--text);margin-bottom:14px}
 .donut-wrap{display:flex;align-items:center;gap:16px}
-.donut{position:relative;width:90px;height:90px;flex-shrink:0}
 .legend{flex:1;display:flex;flex-direction:column;gap:5px}
 .legend-item{display:flex;align-items:center;justify-content:space-between;font-size:11px;color:var(--text2)}
 .legend-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;margin-right:6px}
@@ -126,9 +121,21 @@ tr:hover td{background:var(--hover);cursor:pointer}
 .risk-bar-fill{height:100%;border-radius:99px}
 
 /* Upload */
-.upload-zone{border:2px dashed var(--border);border-radius:12px;padding:40px;text-align:center;cursor:pointer;transition:all .2s;background:var(--card)}
+.upload-zone{border:2px dashed var(--border);border-radius:12px;padding:40px;text-align:center;cursor:pointer;transition:all .2s;background:var(--card);display:block}
 .upload-zone:hover{border-color:var(--blue);background:var(--blue-light)}
 .upload-zone input{display:none}
+.loading-overlay{display:none;flex-direction:column;align-items:center;justify-content:center;gap:12px;padding:40px;background:var(--card);border-radius:12px;border:1px solid var(--border)}
+.spinner{width:36px;height:36px;border:3px solid var(--border);border-top-color:var(--blue);border-radius:50%;animation:spin 0.8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.loading-text{font-size:14px;color:var(--text2)}
+.loading-sub{font-size:12px;color:var(--text3)}
+
+/* ESG bar */
+.esg-bar{height:8px;border-radius:99px;background:var(--bg3);overflow:hidden;margin-top:4px}
+.esg-fill{height:100%;border-radius:99px;background:linear-gradient(90deg,var(--red),var(--amber),var(--green))}
+
+/* Analyst bar */
+.analyst-bar{display:flex;height:8px;border-radius:99px;overflow:hidden;margin-top:6px}
 
 /* AI */
 .ai-chat{display:flex;flex-direction:column;height:calc(100vh - var(--topbar) - 260px);min-height:280px}
@@ -141,9 +148,9 @@ tr:hover td{background:var(--hover);cursor:pointer}
 .ai-msg.agent .ai-bubble{background:var(--card);border:1px solid var(--border);border-bottom-left-radius:3px;color:var(--text)}
 .ai-label{font-size:11px;color:var(--text3);margin-bottom:2px}
 .ai-input-row{display:flex;gap:8px}
-.ai-input{flex:1;padding:10px 14px;border:1px solid var(--border);border-radius:8px;font-size:13px;color:var(--text);background:var(--input);outline:none;transition:var(--transition)}
+.ai-input{flex:1;padding:10px 14px;border:1px solid var(--border);border-radius:8px;font-size:13px;color:var(--text);background:var(--input);outline:none}
 .ai-input:focus{border-color:var(--blue)}
-.ai-send{padding:10px 18px;background:var(--blue);color:#fff;border:none;border-radius:8px;font-size:13px;cursor:pointer;white-space:nowrap;font-weight:500}
+.ai-send{padding:10px 18px;background:var(--blue);color:#fff;border:none;border-radius:8px;font-size:13px;cursor:pointer;font-weight:500}
 .ai-send:disabled{opacity:.4;cursor:not-allowed}
 .chips-row{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px}
 .chip{font-size:11px;padding:5px 12px;border-radius:99px;border:1px solid var(--border);cursor:pointer;color:var(--text2);background:var(--card);transition:all .15s}
@@ -156,7 +163,7 @@ tr:hover td{background:var(--hover);cursor:pointer}
 
 /* Signals */
 .signals-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:20px}
-.signal-card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:16px;transition:var(--transition)}
+.signal-card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:16px}
 .signal-tag{display:inline-flex;align-items:center;gap:4px;font-size:11px;font-weight:600;padding:2px 8px;border-radius:99px;margin-bottom:10px}
 .signal-tag.alert{background:var(--red-light);color:var(--red)}
 .signal-tag.risk{background:var(--amber-light);color:var(--amber)}
@@ -164,10 +171,9 @@ tr:hover td{background:var(--hover);cursor:pointer}
 .signal-tag.news{background:var(--blue-light);color:var(--blue)}
 .signal-title{font-size:14px;font-weight:600;color:var(--text);margin-bottom:6px}
 .signal-body{font-size:12px;color:var(--text2);line-height:1.6;margin-bottom:12px}
-.signal-actions{display:flex;gap:12px;align-items:center}
+.signal-actions{display:flex;gap:12px}
 .signal-investigate{font-size:12px;color:var(--blue);cursor:pointer;font-weight:500}
 .signal-dismiss{font-size:12px;color:var(--text3);cursor:pointer}
-.signal-time{font-size:11px;color:var(--text3)}
 
 /* Stress */
 .stress-bar{display:flex;align-items:flex-end;gap:8px;height:140px;margin:16px 0}
@@ -175,26 +181,17 @@ tr:hover td{background:var(--hover);cursor:pointer}
 .stress-label{font-size:10px;color:var(--text3);text-align:center;line-height:1.3}
 .stress-val{font-size:11px;font-weight:600}
 
-/* Buttons */
 .btn{padding:8px 16px;border-radius:7px;font-size:13px;cursor:pointer;border:none;font-weight:500}
 .btn-primary{background:var(--blue);color:#fff}
-.btn-primary:hover{opacity:.9}
-.btn-secondary{background:var(--bg3);color:var(--text);border:1px solid var(--border)}
-
-/* Back */
 .back-btn{display:inline-flex;align-items:center;gap:6px;font-size:13px;color:var(--text2);cursor:pointer;margin-bottom:16px;background:none;border:none}
 .back-btn:hover{color:var(--blue)}
-.portfolio-name-big{font-size:24px;font-weight:700;color:var(--text);margin-bottom:4px}
-.portfolio-meta-small{font-size:13px;color:var(--text3);margin-bottom:20px}
 
-/* Compliance */
-.compliance-hero{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:32px;text-align:center;margin-bottom:20px}
+/* Tab pills */
+.tab-row{display:flex;gap:4px;background:var(--bg3);border-radius:8px;padding:4px;margin-bottom:20px;width:fit-content}
+.tab-btn{padding:6px 16px;border-radius:6px;font-size:12px;cursor:pointer;border:none;background:none;color:var(--text2);font-weight:500;transition:all .15s}
+.tab-btn.active{background:var(--card);color:var(--text);box-shadow:0 1px 3px rgba(0,0,0,.2)}
 
-@media(max-width:900px){
-  .metric-grid{grid-template-columns:1fr 1fr}
-  .charts-grid{grid-template-columns:1fr}
-  .signals-grid{grid-template-columns:1fr}
-}
+@media(max-width:900px){.metric-grid{grid-template-columns:1fr 1fr}.charts-grid{grid-template-columns:1fr}.signals-grid{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
@@ -204,18 +201,15 @@ tr:hover td{background:var(--hover);cursor:pointer}
   <div class="topbar">
     <div class="logo">
       <div class="logo-icon">H</div>
-      <div>
-        <div class="logo-text">Helix</div>
-        <div class="logo-sub">Risk & Analytics</div>
-      </div>
+      <div><div class="logo-text">Helix</div><div class="logo-sub">Risk & Analytics</div></div>
     </div>
     <div class="search-bar">
       <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
       <input type="text" placeholder="Search portfolios, positions, scenarios..."/>
     </div>
     <div class="topbar-right">
-      <div class="nav-live"><div class="nav-dot"></div>Live · NAV as of 2026-05-11</div>
-      <button class="theme-toggle" onclick="toggleTheme()" id="theme-btn" title="Toggle theme">🌙</button>
+      <div class="nav-live"><div class="nav-dot"></div><span id="nav-time">Live</span></div>
+      <button class="theme-btn" onclick="toggleTheme()" id="theme-btn">🌙</button>
       <div class="avatar">KP</div>
     </div>
   </div>
@@ -249,67 +243,105 @@ tr:hover td{background:var(--hover);cursor:pointer}
     <!-- OVERVIEW -->
     <div class="screen active" id="screen-overview">
       <div class="page-title">Overview</div>
-      <div class="page-sub">7 mandates · $6.84B AUM</div>
-      <div class="metric-grid">
-        <div class="metric-card bt-blue"><div class="metric-label">Total AUM</div><div class="metric-value">$6.84B</div><div class="metric-sub">7 active portfolios</div></div>
-        <div class="metric-card bt-green"><div class="metric-label">Aggregate Day P&L</div><div class="metric-value">$4.21M</div><div class="metric-sub"><span class="up">↑ 0.06%</span> vs yesterday</div></div>
-        <div class="metric-card bt-green"><div class="metric-label">AUM-Weighted YTD</div><div class="metric-value">7.34%</div><div class="metric-sub"><span class="up">↑ 2.16%</span> vs 5.18% benchmark</div></div>
-        <div class="metric-card bt-amber"><div class="metric-label">Active Mandates</div><div class="metric-value">6</div><div class="metric-sub">1 ramping · 0 suspended</div></div>
+      <div class="page-sub" id="overview-sub">Upload a portfolio to see live analytics</div>
+      <div class="metric-grid" id="overview-metrics">
+        <div class="metric-card bt-blue"><div class="metric-label">Total Portfolio Value</div><div class="metric-value" id="ov-value">—</div><div class="metric-sub" id="ov-positions">Upload a portfolio to begin</div></div>
+        <div class="metric-card bt-green"><div class="metric-label">Day P&L</div><div class="metric-value" id="ov-pnl">—</div><div class="metric-sub" id="ov-pnl-pct">vs yesterday's close</div></div>
+        <div class="metric-card bt-amber"><div class="metric-label">Best Performer</div><div class="metric-value" id="ov-best">—</div><div class="metric-sub" id="ov-best-sub">Today</div></div>
+        <div class="metric-card bt-red"><div class="metric-label">Worst Performer</div><div class="metric-value" id="ov-worst">—</div><div class="metric-sub" id="ov-worst-sub">Today</div></div>
       </div>
-      <div class="card">
+      <div id="overview-charts" style="display:none">
+        <div class="charts-grid" id="ov-charts"></div>
+      </div>
+      <div class="card" id="overview-table-card">
         <div class="card-header">
-          <div><div class="card-title">Portfolios</div><div class="card-sub">Click any row to view full analytics</div></div>
+          <div><div class="card-title">Holdings</div><div class="card-sub" id="holdings-sub">Upload a portfolio file to see live positions</div></div>
           <div class="filter-row">
-            <input class="search-input" placeholder="Search portfolio, ID, manager..." oninput="filterPortfolios(this.value)"/>
-            <button class="filter-btn active" onclick="filterStrat('All',this)">All</button>
-            <button class="filter-btn" onclick="filterStrat('Multi-Asset',this)">Multi-Asset</button>
-            <button class="filter-btn" onclick="filterStrat('Equity',this)">Equity</button>
-            <button class="filter-btn" onclick="filterStrat('Fixed Income',this)">Fixed Income</button>
-            <button class="filter-btn" onclick="filterStrat('Macro',this)">Macro</button>
+            <input class="search-input" placeholder="Search ticker, name, sector..." oninput="searchHoldings(this.value)" id="holdings-search"/>
+            <button class="filter-btn active" onclick="filterBySector('All',this)" id="sector-all">All</button>
           </div>
         </div>
-        <div style="overflow-x:auto"><table><thead><tr><th>ID / Name</th><th>Strategy</th><th>Manager</th><th>AUM ↓</th><th>YTD</th><th>Day P&L</th><th>VaR 95%</th><th>Positions</th><th>Status</th></tr></thead><tbody id="ptbody"></tbody></table></div>
+        <div style="overflow-x:auto">
+          <table>
+            <thead><tr>
+              <th>Ticker</th><th>Name</th><th>Sector</th><th>Qty</th>
+              <th>Live Price</th><th>Market Value</th><th>Weight</th>
+              <th>Day P&L</th><th>Day %</th>
+              <th>Analyst</th><th>ESG</th><th>Beta</th>
+            </tr></thead>
+            <tbody id="holdings-tbody">
+              <tr><td colspan="12" style="text-align:center;padding:40px;color:var(--text3)">Upload a portfolio file to see live positions →</td></tr>
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
 
     <!-- UPLOAD -->
     <div class="screen" id="screen-upload">
       <div class="page-title">Upload Portfolio</div>
-      <div class="page-sub">Upload your holdings file to get instant AI-powered analytics</div>
-      <label class="upload-zone">
+      <div class="page-sub">Upload your holdings — Helix fetches live prices and calculates everything automatically</div>
+
+      <div class="card" style="padding:20px;margin-bottom:20px">
+        <div class="card-title" style="margin-bottom:8px">Expected file format</div>
+        <div style="font-size:13px;color:var(--text2);margin-bottom:12px">Your file needs these 3 columns (column names can vary):</div>
+        <table style="width:auto">
+          <thead><tr><th>Name</th><th>Ticker</th><th>Quantity</th></tr></thead>
+          <tbody>
+            <tr><td>Persistent Systems</td><td>PERSISTENT.NS</td><td>100</td></tr>
+            <tr><td>Bharti Airtel</td><td>BHARTIARTL.NS</td><td>800</td></tr>
+            <tr><td>Apple Inc</td><td>AAPL</td><td>50</td></tr>
+          </tbody>
+        </table>
+        <div style="font-size:11px;color:var(--text3);margin-top:10px">NSE tickers end with .NS · BSE with .BO · US stocks use plain ticker · LSE with .L</div>
+      </div>
+
+      <label class="upload-zone" id="upload-zone">
         <input type="file" accept=".xlsx,.xls,.csv" onchange="handleUpload(this)"/>
         <div style="font-size:36px;margin-bottom:12px">📂</div>
-        <div style="font-size:15px;font-weight:600;color:var(--text);margin-bottom:6px" id="upload-title">Drop your portfolio file here</div>
-        <div style="font-size:13px;color:var(--text3)">Supports Excel (.xlsx, .xls) and CSV · Holdings, positions, or any portfolio data</div>
+        <div style="font-size:15px;font-weight:600;color:var(--text);margin-bottom:6px" id="upload-title">Drop your portfolio file here or click to browse</div>
+        <div style="font-size:13px;color:var(--text3)">Supports Excel (.xlsx, .xls) and CSV</div>
       </label>
-      <div id="upload-result" style="display:none;margin-top:20px">
-        <div class="metric-grid" id="upload-metrics"></div>
-        <div class="card"><div class="card-header"><div class="card-title" id="upload-table-title">Holdings Preview</div><div class="card-sub">Showing first 50 rows</div></div><div style="overflow-x:auto"><table><thead id="upload-thead"></thead><tbody id="upload-tbody"></tbody></table></div></div>
+
+      <div class="loading-overlay" id="loading-overlay">
+        <div class="spinner"></div>
+        <div class="loading-text" id="loading-text">Reading file...</div>
+        <div class="loading-sub" id="loading-sub">Please wait</div>
       </div>
     </div>
 
-    <!-- DETAIL -->
+    <!-- PORTFOLIO DETAIL -->
     <div class="screen" id="screen-detail">
       <button class="back-btn" onclick="nav('overview')">
-        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>All Portfolios
+        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>Overview
       </button>
-      <div class="portfolio-name-big" id="d-name"></div>
-      <div class="portfolio-meta-small" id="d-meta"></div>
+      <div style="font-size:22px;font-weight:700;color:var(--text);margin-bottom:2px" id="d-name"></div>
+      <div style="font-size:13px;color:var(--text3);margin-bottom:20px" id="d-meta"></div>
       <div class="metric-grid" id="d-metrics"></div>
-      <div class="charts-grid" id="d-charts"></div>
-      <div class="card"><div class="card-header"><div class="card-title">Risk Assessment</div><div class="card-sub">1-day parametric</div></div><div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:20px;padding:20px" id="d-risk"></div></div>
-      <div class="card">
-        <div class="card-header">
-          <div class="card-title">Holdings</div>
-          <div class="filter-row">
-            <button class="filter-btn active" onclick="filterH('All',this)">All</button>
-            <button class="filter-btn" onclick="filterH('Equity',this)">Equity</button>
-            <button class="filter-btn" onclick="filterH('Fixed Income',this)">Fixed Income</button>
-            <button class="filter-btn" onclick="filterH('Derivative',this)">Derivative</button>
-            <button class="filter-btn" onclick="filterH('Cash',this)">Cash</button>
-          </div>
+
+      <div class="tab-row">
+        <button class="tab-btn active" onclick="detailTab('exposure',this)">Exposure</button>
+        <button class="tab-btn" onclick="detailTab('risk',this)">Risk</button>
+        <button class="tab-btn" onclick="detailTab('holdings',this)">Holdings</button>
+        <button class="tab-btn" onclick="detailTab('esg',this)">ESG & Ratings</button>
+      </div>
+
+      <div id="dt-exposure">
+        <div class="charts-grid" id="d-charts"></div>
+      </div>
+      <div id="dt-risk" style="display:none">
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px">
+          <div class="card"><div class="card-header"><div class="card-title">Value at Risk</div></div><div style="padding:16px" id="d-var"></div></div>
+          <div class="card"><div class="card-header"><div class="card-title">Credit Quality</div></div><div style="padding:0 0 8px" id="d-credit"></div></div>
+          <div class="card"><div class="card-header"><div class="card-title">Liquidity</div></div><div style="padding:16px" id="d-liq"></div></div>
         </div>
-        <div style="overflow-x:auto"><table><thead><tr><th>Ticker</th><th>Name</th><th>Class</th><th>Sector</th><th>Region</th><th>Market Value</th><th>Weight</th><th>Day P&L</th><th>YTD P&L</th><th>Liq(D)</th></tr></thead><tbody id="d-holdings"></tbody></table></div>
+      </div>
+      <div id="dt-holdings" style="display:none">
+        <div class="card"><div class="card-header"><div class="card-title" id="d-holdings-title">Holdings</div></div>
+        <div style="overflow-x:auto"><table><thead><tr><th>Ticker</th><th>Name</th><th>Class</th><th>Sector</th><th>Region</th><th>Market Value</th><th>Weight</th><th>Day P&L</th><th>YTD P&L</th><th>Liq(D)</th></tr></thead><tbody id="d-holdings"></tbody></table></div></div>
+      </div>
+      <div id="dt-esg" style="display:none">
+        <div id="d-esg-content"></div>
       </div>
     </div>
 
@@ -325,7 +357,7 @@ tr:hover td{background:var(--hover);cursor:pointer}
         <div class="metric-card bt-red"><div class="metric-label">Max Drawdown</div><div class="metric-value" style="font-size:20px">-8.40%</div><div class="metric-sub">Beta 0.76</div></div>
       </div>
       <div class="card">
-        <div class="card-header"><div class="card-title">Stress Scenarios</div><div class="card-sub">Modelled P&L impact · NAV $6.84B</div></div>
+        <div class="card-header"><div class="card-title">Stress Scenarios</div><div class="card-sub">Modelled P&L impact · Firm-wide</div></div>
         <div style="padding:20px"><div class="stress-bar" id="stress-bars"></div></div>
       </div>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
@@ -334,22 +366,19 @@ tr:hover td{background:var(--hover);cursor:pointer}
           <table><thead><tr><th>Rating</th><th>Exposure</th><th>% FI</th><th>PD 1Y</th></tr></thead><tbody>
             <tr><td><span class="badge badge-green">AAA</span></td><td>$412.4M</td><td>72.1%</td><td>0.01%</td></tr>
             <tr><td><span class="badge badge-green">AA+</span></td><td>$68.2M</td><td>11.9%</td><td>0.03%</td></tr>
-            <tr><td><span class="badge badge-green">AA</span></td><td>$42.8M</td><td>7.5%</td><td>0.05%</td></tr>
             <tr><td><span class="badge badge-amber">BB+</span></td><td>$28.4M</td><td>5.0%</td><td>1.10%</td></tr>
             <tr><td><span class="badge badge-amber">BB</span></td><td>$19.6M</td><td>3.4%</td><td>1.80%</td></tr>
           </tbody></table>
         </div>
         <div class="card">
-          <div class="card-header"><div class="card-title">Liquidity Profile</div><div class="card-sub">Days to liquidate at normal market depth</div></div>
+          <div class="card-header"><div class="card-title">Liquidity Profile</div><div class="card-sub">Days to liquidate</div></div>
           <div style="padding:16px 20px">
             <div class="risk-bar-wrap">
-              <div class="risk-bar-item"><div class="risk-bar-label"><span>≤ 1 day</span><span class="up">$1.12B · 71.4%</span></div><div class="risk-bar-track"><div class="risk-bar-fill" style="width:71.4%;background:var(--green)"></div></div></div>
-              <div class="risk-bar-item"><div class="risk-bar-label"><span>2–7 days</span><span style="color:var(--text2)">$198.4M · 12.6%</span></div><div class="risk-bar-track"><div class="risk-bar-fill" style="width:12.6%;background:var(--blue)"></div></div></div>
-              <div class="risk-bar-item"><div class="risk-bar-label"><span>8–30 days</span><span class="neutral">$48.2M · 3.1%</span></div><div class="risk-bar-track"><div class="risk-bar-fill" style="width:3.1%;background:var(--amber)"></div></div></div>
-              <div class="risk-bar-item"><div class="risk-bar-label"><span>31–90 days</span><span class="neutral">$78.4M · 5.0%</span></div><div class="risk-bar-track"><div class="risk-bar-fill" style="width:5%;background:var(--amber)"></div></div></div>
-              <div class="risk-bar-item"><div class="risk-bar-label"><span>&gt; 90 days</span><span class="down">$124.8M · 7.9%</span></div><div class="risk-bar-track"><div class="risk-bar-fill" style="width:7.9%;background:var(--red)"></div></div></div>
+              <div class="risk-bar-item"><div class="risk-bar-label"><span>≤ 1 day</span><span class="up">71.4%</span></div><div class="risk-bar-track"><div class="risk-bar-fill" style="width:71.4%;background:var(--green)"></div></div></div>
+              <div class="risk-bar-item"><div class="risk-bar-label"><span>2–7 days</span><span>12.6%</span></div><div class="risk-bar-track"><div class="risk-bar-fill" style="width:12.6%;background:var(--blue)"></div></div></div>
+              <div class="risk-bar-item"><div class="risk-bar-label"><span>8–30 days</span><span class="neutral">3.1%</span></div><div class="risk-bar-track"><div class="risk-bar-fill" style="width:3.1%;background:var(--amber)"></div></div></div>
+              <div class="risk-bar-item"><div class="risk-bar-label"><span>&gt; 90 days</span><span class="down">7.9%</span></div><div class="risk-bar-track"><div class="risk-bar-fill" style="width:7.9%;background:var(--red)"></div></div></div>
             </div>
-            <p style="font-size:11px;color:var(--text2);margin-top:14px;line-height:1.5"><strong>Redemption coverage:</strong> 7-day liquid assets cover <span class="up" style="font-weight:600">72%</span> of NAV — above 25% prospectus floor.</p>
           </div>
         </div>
       </div>
@@ -365,22 +394,21 @@ tr:hover td{background:var(--hover);cursor:pointer}
         <div class="metric-card bt-green"><div class="metric-label">Resolved Today</div><div class="metric-value up">12</div><div class="metric-sub">Closed exceptions</div></div>
         <div class="metric-card bt-blue"><div class="metric-label">Breach Rate</div><div class="metric-value">1.8%</div><div class="metric-sub up">↓ 0.3% vs last month</div></div>
       </div>
-      <div class="compliance-hero">
+      <div class="card" style="padding:32px;text-align:center;margin-bottom:20px">
         <div style="font-size:36px;margin-bottom:12px">📋</div>
         <div style="font-size:16px;font-weight:600;color:var(--text);margin-bottom:6px">Exception Report Agent</div>
-        <div style="font-size:13px;color:var(--text2);margin-bottom:20px;line-height:1.7;max-width:500px;margin-left:auto;margin-right:auto">Generate AI-powered compliance reports for any portfolio, date range, or exception type. Upload your exceptions data and get audit-ready reports in seconds.</div>
-        <button class="btn btn-primary" onclick="nav('ai');setTimeout(()=>{document.getElementById('ai-input').value='Show me a compliance summary — which portfolios have the most open exceptions and what are the key risks?';aiSend();},300)">Ask Helix about Compliance →</button>
+        <div style="font-size:13px;color:var(--text2);margin-bottom:20px;line-height:1.7;max-width:500px;margin-left:auto;margin-right:auto">Generate AI-powered compliance reports for any portfolio or date range. Upload your exceptions data and get audit-ready PDF reports instantly.</div>
+        <button class="btn btn-primary" onclick="nav('ai');setTimeout(()=>{document.getElementById('ai-input').value='Give me a compliance summary — which portfolios have the most open exceptions and what are the key risks I should act on today?';aiSend();},300)">Ask Helix about Compliance →</button>
       </div>
       <div class="card">
-        <div class="card-header"><div class="card-title">Recent Exceptions</div><div class="card-sub">Last 7 days · All portfolios</div></div>
-        <div style="overflow-x:auto"><table><thead><tr><th>ID</th><th>Portfolio</th><th>Rule</th><th>Breach %</th><th>Status</th><th>Assignee</th><th>Created</th></tr></thead><tbody>
+        <div class="card-header"><div class="card-title">Recent Exceptions</div><div class="card-sub">Last 7 days</div></div>
+        <div style="overflow-x:auto"><table><thead><tr><th>ID</th><th>Portfolio</th><th>Rule</th><th>Breach %</th><th>Status</th><th>Assignee</th><th>Date</th></tr></thead><tbody>
           <tr><td>#EX-2291</td><td>FIC-007</td><td>Duration limit</td><td><span class="down" style="font-weight:600">112%</span></td><td><span class="badge badge-red">Open</span></td><td>Priya N.</td><td>11 May</td></tr>
           <tr><td>#EX-2289</td><td>GMA-001</td><td>Tech concentration</td><td><span class="neutral" style="font-weight:600">89%</span></td><td><span class="badge badge-amber">Pending</span></td><td>Helena P.</td><td>10 May</td></tr>
           <tr><td>#EX-2284</td><td>EQL-014</td><td>Single stock limit</td><td><span class="down" style="font-weight:600">134%</span></td><td><span class="badge badge-red">Open</span></td><td>Marcus C.</td><td>09 May</td></tr>
           <tr><td>#EX-2280</td><td>MAC-003</td><td>FX exposure</td><td><span class="up" style="font-weight:600">45%</span></td><td><span class="badge badge-green">Closed</span></td><td>James W.</td><td>08 May</td></tr>
           <tr><td>#EX-2278</td><td>GMA-001</td><td>Liquidity bucket</td><td><span class="neutral" style="font-weight:600">76%</span></td><td><span class="badge badge-amber">Pending</span></td><td>Helena P.</td><td>07 May</td></tr>
           <tr><td>#EX-2271</td><td>ALT-009</td><td>Illiquid asset limit</td><td><span class="down" style="font-weight:600">108%</span></td><td><span class="badge badge-red">Open</span></td><td>Sarah O.</td><td>06 May</td></tr>
-          <tr><td>#EX-2268</td><td>EQL-021</td><td>EM concentration</td><td><span class="up" style="font-weight:600">52%</span></td><td><span class="badge badge-green">Closed</span></td><td>Raj P.</td><td>05 May</td></tr>
         </tbody></table></div>
       </div>
     </div>
@@ -397,10 +425,10 @@ tr:hover td{background:var(--hover);cursor:pointer}
           </div>
         </div>
         <div style="padding:16px">
-          <div class="chips-row">
+          <div class="chips-row" id="ai-chips">
             <button class="chip" onclick="aiAsk(this.textContent)">What's my biggest concentration risk?</button>
-            <button class="chip" onclick="aiAsk(this.textContent)">Which portfolio has the highest VaR?</button>
-            <button class="chip" onclick="aiAsk(this.textContent)">Summarise credit risk on the fixed income book</button>
+            <button class="chip" onclick="aiAsk(this.textContent)">Which holdings have a Sell rating?</button>
+            <button class="chip" onclick="aiAsk(this.textContent)">Analyse my ESG exposure</button>
             <button class="chip" onclick="aiAsk(this.textContent)">What positions suffer most if rates rise 100bps?</button>
             <button class="chip" onclick="aiAsk(this.textContent)">Which portfolios are close to mandate limits?</button>
           </div>
@@ -408,11 +436,11 @@ tr:hover td{background:var(--hover);cursor:pointer}
             <div class="ai-messages" id="ai-messages">
               <div class="ai-msg agent">
                 <div class="ai-label">✦ Helix</div>
-                <div class="ai-bubble">Hello! I'm Helix, your AI analytics assistant. I have full visibility into your 7 mandates across $6.84B AUM — positions, risk metrics, compliance exceptions, and market exposures.\n\nAsk me anything about your book.</div>
+                <div class="ai-bubble">Hello! I'm Helix. Upload a portfolio on the Upload screen and I'll give you live AI analysis — concentration risks, analyst ratings, ESG scores, and actionable insights based on real market data.</div>
               </div>
             </div>
             <div class="ai-input-row">
-              <input class="ai-input" id="ai-input" placeholder="e.g. What's my exposure to European banks?" onkeydown="if(event.key==='Enter')aiSend()"/>
+              <input class="ai-input" id="ai-input" placeholder="Ask anything about your portfolio..." onkeydown="if(event.key==='Enter')aiSend()"/>
               <button class="ai-send" id="ai-send-btn" onclick="aiSend()">Send ↗</button>
             </div>
           </div>
@@ -427,45 +455,25 @@ tr:hover td{background:var(--hover);cursor:pointer}
 
 <script>
 const WORKER='https://proud-resonance-42fd.k-pahwa14-e82.workers.dev';
+let livePortfolio=null;
+let allHoldings=[];
+let aiHist=[];
+let aiRunning=false;
+let dark=true;
 
 // Theme
-let dark=true;
 function toggleTheme(){
   dark=!dark;
   document.documentElement.setAttribute('data-theme',dark?'dark':'light');
   document.getElementById('theme-btn').textContent=dark?'🌙':'☀️';
 }
 
-// Data
-const portfolios=[
-  {id:'FIC-007',name:'Investment Grade Credit',strat:'Fixed Income',mgr:'Priya Natarajan',aum:'$1.84B',ytd:'+3.12%',pnl:'-$184.2K',var:'0.61%',pos:218,status:'Active',ytdN:3.12,pnlN:-184200},
-  {id:'GMA-001',name:'Global Multi-Asset Fund',strat:'Multi-Asset',mgr:'Helena Park',aum:'$1.52B',ytd:'+7.42%',pnl:'+$1.28M',var:'1.42%',pos:142,status:'Active',ytdN:7.42,pnlN:1280000},
-  {id:'EQL-014',name:'Global Equity Long-Only',strat:'Equity',mgr:'Marcus Chen',aum:'$1.12B',ytd:'+11.24%',pnl:'+$2.84M',var:'2.18%',pos:86,status:'Active',ytdN:11.24,pnlN:2840000},
-  {id:'MAC-003',name:'Global Macro',strat:'Macro',mgr:'James Whitfield',aum:'$892.4M',ytd:'+4.88%',pnl:'+$412K',var:'1.95%',pos:54,status:'Active',ytdN:4.88,pnlN:412000},
-  {id:'ALT-009',name:'Alternatives & Private Equity',strat:'Multi-Asset',mgr:'Sarah Okonkwo',aum:'$812.8M',ytd:'+2.31%',pnl:'+$89K',var:'0.98%',pos:38,status:'Active',ytdN:2.31,pnlN:89000},
-  {id:'EQL-022',name:'US Small Cap Growth',strat:'Equity',mgr:'David Kim',aum:'$484.2M',ytd:'+9.14%',pnl:'+$624K',var:'2.84%',pos:112,status:'Active',ytdN:9.14,pnlN:624000},
-  {id:'EQL-021',name:'EM Equity Growth',strat:'Equity',mgr:'Raj Patel',aum:'$163.4M',ytd:'-1.42%',pnl:'-$42K',var:'3.12%',pos:67,status:'Ramping',ytdN:-1.42,pnlN:-42000},
-];
-
-const holdings=[
-  {ticker:'UST10Y',name:'US Treasury 10Y 4.25%',cls:'Fixed Income',sector:'Sovereign',region:'North America',val:'$312M',wt:'20.52%',dpnl:'-$125K',ytdpnl:'+$1.84M',liq:1},
-  {ticker:'MSFT',name:'Microsoft Corp',cls:'Equity',sector:'Technology',region:'North America',val:'$124.8M',wt:'8.21%',dpnl:'+$3.2M',ytdpnl:'+$18.4M',liq:1},
-  {ticker:'NVDA',name:'NVIDIA Corporation',cls:'Equity',sector:'Technology',region:'North America',val:'$98.4M',wt:'6.47%',dpnl:'+$5.8M',ytdpnl:'+$42.1M',liq:1},
-  {ticker:'BUND10Y',name:'German Bund 10Y 2.5%',cls:'Fixed Income',sector:'Sovereign',region:'Europe',val:'$84.2M',wt:'5.54%',dpnl:'+$420K',ytdpnl:'+$2.8M',liq:1},
-  {ticker:'ASML',name:'ASML Holding NV',cls:'Equity',sector:'Technology',region:'Europe',val:'$68.4M',wt:'4.50%',dpnl:'+$1.8M',ytdpnl:'+$8.4M',liq:1},
-  {ticker:'GLD',name:'SPDR Gold Shares ETF',cls:'Derivative',sector:'Commodity',region:'Global',val:'$62.8M',wt:'4.13%',dpnl:'+$1.2M',ytdpnl:'+$9.2M',liq:1},
-  {ticker:'JPY/USD',name:'Japanese Yen FX Forward',cls:'Derivative',sector:'Currency',region:'Asia',val:'$48.4M',wt:'3.18%',dpnl:'-$312K',ytdpnl:'-$1.8M',liq:2},
-  {ticker:'GOOGL',name:'Alphabet Inc Class A',cls:'Equity',sector:'Technology',region:'North America',val:'$44.2M',wt:'2.91%',dpnl:'+$924K',ytdpnl:'+$6.2M',liq:1},
-  {ticker:'TLT',name:'iShares 20Y Treasury ETF',cls:'Fixed Income',sector:'Sovereign',region:'North America',val:'$38.4M',wt:'2.53%',dpnl:'-$84K',ytdpnl:'+$1.2M',liq:1},
-  {ticker:'CASH',name:'USD Cash & Equivalents',cls:'Cash',sector:'Cash',region:'Global',val:'$257.4M',wt:'16.93%',dpnl:'$0',ytdpnl:'$0',liq:1},
-];
-
-const signals=[
-  {type:'alert',title:'Tech concentration above target',body:'Technology sector now represents 8.9% of NAV vs. 6.5% policy target. NVIDIA contributed 67% of YTD tech gains — consider partial trim to rebalance.',ctx:'Tech at 8.9% vs 6.5% target. NVIDIA drove 67% of tech gains. What should I do?'},
-  {type:'risk',title:'Liquidity bucket >90d trending up',body:'Illiquid alternatives (Private RE + PE) reached 16.1% of NAV, approaching the 18% prospectus limit. New PE capital calls due Q3 2026.',ctx:'Illiquid bucket at 16.1% approaching 18% limit. PE capital calls due Q3 2026. What is the risk?'},
-  {type:'opportunity',title:'Duration mismatch vs. benchmark',body:'Portfolio duration is 1.4y shorter than benchmark. With Fed pivoting dovish in May FOMC minutes, extending duration via UST10Y could add ~30bps of carry.',ctx:'Duration is 1.4y short of benchmark. Fed is turning dovish. Should I extend duration?'},
-  {type:'news',title:'ASML — China export controls update',body:'Reuters reports new EUV restrictions effective Q3. Modelled impact: −4 to −7% on ASML revenue. Position currently +5.8% YTD, size $68.4M.',ctx:'ASML faces new China EUV export restrictions from Q3. Our position is $68.4M, +5.8% YTD. What should I do?'},
-];
+// Live clock
+function updateClock(){
+  const now=new Date();
+  document.getElementById('nav-time').textContent='Live · '+now.toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'});
+}
+setInterval(updateClock,1000);updateClock();
 
 // Nav
 function nav(s,data){
@@ -476,111 +484,342 @@ function nav(s,data){
   if(s==='detail'&&data)loadDetail(data);
 }
 
-// Portfolios
-function renderP(list){
-  document.getElementById('ptbody').innerHTML=list.map(p=>`
-    <tr onclick='nav("detail",${JSON.stringify(p).replace(/'/g,"&#39;")})'>
-      <td><div style="font-weight:600;color:var(--blue)">${p.id}</div><div style="font-size:11px;color:var(--text3)">${p.name}</div></td>
-      <td>${p.strat}</td><td>${p.mgr}</td>
-      <td style="font-weight:600">${p.aum}</td>
-      <td class="${p.ytdN>=0?'up':'down'}" style="font-weight:500">${p.ytd}</td>
-      <td class="${p.pnlN>=0?'up':'down'}" style="font-weight:500">${p.pnl}</td>
-      <td>${p.var}</td><td>${p.pos}</td>
-      <td><span class="badge ${p.status==='Active'?'badge-green':'badge-blue'}">${p.status}</span></td>
+// Upload & fetch live prices
+async function handleUpload(input){
+  const file=input.files[0];if(!file)return;
+  document.getElementById('upload-zone').style.display='none';
+  const overlay=document.getElementById('loading-overlay');
+  overlay.style.display='flex';
+  setLoading('Reading file...','Parsing your portfolio');
+
+  const reader=new FileReader();
+  reader.onload=async e=>{
+    try{
+      const wb=XLSX.read(e.target.result,{type:'array',cellDates:true});
+      const ws=wb.Sheets[wb.SheetNames[0]];
+      const data=XLSX.utils.sheet_to_json(ws,{defval:''});
+      if(!data.length){alert('File appears empty');resetUpload();return;}
+
+      // Detect columns
+      const cols=Object.keys(data[0]);
+      const clean=s=>s.toLowerCase().replace(/[\s_\-]/g,'');
+      const findCol=(...v)=>cols.find(c=>v.some(x=>clean(c).includes(x)))||null;
+      const tickerCol=findCol('ticker','symbol','scrip','code');
+      const nameCol=findCol('name','instrument','security','stock');
+      const qtyCol=findCol('qty','quantity','units','shares','holding');
+
+      if(!tickerCol||!qtyCol){
+        alert(`Could not find required columns.\nDetected columns: ${cols.join(', ')}\n\nPlease make sure your file has Ticker and Quantity columns.`);
+        resetUpload();return;
+      }
+
+      // Extract positions
+      const positions=data.filter(r=>r[tickerCol]&&r[qtyCol]).map(r=>({
+        name:nameCol?String(r[nameCol]):'',
+        ticker:String(r[tickerCol]).trim().toUpperCase(),
+        qty:parseFloat(String(r[qtyCol]).replace(/,/g,''))||0
+      })).filter(p=>p.qty>0);
+
+      if(!positions.length){alert('No valid positions found.');resetUpload();return;}
+
+      setLoading(`Fetching live prices...`,`Getting market data for ${positions.length} securities`);
+
+      // Fetch live prices in batches of 10
+      const batchSize=10;
+      const priceData={};
+      for(let i=0;i<positions.length;i+=batchSize){
+        const batch=positions.slice(i,i+batchSize);
+        const tickers=batch.map(p=>p.ticker).join(',');
+        setLoading(`Fetching prices...`,`${Math.min(i+batchSize,positions.length)} of ${positions.length} securities`);
+        try{
+          const res=await fetch(`${WORKER}/prices?tickers=${encodeURIComponent(tickers)}`);
+          const d=await res.json();
+          Object.assign(priceData,d);
+        }catch(e){console.error('Price fetch error:',e);}
+      }
+
+      setLoading('Calculating analytics...','Computing positions, P&L and exposure');
+
+      // Build enriched holdings
+      const holdings=positions.map(p=>{
+        const pd=priceData[p.ticker]||{};
+        const price=pd.price||0;
+        const prev=pd.previousClose||0;
+        const mv=price*p.qty;
+        const dpnl=(price-prev)*p.qty;
+        const dpct=prev>0?((price-prev)/prev)*100:0;
+        return{
+          ...p,
+          price,previousClose:prev,
+          marketValue:mv,
+          dayPnl:dpnl,
+          dayPct:dpct,
+          currency:pd.currency||'',
+          shortName:pd.shortName||p.name||p.ticker,
+          sector:pd.sector||'Unknown',
+          industry:pd.industry||'',
+          country:pd.country||'',
+          beta:pd.beta||null,
+          peRatio:pd.peRatio||null,
+          marketCap:pd.marketCap||0,
+          analystRating:pd.analystRating||'N/A',
+          analystCount:pd.analystCount||0,
+          strongBuy:pd.strongBuy||0,
+          buy:pd.buy||0,
+          hold:pd.hold||0,
+          sell:pd.sell||0,
+          strongSell:pd.strongSell||0,
+          targetPrice:pd.targetPrice||null,
+          esgTotal:pd.esgTotal||null,
+          esgEnv:pd.esgEnv||null,
+          esgSocial:pd.esgSocial||null,
+          esgGov:pd.esgGov||null,
+          dividendYield:pd.dividendYield||null,
+          returnOnEquity:pd.returnOnEquity||null,
+          debtToEquity:pd.debtToEquity||null,
+          fiftyTwoWeekHigh:pd.fiftyTwoWeekHigh||0,
+          fiftyTwoWeekLow:pd.fiftyTwoWeekLow||0,
+          error:pd.error||null,
+        };
+      });
+
+      // Calculate total & weights
+      const totalMV=holdings.reduce((s,h)=>s+h.marketValue,0);
+      holdings.forEach(h=>h.weight=totalMV>0?(h.marketValue/totalMV)*100:0);
+      const totalDayPnl=holdings.reduce((s,h)=>s+h.dayPnl,0);
+
+      // Store globally
+      livePortfolio={holdings,totalMV,totalDayPnl,file:file.name,loadedAt:new Date()};
+      allHoldings=[...holdings];
+
+      // Update AI context
+      updateAIContext(holdings,totalMV,totalDayPnl);
+
+      setLoading('Building your dashboard...','Almost ready');
+      await new Promise(r=>setTimeout(r,500));
+
+      overlay.style.display='none';
+      document.getElementById('upload-zone').style.display='block';
+      document.getElementById('upload-title').textContent=`✅ ${file.name} loaded — ${holdings.length} positions`;
+
+      // Update overview
+      updateOverview(holdings,totalMV,totalDayPnl);
+      nav('overview');
+
+    }catch(err){
+      console.error(err);
+      alert('Error processing file: '+err.message);
+      resetUpload();
+    }
+  };
+  reader.readAsArrayBuffer(file);
+}
+
+function setLoading(text,sub){
+  document.getElementById('loading-text').textContent=text;
+  document.getElementById('loading-sub').textContent=sub;
+}
+
+function resetUpload(){
+  document.getElementById('loading-overlay').style.display='none';
+  document.getElementById('upload-zone').style.display='block';
+}
+
+// Format helpers
+const fmtCcy=(v,ccy='')=>{
+  if(!v&&v!==0)return'—';
+  const abs=Math.abs(v);
+  let s=abs>=1e9?(abs/1e9).toFixed(2)+'B':abs>=1e6?(abs/1e6).toFixed(2)+'M':abs>=1e3?(abs/1e3).toFixed(1)+'K':abs.toFixed(2);
+  return(v<0?'-':'')+s+(ccy?' '+ccy:'');
+};
+const fmtPct=v=>v==null?'—':(v>=0?'+':'')+v.toFixed(2)+'%';
+const fmtNum=v=>v==null?'—':v.toLocaleString();
+
+function analystBadge(r){
+  if(!r||r==='N/A')return'<span style="color:var(--text3);font-size:11px">N/A</span>';
+  const map={'Strong Buy':'badge-green','Buy':'badge-green','Hold':'badge-amber','Sell':'badge-red','Strong Sell':'badge-red'};
+  return`<span class="badge ${map[r]||'badge-blue'}" style="font-size:10px">${r}</span>`;
+}
+
+function esgPill(score){
+  if(!score)return'<span style="color:var(--text3);font-size:11px">N/A</span>';
+  const color=score<20?'var(--green)':score<30?'var(--amber)':'var(--red)';
+  return`<span style="font-size:11px;font-weight:600;color:${color}">${score.toFixed(0)}</span>`;
+}
+
+// Update overview after upload
+function updateOverview(holdings,totalMV,totalDayPnl){
+  const sorted=[...holdings].sort((a,b)=>b.dayPct-a.dayPct);
+  const best=sorted[0],worst=sorted[sorted.length-1];
+  const pnlPct=totalMV>0?(totalDayPnl/(totalMV-totalDayPnl))*100:0;
+
+  document.getElementById('overview-sub').textContent=`${holdings.length} positions · ${new Date().toLocaleDateString('en-GB')}`;
+  document.getElementById('ov-value').textContent=fmtCcy(totalMV);
+  document.getElementById('ov-pnl').textContent=fmtCcy(totalDayPnl);
+  document.getElementById('ov-pnl').className='metric-value '+(totalDayPnl>=0?'up':'down');
+  document.getElementById('ov-pnl-pct').innerHTML=`<span class="${totalDayPnl>=0?'up':'down'}">${fmtPct(pnlPct)}</span> vs yesterday`;
+  document.getElementById('ov-positions').textContent=`${holdings.length} live positions`;
+
+  if(best){
+    document.getElementById('ov-best').textContent=best.ticker;
+    document.getElementById('ov-best').className='metric-value up';
+    document.getElementById('ov-best-sub').textContent=fmtPct(best.dayPct)+' today';
+  }
+  if(worst){
+    document.getElementById('ov-worst').textContent=worst.ticker;
+    document.getElementById('ov-worst').className='metric-value down';
+    document.getElementById('ov-worst-sub').textContent=fmtPct(worst.dayPct)+' today';
+  }
+
+  // Sector filter buttons
+  const sectors=[...new Set(holdings.map(h=>h.sector).filter(Boolean))].sort();
+  const filterRow=document.getElementById('sector-all').parentElement;
+  filterRow.querySelectorAll('.filter-btn:not(#sector-all)').forEach(b=>b.remove());
+  sectors.forEach(s=>{
+    const b=document.createElement('button');
+    b.className='filter-btn';b.textContent=s;
+    b.onclick=()=>filterBySector(s,b);
+    filterRow.appendChild(b);
+  });
+
+  // Charts
+  document.getElementById('overview-charts').style.display='block';
+  buildOverviewCharts(holdings,totalMV);
+
+  // Holdings table
+  document.getElementById('holdings-sub').textContent=`${holdings.length} positions · Total ${fmtCcy(totalMV)}`;
+  renderHoldingsTable(holdings);
+}
+
+function buildOverviewCharts(holdings,totalMV){
+  // Sector breakdown
+  const sectorMap={};
+  holdings.forEach(h=>{const s=h.sector||'Unknown';sectorMap[s]=(sectorMap[s]||0)+h.marketValue;});
+  const sectorData=Object.entries(sectorMap).sort((a,b)=>b[1]-a[1]).slice(0,6).map(([k,v],i)=>([k,parseFloat(((v/totalMV)*100).toFixed(1)),COLORS[i]]));
+
+  // Analyst breakdown
+  const ratingMap={'Strong Buy':0,'Buy':0,'Hold':0,'Sell':0,'Strong Sell':0,'N/A':0};
+  holdings.forEach(h=>{const r=h.analystRating||'N/A';ratingMap[r]=(ratingMap[r]||0)+1;});
+  const analystData=Object.entries(ratingMap).filter(([,v])=>v>0).map(([k,v],i)=>([k,parseFloat(((v/holdings.length)*100).toFixed(1)),['#22c55e','#86efac','#f59e0b','#ef4444','#dc2626','#64748b'][i]]));
+
+  // Country
+  const countryMap={};
+  holdings.forEach(h=>{const c=h.country||'Unknown';countryMap[c]=(countryMap[c]||0)+h.marketValue;});
+  const countryData=Object.entries(countryMap).sort((a,b)=>b[1]-a[1]).slice(0,5).map(([k,v],i)=>([k,parseFloat(((v/totalMV)*100).toFixed(1)),COLORS[i]]));
+
+  document.getElementById('ov-charts').innerHTML=
+    donut('Sector Exposure',sectorData)+
+    donut('Analyst Consensus',analystData)+
+    donut('Country Exposure',countryData);
+}
+
+const COLORS=['#3b82f6','#22c55e','#f59e0b','#8b5cf6','#ef4444','#06b6d4','#f43f5e','#84cc16'];
+
+function renderHoldingsTable(list){
+  document.getElementById('holdings-tbody').innerHTML=list.length===0
+    ?'<tr><td colspan="12" style="text-align:center;padding:30px;color:var(--text3)">No positions match your filter</td></tr>'
+    :list.map(h=>`<tr>
+      <td style="font-weight:600;color:var(--blue)">${h.ticker}</td>
+      <td style="max-width:180px;overflow:hidden;text-overflow:ellipsis;color:var(--text)">${h.shortName||h.name||'—'}</td>
+      <td><span style="font-size:11px;color:var(--text3)">${h.sector||'—'}</span></td>
+      <td>${fmtNum(h.qty)}</td>
+      <td>${h.price?h.price.toLocaleString(undefined,{minimumFractionDigits:2,maximumFractionDigits:2})+' '+(h.currency||''):'—'}</td>
+      <td style="font-weight:500">${fmtCcy(h.marketValue,h.currency)}</td>
+      <td>${h.weight?h.weight.toFixed(2)+'%':'—'}</td>
+      <td class="${h.dayPnl>=0?'up':'down'}">${fmtCcy(h.dayPnl,h.currency)}</td>
+      <td class="${h.dayPct>=0?'up':'down'}">${fmtPct(h.dayPct)}</td>
+      <td>${analystBadge(h.analystRating)}</td>
+      <td>${esgPill(h.esgTotal)}</td>
+      <td>${h.beta!=null?h.beta.toFixed(2):'—'}</td>
     </tr>`).join('');
 }
 
-function filterPortfolios(q){
-  renderP(portfolios.filter(p=>[p.id,p.name,p.mgr].some(v=>v.toLowerCase().includes(q.toLowerCase()))));
+function searchHoldings(q){
+  if(!livePortfolio)return;
+  const f=allHoldings.filter(h=>[h.ticker,h.shortName,h.sector,h.name].some(v=>(v||'').toLowerCase().includes(q.toLowerCase())));
+  renderHoldingsTable(f);
 }
 
-function filterStrat(s,btn){
+function filterBySector(s,btn){
   document.querySelectorAll('#screen-overview .filter-btn').forEach(b=>b.classList.remove('active'));
   btn.classList.add('active');
-  renderP(s==='All'?portfolios:portfolios.filter(p=>p.strat===s));
+  renderHoldingsTable(s==='All'?allHoldings:allHoldings.filter(h=>h.sector===s));
 }
 
-// Detail
-function loadDetail(p){
-  document.getElementById('d-name').textContent=p.name;
-  document.getElementById('d-meta').textContent=`${p.id} · ${p.strat} · PM ${p.mgr}`;
-  document.getElementById('d-metrics').innerHTML=`
-    <div class="metric-card bt-blue"><div class="metric-label">AUM</div><div class="metric-value">${p.aum}</div><div class="metric-sub">Net asset value</div></div>
-    <div class="metric-card ${p.pnlN>=0?'bt-green':'bt-red'}"><div class="metric-label">Day P&L</div><div class="metric-value">${p.pnl}</div><div class="metric-sub"><span class="${p.pnlN>=0?'up':'down'}">↑ 0.08%</span> vs yesterday</div></div>
-    <div class="metric-card bt-green"><div class="metric-label">YTD Return</div><div class="metric-value">${p.ytd}</div><div class="metric-sub"><span class="up">↑ 2.16%</span> vs benchmark</div></div>
-    <div class="metric-card bt-amber"><div class="metric-label">VaR 95% · 1D</div><div class="metric-value">${p.var}</div><div class="metric-sub">${p.pos} positions</div></div>`;
-  document.getElementById('d-charts').innerHTML=
-    donut('Sector Exposure',[['Sovereign',39.9,'#3b82f6'],['Cash',16.9,'#22c55e'],['Technology',12.8,'#8b5cf6'],['Private Equity',10.9,'#f59e0b'],['Commodity',6.1,'#ef4444'],['Real Estate',5,'#06b6d4'],['Other',8.4,'#94a3b8']])+
-    donut('Region Exposure',[['North America',48.7,'#3b82f6'],['Global',31,'#22c55e'],['Europe',12.1,'#f59e0b'],['Emerging',5.5,'#8b5cf6'],['Asia',2.7,'#ef4444']])+
-    donut('Currency Exposure',[['USD',88.4,'#3b82f6'],['EUR',8.8,'#22c55e'],['GBP',1.2,'#f59e0b'],['JPY',1.0,'#8b5cf6'],['CHF',0.6,'#ef4444']]);
-  document.getElementById('d-risk').innerHTML=`
-    <div>
-      <div style="font-size:13px;font-weight:600;color:var(--text);margin-bottom:12px">Value at Risk</div>
-      <div class="risk-bar-wrap">
-        <div class="risk-bar-item"><div class="risk-bar-label"><span>VaR 95%</span><span class="neutral" style="font-weight:600">${p.var}</span></div><div class="risk-bar-track"><div class="risk-bar-fill" style="width:${p.var};background:var(--amber)"></div></div></div>
-        <div class="risk-bar-item"><div class="risk-bar-label"><span>VaR 99%</span><span class="down" style="font-weight:600">2.14%</span></div><div class="risk-bar-track"><div class="risk-bar-fill" style="width:35%;background:var(--red)"></div></div></div>
-        <div class="risk-bar-item"><div class="risk-bar-label"><span>CVaR 95%</span><span style="font-weight:500">1.82%</span></div><div class="risk-bar-track"><div class="risk-bar-fill" style="width:28%;background:var(--blue)"></div></div></div>
-        <div class="risk-bar-item"><div class="risk-bar-label"><span>Volatility (ann.)</span><span style="font-weight:500">8.94%</span></div></div>
-      </div>
-    </div>
-    <div>
-      <div style="font-size:13px;font-weight:600;color:var(--text);margin-bottom:12px">Credit Quality</div>
-      <table style="font-size:12px"><thead><tr><th>Rating</th><th>Exposure</th><th>PD 1Y</th></tr></thead><tbody>
-        <tr><td><span class="badge badge-green">AAA</span></td><td>$412.4M</td><td>0.01%</td></tr>
-        <tr><td><span class="badge badge-green">AA+</span></td><td>$68.2M</td><td>0.03%</td></tr>
-        <tr><td><span class="badge badge-amber">BB+</span></td><td>$28.4M</td><td>1.10%</td></tr>
-        <tr><td><span class="badge badge-amber">BB</span></td><td>$19.6M</td><td>1.80%</td></tr>
-      </tbody></table>
-    </div>
-    <div>
-      <div style="font-size:13px;font-weight:600;color:var(--text);margin-bottom:12px">Liquidity</div>
-      <div class="risk-bar-wrap">
-        <div class="risk-bar-item"><div class="risk-bar-label"><span>Highly Liquid</span><span class="up">71.4%</span></div><div class="risk-bar-track"><div class="risk-bar-fill" style="width:71.4%;background:var(--green)"></div></div></div>
-        <div class="risk-bar-item"><div class="risk-bar-label"><span>Mod. Liquid</span><span>12.6%</span></div><div class="risk-bar-track"><div class="risk-bar-fill" style="width:12.6%;background:var(--blue)"></div></div></div>
-        <div class="risk-bar-item"><div class="risk-bar-label"><span>Less Liquid</span><span class="neutral">8.1%</span></div><div class="risk-bar-track"><div class="risk-bar-fill" style="width:8.1%;background:var(--amber)"></div></div></div>
-        <div class="risk-bar-item"><div class="risk-bar-label"><span>Illiquid</span><span class="down">7.9%</span></div><div class="risk-bar-track"><div class="risk-bar-fill" style="width:7.9%;background:var(--red)"></div></div></div>
-      </div>
-    </div>`;
-  renderH('All');
-}
-
-function renderH(cls){
-  const f=cls==='All'?holdings:holdings.filter(h=>h.cls===cls);
-  document.getElementById('d-holdings').innerHTML=f.map(h=>`
-    <tr>
-      <td style="font-weight:600">${h.ticker}</td>
-      <td style="color:var(--text3);font-size:12px">${h.name}</td>
-      <td>${h.cls}</td><td>${h.sector}</td><td>${h.region}</td>
-      <td style="font-weight:500">${h.val}</td><td>${h.wt}</td>
-      <td class="${h.dpnl.startsWith('-')?'down':'up'}">${h.dpnl}</td>
-      <td class="${h.ytdpnl.startsWith('-')?'down':'up'}">${h.ytdpnl}</td>
-      <td>${h.liq}</td>
-    </tr>`).join('');
-}
-
-function filterH(cls,btn){
-  document.querySelectorAll('#screen-detail .filter-btn').forEach(b=>b.classList.remove('active'));
-  btn.classList.add('active');
-  renderH(cls);
-}
-
-// Donut
+// Donut chart
 function donut(title,data){
   const r=38,cx=45,cy=45,circ=2*Math.PI*r;
   let off=0;
   const slices=data.map(([lbl,pct,col])=>{
     const dash=circ*pct/100,gap=circ-dash;
     const s=`<circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="${col}" stroke-width="14" stroke-dasharray="${dash} ${gap}" stroke-dashoffset="${-off}"/>`;
-    off+=dash;
-    return {s,lbl,pct,col};
+    off+=dash;return{s,lbl,pct,col};
   });
-  return `<div class="chart-card"><div class="chart-title">${title}</div><div class="donut-wrap">
-    <div class="donut"><svg viewBox="0 0 90 90" width="90" height="90" style="transform:rotate(-90deg)">${slices.map(s=>s.s).join('')}</svg></div>
+  return`<div class="chart-card"><div class="chart-title">${title}</div><div class="donut-wrap">
+    <div style="position:relative;width:90px;height:90px;flex-shrink:0"><svg viewBox="0 0 90 90" width="90" height="90" style="transform:rotate(-90deg)">${slices.map(s=>s.s).join('')}</svg></div>
     <div class="legend">${slices.map(s=>`<div class="legend-item"><div class="legend-left"><div class="legend-dot" style="background:${s.col}"></div>${s.lbl}</div><span style="font-weight:500">${s.pct}%</span></div>`).join('')}</div>
   </div></div>`;
 }
 
-// Stress
+// Detail view (demo portfolios)
+const demoPortfolios=[
+  {id:'FIC-007',name:'Investment Grade Credit',strat:'Fixed Income',mgr:'Priya Natarajan',aum:'$1.84B',ytd:'+3.12%',pnl:'-$184.2K',var:'0.61%',pos:218,status:'Active',ytdN:3.12,pnlN:-184200},
+  {id:'GMA-001',name:'Global Multi-Asset Fund',strat:'Multi-Asset',mgr:'Helena Park',aum:'$1.52B',ytd:'+7.42%',pnl:'+$1.28M',var:'1.42%',pos:142,status:'Active',ytdN:7.42,pnlN:1280000},
+  {id:'EQL-014',name:'Global Equity Long-Only',strat:'Equity',mgr:'Marcus Chen',aum:'$1.12B',ytd:'+11.24%',pnl:'+$2.84M',var:'2.18%',pos:86,status:'Active',ytdN:11.24,pnlN:2840000},
+];
+
+const demoHoldings=[
+  {ticker:'UST10Y',name:'US Treasury 10Y',cls:'Fixed Income',sector:'Sovereign',region:'North America',val:'$312M',wt:'20.52%',dpnl:'-$125K',ytdpnl:'+$1.84M',liq:1},
+  {ticker:'MSFT',name:'Microsoft Corp',cls:'Equity',sector:'Technology',region:'North America',val:'$124.8M',wt:'8.21%',dpnl:'+$3.2M',ytdpnl:'+$18.4M',liq:1},
+  {ticker:'NVDA',name:'NVIDIA Corporation',cls:'Equity',sector:'Technology',region:'North America',val:'$98.4M',wt:'6.47%',dpnl:'+$5.8M',ytdpnl:'+$42.1M',liq:1},
+  {ticker:'BUND10Y',name:'German Bund 10Y',cls:'Fixed Income',sector:'Sovereign',region:'Europe',val:'$84.2M',wt:'5.54%',dpnl:'+$420K',ytdpnl:'+$2.8M',liq:1},
+  {ticker:'CASH',name:'USD Cash',cls:'Cash',sector:'Cash',region:'Global',val:'$257.4M',wt:'16.93%',dpnl:'$0',ytdpnl:'$0',liq:1},
+];
+
+function loadDetail(p){
+  document.getElementById('d-name').textContent=p.name;
+  document.getElementById('d-meta').textContent=`${p.id} · ${p.strat} · PM ${p.mgr}`;
+  document.getElementById('d-metrics').innerHTML=`
+    <div class="metric-card bt-blue"><div class="metric-label">AUM</div><div class="metric-value">${p.aum}</div><div class="metric-sub">Net asset value</div></div>
+    <div class="metric-card ${p.pnlN>=0?'bt-green':'bt-red'}"><div class="metric-label">Day P&L</div><div class="metric-value ${p.pnlN>=0?'up':'down'}">${p.pnl}</div><div class="metric-sub">vs yesterday</div></div>
+    <div class="metric-card bt-green"><div class="metric-label">YTD Return</div><div class="metric-value up">${p.ytd}</div><div class="metric-sub">vs benchmark</div></div>
+    <div class="metric-card bt-amber"><div class="metric-label">VaR 95%</div><div class="metric-value">${p.var}</div><div class="metric-sub">${p.pos} positions</div></div>`;
+  document.getElementById('d-charts').innerHTML=
+    donut('Sector',[['Sovereign',39.9,'#3b82f6'],['Cash',16.9,'#22c55e'],['Technology',12.8,'#8b5cf6'],['PE',10.9,'#f59e0b'],['Commodity',6.1,'#ef4444'],['Other',13.4,'#94a3b8']])+
+    donut('Region',[['N. America',48.7,'#3b82f6'],['Global',31,'#22c55e'],['Europe',12.1,'#f59e0b'],['Emerging',5.5,'#8b5cf6'],['Asia',2.7,'#ef4444']])+
+    donut('Currency',[['USD',88.4,'#3b82f6'],['EUR',8.8,'#22c55e'],['GBP',1.2,'#f59e0b'],['JPY',1.0,'#8b5cf6'],['CHF',0.6,'#ef4444']]);
+  document.getElementById('d-var').innerHTML=`<div class="risk-bar-wrap">
+    <div class="risk-bar-item"><div class="risk-bar-label"><span>VaR 95%</span><span class="neutral">${p.var}</span></div><div class="risk-bar-track"><div class="risk-bar-fill" style="width:40%;background:var(--amber)"></div></div></div>
+    <div class="risk-bar-item"><div class="risk-bar-label"><span>VaR 99%</span><span class="down">2.14%</span></div><div class="risk-bar-track"><div class="risk-bar-fill" style="width:55%;background:var(--red)"></div></div></div>
+    <div class="risk-bar-item"><div class="risk-bar-label"><span>Volatility</span><span>8.94%</span></div><div class="risk-bar-track"><div class="risk-bar-fill" style="width:30%;background:var(--blue)"></div></div></div>
+  </div>`;
+  document.getElementById('d-credit').innerHTML=`<table style="font-size:12px"><thead><tr><th>Rating</th><th>Exposure</th><th>PD 1Y</th></tr></thead><tbody>
+    <tr><td><span class="badge badge-green">AAA</span></td><td>$412M</td><td>0.01%</td></tr>
+    <tr><td><span class="badge badge-green">AA+</span></td><td>$68M</td><td>0.03%</td></tr>
+    <tr><td><span class="badge badge-amber">BB+</span></td><td>$28M</td><td>1.10%</td></tr>
+  </tbody></table>`;
+  document.getElementById('d-liq').innerHTML=`<div class="risk-bar-wrap">
+    <div class="risk-bar-item"><div class="risk-bar-label"><span>≤1 day</span><span class="up">71.4%</span></div><div class="risk-bar-track"><div class="risk-bar-fill" style="width:71.4%;background:var(--green)"></div></div></div>
+    <div class="risk-bar-item"><div class="risk-bar-label"><span>2–7 days</span><span>12.6%</span></div><div class="risk-bar-track"><div class="risk-bar-fill" style="width:12.6%;background:var(--blue)"></div></div></div>
+    <div class="risk-bar-item"><div class="risk-bar-label"><span>>90 days</span><span class="down">7.9%</span></div><div class="risk-bar-track"><div class="risk-bar-fill" style="width:7.9%;background:var(--red)"></div></div></div>
+  </div>`;
+  document.getElementById('d-holdings').innerHTML=demoHoldings.map(h=>`<tr>
+    <td style="font-weight:600">${h.ticker}</td><td>${h.name}</td><td>${h.cls}</td><td>${h.sector}</td><td>${h.region}</td>
+    <td>${h.val}</td><td>${h.wt}</td>
+    <td class="${h.dpnl.startsWith('-')?'down':'up'}">${h.dpnl}</td>
+    <td class="${h.ytdpnl.startsWith('-')?'down':'up'}">${h.ytdpnl}</td>
+    <td>${h.liq}</td>
+  </tr>`).join('');
+  document.getElementById('d-holdings-title').textContent=`Holdings · ${p.pos} positions`;
+}
+
+function detailTab(tab,btn){
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  ['exposure','risk','holdings','esg'].forEach(t=>document.getElementById('dt-'+t).style.display=t===tab?'block':'none');
+}
+
+// Stress bars
 const stressData=[
   {l:'2008 GFC',v:-17.8,c:'#ef4444'},{l:'COVID Mar 2020',v:-11.2,c:'#ef4444'},
   {l:'Rates +200bps',v:-4.8,c:'#f59e0b'},{l:'EM Crisis',v:-3.9,c:'#f59e0b'},
@@ -589,15 +828,21 @@ const stressData=[
 const maxS=Math.max(...stressData.map(s=>Math.abs(s.v)));
 document.getElementById('stress-bars').innerHTML=stressData.map(s=>{
   const h=Math.round(Math.abs(s.v)/maxS*120);
-  return `<div class="stress-col"><div class="stress-val" style="color:${s.c}">${s.v}%</div><div style="width:100%;height:${h}px;background:${s.c};border-radius:4px 4px 0 0"></div><div class="stress-label">${s.l}</div></div>`;
+  return`<div class="stress-col"><div class="stress-val" style="color:${s.c}">${s.v}%</div><div style="width:100%;height:${h}px;background:${s.c};border-radius:4px 4px 0 0"></div><div class="stress-label">${s.l}</div></div>`;
 }).join('');
 
 // Signals
+const signals=[
+  {type:'alert',title:'Tech concentration above target',body:'Technology sector now represents 8.9% of NAV vs. 6.5% policy target. NVIDIA contributed 67% of YTD tech gains.',ctx:'Tech at 8.9% vs 6.5% target. NVIDIA drove 67% of tech gains. What should I do?'},
+  {type:'risk',title:'Liquidity bucket >90d trending up',body:'Illiquid alternatives reached 16.1% of NAV, approaching the 18% prospectus limit.',ctx:'Illiquid bucket at 16.1% approaching 18% limit. What is the risk and what action should I take?'},
+  {type:'opportunity',title:'Duration mismatch vs. benchmark',body:'Portfolio duration is 1.4y shorter than benchmark. Fed pivoting dovish — extending duration could add ~30bps carry.',ctx:'Duration 1.4y short of benchmark. Fed turning dovish. Should I extend duration and how?'},
+  {type:'news',title:'ASML — China export controls',body:'New EUV restrictions effective Q3. Modelled impact: −4 to −7% on ASML revenue. Position +5.8% YTD.',ctx:'ASML faces China EUV export restrictions from Q3. Our position is $68.4M +5.8% YTD. What should I do?'},
+];
 document.getElementById('signals-grid').innerHTML=signals.map(s=>`
   <div class="signal-card">
     <div style="display:flex;justify-content:space-between;align-items:flex-start">
       <span class="signal-tag ${s.type}">${s.type.toUpperCase()}</span>
-      <span class="signal-time">2h ago</span>
+      <span style="font-size:11px;color:var(--text3)">2h ago</span>
     </div>
     <div class="signal-title">${s.title}</div>
     <div class="signal-body">${s.body}</div>
@@ -607,53 +852,48 @@ document.getElementById('signals-grid').innerHTML=signals.map(s=>`
     </div>
   </div>`).join('');
 
-// Upload
-function handleUpload(input){
-  const file=input.files[0];if(!file)return;
-  document.getElementById('upload-title').textContent=file.name+' — reading...';
-  const reader=new FileReader();
-  reader.onload=e=>{
-    try{
-      const wb=XLSX.read(e.target.result,{type:'array',cellDates:true});
-      const ws=wb.Sheets[wb.SheetNames[0]];
-      const data=XLSX.utils.sheet_to_json(ws,{defval:''});
-      if(!data.length){alert('File appears empty');return;}
-      const cols=Object.keys(data[0]);
-      document.getElementById('upload-title').textContent=file.name+' · '+data.length+' rows';
-      document.getElementById('upload-metrics').innerHTML=`
-        <div class="metric-card bt-blue"><div class="metric-label">Records</div><div class="metric-value">${data.length}</div></div>
-        <div class="metric-card bt-green"><div class="metric-label">Columns</div><div class="metric-value">${cols.length}</div></div>
-        <div class="metric-card bt-blue"><div class="metric-label">File</div><div class="metric-value" style="font-size:14px">${file.name}</div></div>
-        <div class="metric-card bt-green"><div class="metric-label">Sheet</div><div class="metric-value" style="font-size:14px">${wb.SheetNames[0]}</div></div>`;
-      document.getElementById('upload-thead').innerHTML='<tr>'+cols.map(c=>`<th>${c}</th>`).join('')+'</tr>';
-      document.getElementById('upload-tbody').innerHTML=data.slice(0,50).map(r=>`<tr>${cols.map(c=>`<td>${r[c]||'—'}</td>`).join('')}</tr>`).join('');
-      document.getElementById('upload-result').style.display='block';
-    }catch(err){alert('Could not read file: '+err.message);}
-  };
-  reader.readAsArrayBuffer(file);
+// AI context
+let aiContext=`You are Helix, an AI assistant for an institutional portfolio management and risk analytics platform.
+
+FIRM DATA (demo):
+- 7 mandates, $6.84B AUM
+- Key portfolios: FIC-007 (Investment Grade Credit, $1.84B), GMA-001 (Global Multi-Asset, $1.52B), EQL-014 (Global Equity, $1.12B)
+- Firm VaR 95%: 1.38%, Volatility: 8.94%
+- Open compliance exceptions: 23
+
+Respond like a senior risk analyst. Be concise, specific, and actionable.`;
+
+function updateAIContext(holdings,totalMV,totalDayPnl){
+  const top10=[...holdings].sort((a,b)=>b.marketValue-a.marketValue).slice(0,10);
+  const sectorMap={};holdings.forEach(h=>{const s=h.sector||'Unknown';sectorMap[s]=(sectorMap[s]||0)+h.marketValue;});
+  const sectors=Object.entries(sectorMap).sort((a,b)=>b[1]-a[1]).map(([k,v])=>`${k}: ${((v/totalMV)*100).toFixed(1)}%`).join(', ');
+  const ratingDist={};holdings.forEach(h=>{const r=h.analystRating||'N/A';ratingDist[r]=(ratingDist[r]||0)+1;});
+  const ratings=Object.entries(ratingDist).map(([k,v])=>`${k}: ${v}`).join(', ');
+  const withEsg=holdings.filter(h=>h.esgTotal);
+  const avgEsg=withEsg.length?withEsg.reduce((s,h)=>s+h.esgTotal,0)/withEsg.length:null;
+
+  aiContext=`You are Helix, an AI assistant for an institutional portfolio management and risk analytics platform.
+
+LIVE PORTFOLIO DATA (uploaded by user):
+- Total positions: ${holdings.length}
+- Total market value: ${fmtCcy(totalMV)}
+- Day P&L: ${fmtCcy(totalDayPnl)} (${fmtPct(totalMV>0?(totalDayPnl/(totalMV-totalDayPnl))*100:0)})
+- Sector exposure: ${sectors}
+- Analyst ratings distribution: ${ratings}
+- Average ESG score: ${avgEsg?avgEsg.toFixed(1):'N/A'} (lower = better in Yahoo's methodology)
+
+TOP 10 HOLDINGS:
+${top10.map(h=>`- ${h.ticker} (${h.shortName||h.name}): ${fmtCcy(h.marketValue)} | ${h.weight?.toFixed(1)}% weight | Day: ${fmtPct(h.dayPct)} | Analyst: ${h.analystRating} | ESG: ${h.esgTotal?.toFixed(0)||'N/A'} | Beta: ${h.beta?.toFixed(2)||'N/A'}`).join('\n')}
+
+Respond like a senior risk analyst. Be concise, specific, and actionable. Use real numbers from the data above.`;
+
+  // Reset AI chat with new context
+  aiHist=[];
+  const chat=document.getElementById('ai-messages');
+  chat.innerHTML=`<div class="ai-msg agent"><div class="ai-label">✦ Helix</div><div class="ai-bubble">Portfolio loaded — ${holdings.length} positions, total value ${fmtCcy(totalMV)}.\n\nDay P&L: ${fmtCcy(totalDayPnl)} (${fmtPct(totalMV>0?(totalDayPnl/(totalMV-totalDayPnl))*100:0)})\n\nI can see your live positions, analyst ratings, ESG scores and sector exposure. Ask me anything about your book.</div></div>`;
 }
 
-// AI
-let aiHist=[],aiRunning=false;
-const AI_CTX=`You are Helix, an AI assistant for an institutional portfolio management and risk analytics platform called Helix.
-
-FIRM OVERVIEW:
-- Total AUM: $6.84B across 7 mandates
-- Portfolios: FIC-007 (Investment Grade Credit, $1.84B, PM Priya Natarajan, YTD +3.12%, VaR 0.61%), GMA-001 (Global Multi-Asset, $1.52B, PM Helena Park, YTD +7.42%, VaR 1.42%), EQL-014 (Global Equity Long-Only, $1.12B, PM Marcus Chen, YTD +11.24%, VaR 2.18%), MAC-003 (Global Macro, $892.4M, PM James Whitfield, YTD +4.88%, VaR 1.95%), ALT-009 (Alternatives & PE, $812.8M, PM Sarah Okonkwo, YTD +2.31%, VaR 0.98%), EQL-022 (US Small Cap Growth, $484.2M, PM David Kim, YTD +9.14%, VaR 2.84%), EQL-021 (EM Equity Growth, $163.4M, PM Raj Patel, YTD -1.42%, VaR 3.12%)
-- Firm VaR 95%: 1.38% ($19.2M), VaR 99%: 2.14% ($29.8M), Volatility: 8.94%, Max Drawdown: -8.40%
-- Liquidity: 71.4% highly liquid, 7.9% illiquid (>90 days)
-- Open compliance exceptions: 23, Pending: 8, Breach rate: 1.8%
-- Active signals: Tech concentration 8.9% vs 6.5% target; Illiquid bucket 16.1% approaching 18% limit; Duration 1.4y short of benchmark; ASML facing China EUV export restrictions ($68.4M position)
-- Top holdings GMA-001: UST10Y $312M, MSFT $124.8M, NVDA $98.4M, BUND10Y $84.2M, ASML $68.4M, GLD $62.8M
-
-Respond concisely and professionally like a senior risk analyst. Use specific numbers. Be direct and actionable. Maximum 4-5 sentences unless a detailed breakdown is needed.`;
-
-function aiAsk(q){document.getElementById('ai-input').value=q;aiSend();}
-
-function investigateSignal(ctx){
-  nav('ai');
-  setTimeout(()=>{document.getElementById('ai-input').value=ctx;aiSend();},300);
-}
+function investigateSignal(ctx){nav('ai');setTimeout(()=>{document.getElementById('ai-input').value=ctx;aiSend();},300);}
 
 async function aiSend(){
   if(aiRunning)return;
@@ -670,10 +910,10 @@ async function aiSend(){
   aiHist.push({role:'user',content:msg});
   try{
     const res=await fetch(WORKER,{method:'POST',headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({model:'claude-sonnet-4-5',max_tokens:1000,system:AI_CTX,messages:aiHist})});
+      body:JSON.stringify({model:'claude-sonnet-4-5',max_tokens:1000,system:aiContext,messages:aiHist})});
     const data=await res.json();
     document.getElementById('ai-think')?.remove();
-    const text=data.content?.[0]?.text||'Sorry, no response received.';
+    const text=data.content?.[0]?.text||'Sorry, no response.';
     aiHist.push({role:'assistant',content:text});
     const ad=document.createElement('div');ad.className='ai-msg agent';
     ad.innerHTML=`<div class="ai-label">✦ Helix</div><div class="ai-bubble">${text}</div>`;
@@ -687,9 +927,6 @@ async function aiSend(){
   chat.scrollTop=chat.scrollHeight;
   aiRunning=false;document.getElementById('ai-send-btn').disabled=false;
 }
-
-// Init
-renderP(portfolios);
 </script>
 </body>
 </html>
