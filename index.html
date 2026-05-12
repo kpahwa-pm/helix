@@ -3,198 +3,148 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Helix — AI Portfolio Analytics</title>
-<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+<title>Helix — AI Portfolio Analytics (Demo)</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 :root{
-  --blue:#3b82f6;--blue-light:rgba(59,130,246,.12);--blue-mid:rgba(59,130,246,.2);
+  --blue:#3b82f6;--blue-light:rgba(59,130,246,.12);
   --green:#22c55e;--green-light:rgba(34,197,94,.12);
   --red:#ef4444;--red-light:rgba(239,68,68,.12);
   --amber:#f59e0b;--amber-light:rgba(245,158,11,.12);
-  --sidebar:224px;--topbar:56px;
-  --transition:background .2s,color .2s,border-color .2s;
+  --purple:#8b5cf6;--sidebar:224px;--topbar:56px;
 }
 [data-theme="dark"]{
-  --bg:#0f1117;--bg2:#161b27;--bg3:#1e2535;
-  --border:#2a3347;--border2:#1e2535;
+  --bg:#0f1117;--bg3:#1e2535;--border:#2a3347;
   --text:#e2e8f0;--text2:#94a3b8;--text3:#64748b;
-  --card:#161b27;--card2:#1e2535;
-  --hover:#1e2535;
-  --input:#1e2535;
+  --card:#161b27;--hover:#1e2535;--input:#1e2535;
 }
 [data-theme="light"]{
-  --bg:#f8fafc;--bg2:#fff;--bg3:#f1f5f9;
-  --border:#e2e8f0;--border2:#f1f5f9;
+  --bg:#f8fafc;--bg3:#f1f5f9;--border:#e2e8f0;
   --text:#0f172a;--text2:#475569;--text3:#94a3b8;
-  --card:#fff;--card2:#f8fafc;
-  --hover:#f8fafc;
-  --input:#f8fafc;
+  --card:#fff;--hover:#f8fafc;--input:#f8fafc;
 }
-body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg);color:var(--text);height:100vh;overflow:hidden;transition:var(--transition)}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg);color:var(--text);height:100vh;overflow:hidden;transition:background .2s,color .2s}
 .app{display:grid;grid-template-columns:var(--sidebar) 1fr;grid-template-rows:var(--topbar) 1fr;height:100vh}
-
 /* Topbar */
-.topbar{grid-column:1/-1;background:var(--card);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 20px;gap:16px;z-index:10;transition:var(--transition)}
+.topbar{grid-column:1/-1;background:var(--card);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 20px;gap:16px;z-index:10}
 .logo{display:flex;align-items:center;gap:8px}
 .logo-icon{width:28px;height:28px;background:var(--blue);border-radius:6px;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:13px}
-.logo-text{font-size:14px;font-weight:700;color:var(--text);line-height:1}
-.logo-sub{font-size:10px;color:var(--text3);font-weight:400;text-transform:uppercase;letter-spacing:.05em}
-.search-bar{flex:1;max-width:480px;display:flex;align-items:center;gap:8px;background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:0 12px;height:34px;transition:var(--transition)}
-.search-bar input{flex:1;border:none;background:none;font-size:13px;color:var(--text);outline:none}
-.search-bar input::placeholder{color:var(--text3)}
-.topbar-right{display:flex;align-items:center;gap:12px}
+.logo-text{font-size:14px;font-weight:700;color:var(--text)}
+.logo-sub{font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:.05em}
+.topbar-right{display:flex;align-items:center;gap:10px}
 .nav-live{font-size:12px;color:var(--text2);display:flex;align-items:center;gap:6px}
-.nav-dot{width:7px;height:7px;border-radius:50%;background:#22c55e}
-.theme-toggle{width:32px;height:32px;border-radius:50%;border:1px solid var(--border);background:var(--bg3);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:15px;transition:var(--transition)}
-.theme-toggle:hover{background:var(--hover)}
+.nav-dot{width:7px;height:7px;border-radius:50%;background:#22c55e;animation:pulse 2s ease-in-out infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+.theme-btn{width:32px;height:32px;border-radius:50%;border:1px solid var(--border);background:var(--bg3);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:15px}
 .avatar{width:30px;height:30px;border-radius:50%;background:var(--blue);color:#fff;font-size:12px;font-weight:600;display:flex;align-items:center;justify-content:center}
-
+.demo-pill{font-size:11px;font-weight:600;padding:3px 10px;border-radius:99px;background:var(--amber-light);color:var(--amber);border:1px solid rgba(245,158,11,.3)}
 /* Sidebar */
-.sidebar{background:var(--card);border-right:1px solid var(--border);display:flex;flex-direction:column;gap:2px;overflow-y:auto;padding:16px 0;transition:var(--transition)}
+.sidebar{background:var(--card);border-right:1px solid var(--border);display:flex;flex-direction:column;padding:16px 0;overflow-y:auto}
 .nav-section{font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:.06em;padding:12px 16px 4px;font-weight:600}
 .nav-item{display:flex;align-items:center;gap:10px;padding:9px 16px;font-size:13px;color:var(--text2);cursor:pointer;border-left:2px solid transparent;transition:all .15s}
 .nav-item:hover{background:var(--hover);color:var(--text)}
 .nav-item.active{background:var(--blue-light);color:var(--blue);border-left-color:var(--blue);font-weight:500}
-.nav-icon{width:16px;height:16px;opacity:.8;flex-shrink:0}
-.sidebar-bottom{margin-top:auto;padding:16px;border-top:1px solid var(--border2)}
-.sidebar-credit{font-size:11px;color:var(--text3);line-height:1.6}
+.nav-icon{width:16px;height:16px;flex-shrink:0}
+.sidebar-bottom{margin-top:auto;padding:16px;border-top:1px solid var(--border)}
+.sidebar-credit{font-size:11px;color:var(--text3);line-height:1.8}
 .sidebar-credit em{font-style:italic;color:var(--text2);font-size:12px}
-
 /* Main */
-.main{overflow-y:auto;background:var(--bg);transition:var(--transition)}
+.main{overflow-y:auto;background:var(--bg)}
 .screen{display:none;padding:28px 32px;min-height:100%}
 .screen.active{display:block}
 .page-title{font-size:22px;font-weight:700;color:var(--text);margin-bottom:2px}
 .page-sub{font-size:13px;color:var(--text2);margin-bottom:24px;display:flex;align-items:center;gap:8px}
-
 /* Metric cards */
 .metric-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:24px}
-.metric-card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:16px 20px;transition:var(--transition)}
+.metric-card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:16px 20px;transition:transform .15s}
+.metric-card:hover{transform:translateY(-1px)}
 .metric-label{font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:.05em;font-weight:600;margin-bottom:8px}
 .metric-value{font-size:24px;font-weight:700;color:var(--text);margin-bottom:4px}
 .metric-sub{font-size:12px;color:var(--text2)}
-.up{color:var(--green)}
-.down{color:var(--red)}
-.neutral{color:var(--amber)}
-.metric-card.bt-blue{border-top:3px solid var(--blue)}
-.metric-card.bt-green{border-top:3px solid var(--green)}
-.metric-card.bt-amber{border-top:3px solid var(--amber)}
-.metric-card.bt-red{border-top:3px solid var(--red)}
-
+.up{color:var(--green)}.down{color:var(--red)}.neutral{color:var(--amber)}
+.bt-blue{border-top:3px solid var(--blue)}.bt-green{border-top:3px solid var(--green)}
+.bt-amber{border-top:3px solid var(--amber)}.bt-red{border-top:3px solid var(--red)}
 /* Cards */
-.card{background:var(--card);border:1px solid var(--border);border-radius:10px;overflow:hidden;margin-bottom:20px;transition:var(--transition)}
-.card-header{padding:14px 20px;border-bottom:1px solid var(--border2);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px}
+.card{background:var(--card);border:1px solid var(--border);border-radius:10px;overflow:hidden;margin-bottom:20px}
+.card-header{padding:14px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px}
 .card-title{font-size:14px;font-weight:600;color:var(--text)}
 .card-sub{font-size:12px;color:var(--text3)}
-
 /* Table */
 table{width:100%;border-collapse:collapse;font-size:13px}
-th{padding:10px 16px;text-align:left;font-size:11px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:.04em;border-bottom:1px solid var(--border);background:var(--bg3)}
-td{padding:11px 16px;border-bottom:1px solid var(--border2);color:var(--text2)}
+th{padding:10px 14px;text-align:left;font-size:11px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:.04em;border-bottom:1px solid var(--border);background:var(--bg3);white-space:nowrap}
+td{padding:10px 14px;border-bottom:1px solid var(--border);color:var(--text2);white-space:nowrap}
 tr:last-child td{border-bottom:none}
-tr:hover td{background:var(--hover);cursor:pointer}
+tr:hover td{background:var(--hover)}
 .badge{display:inline-flex;align-items:center;padding:2px 8px;border-radius:99px;font-size:11px;font-weight:500}
 .badge-green{background:var(--green-light);color:var(--green)}
 .badge-red{background:var(--red-light);color:var(--red)}
 .badge-blue{background:var(--blue-light);color:var(--blue)}
 .badge-amber{background:var(--amber-light);color:var(--amber)}
-
-/* Filters */
-.filter-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
-.filter-btn{padding:5px 14px;border-radius:99px;border:1px solid var(--border);background:var(--card);font-size:12px;color:var(--text2);cursor:pointer;transition:all .15s}
-.filter-btn:hover,.filter-btn.active{background:var(--blue);color:#fff;border-color:var(--blue)}
-.search-input{padding:6px 12px;border:1px solid var(--border);border-radius:6px;font-size:12px;color:var(--text);background:var(--input);outline:none;width:220px;transition:var(--transition)}
-.search-input:focus{border-color:var(--blue)}
-
+.badge-gray{background:rgba(100,116,139,.15);color:var(--text3)}
+.ticker-cell{color:var(--blue);font-weight:600}
+.target-up{font-size:10px;color:var(--green)}
+.target-dn{font-size:10px;color:var(--red)}
 /* Charts */
 .charts-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:20px}
-.chart-card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:18px;transition:var(--transition)}
+.chart-card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:18px}
 .chart-title{font-size:13px;font-weight:600;color:var(--text);margin-bottom:14px}
 .donut-wrap{display:flex;align-items:center;gap:16px}
-.donut{position:relative;width:90px;height:90px;flex-shrink:0}
 .legend{flex:1;display:flex;flex-direction:column;gap:5px}
 .legend-item{display:flex;align-items:center;justify-content:space-between;font-size:11px;color:var(--text2)}
 .legend-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;margin-right:6px}
 .legend-left{display:flex;align-items:center}
-
 /* Risk bars */
-.risk-bar-wrap{display:flex;flex-direction:column;gap:10px}
-.risk-bar-item{display:flex;flex-direction:column;gap:4px}
+.risk-bar-item{display:flex;flex-direction:column;gap:4px;margin-bottom:8px}
 .risk-bar-label{display:flex;justify-content:space-between;font-size:11px;color:var(--text2)}
 .risk-bar-track{height:6px;background:var(--bg3);border-radius:99px;overflow:hidden}
-.risk-bar-fill{height:100%;border-radius:99px}
-
-/* Upload */
-.upload-zone{border:2px dashed var(--border);border-radius:12px;padding:40px;text-align:center;cursor:pointer;transition:all .2s;background:var(--card)}
-.upload-zone:hover{border-color:var(--blue);background:var(--blue-light)}
-.upload-zone input{display:none}
-
-/* AI */
-.ai-chat{display:flex;flex-direction:column;height:calc(100vh - var(--topbar) - 260px);min-height:280px}
-.ai-messages{flex:1;overflow-y:auto;display:flex;flex-direction:column;gap:12px;padding:16px;background:var(--bg);border-radius:10px;border:1px solid var(--border);margin-bottom:12px}
-.ai-msg{display:flex;flex-direction:column;gap:4px}
-.ai-msg.user{align-items:flex-end}
-.ai-msg.agent{align-items:flex-start}
-.ai-bubble{padding:10px 14px;border-radius:10px;font-size:13px;line-height:1.6;max-width:82%;white-space:pre-wrap}
-.ai-msg.user .ai-bubble{background:var(--blue);color:#fff;border-bottom-right-radius:3px}
-.ai-msg.agent .ai-bubble{background:var(--card);border:1px solid var(--border);border-bottom-left-radius:3px;color:var(--text)}
-.ai-label{font-size:11px;color:var(--text3);margin-bottom:2px}
-.ai-input-row{display:flex;gap:8px}
-.ai-input{flex:1;padding:10px 14px;border:1px solid var(--border);border-radius:8px;font-size:13px;color:var(--text);background:var(--input);outline:none;transition:var(--transition)}
-.ai-input:focus{border-color:var(--blue)}
-.ai-send{padding:10px 18px;background:var(--blue);color:#fff;border:none;border-radius:8px;font-size:13px;cursor:pointer;white-space:nowrap;font-weight:500}
-.ai-send:disabled{opacity:.4;cursor:not-allowed}
-.chips-row{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px}
-.chip{font-size:11px;padding:5px 12px;border-radius:99px;border:1px solid var(--border);cursor:pointer;color:var(--text2);background:var(--card);transition:all .15s}
-.chip:hover{background:var(--blue-light);border-color:var(--blue);color:var(--blue)}
-.thinking{display:flex;gap:4px;align-items:center;padding:10px 14px;background:var(--card);border:1px solid var(--border);border-radius:10px;width:fit-content}
-.thinking span{width:5px;height:5px;border-radius:50%;background:var(--text3);animation:blink 1.2s infinite}
-.thinking span:nth-child(2){animation-delay:.2s}
-.thinking span:nth-child(3){animation-delay:.4s}
-@keyframes blink{0%,80%,100%{opacity:.2}40%{opacity:1}}
-
+.risk-bar-fill{height:100%;border-radius:99px;transition:width .6s ease}
+/* Stress */
+.stress-bar{display:flex;align-items:flex-end;gap:8px;height:140px;margin:16px 0}
+.stress-col{display:flex;flex-direction:column;align-items:center;gap:6px;flex:1}
+.stress-label{font-size:10px;color:var(--text3);text-align:center;line-height:1.3}
+.stress-val{font-size:11px;font-weight:600}
 /* Signals */
 .signals-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:20px}
-.signal-card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:16px;transition:var(--transition)}
-.signal-tag{display:inline-flex;align-items:center;gap:4px;font-size:11px;font-weight:600;padding:2px 8px;border-radius:99px;margin-bottom:10px}
+.signal-card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:16px;transition:border-color .2s}
+.signal-card:hover{border-color:var(--blue)}
+.signal-tag{display:inline-flex;font-size:11px;font-weight:600;padding:2px 8px;border-radius:99px;margin-bottom:10px}
 .signal-tag.alert{background:var(--red-light);color:var(--red)}
 .signal-tag.risk{background:var(--amber-light);color:var(--amber)}
 .signal-tag.opportunity{background:var(--green-light);color:var(--green)}
 .signal-tag.news{background:var(--blue-light);color:var(--blue)}
 .signal-title{font-size:14px;font-weight:600;color:var(--text);margin-bottom:6px}
 .signal-body{font-size:12px;color:var(--text2);line-height:1.6;margin-bottom:12px}
-.signal-actions{display:flex;gap:12px;align-items:center}
+.signal-actions{display:flex;gap:12px}
 .signal-investigate{font-size:12px;color:var(--blue);cursor:pointer;font-weight:500}
 .signal-dismiss{font-size:12px;color:var(--text3);cursor:pointer}
-.signal-time{font-size:11px;color:var(--text3)}
-
-/* Stress */
-.stress-bar{display:flex;align-items:flex-end;gap:8px;height:140px;margin:16px 0}
-.stress-col{display:flex;flex-direction:column;align-items:center;gap:6px;flex:1}
-.stress-label{font-size:10px;color:var(--text3);text-align:center;line-height:1.3}
-.stress-val{font-size:11px;font-weight:600}
-
-/* Buttons */
+/* AI */
+.ai-chat{display:flex;flex-direction:column;height:calc(100vh - var(--topbar) - 280px);min-height:280px}
+.ai-messages{flex:1;overflow-y:auto;display:flex;flex-direction:column;gap:12px;padding:16px;background:var(--bg);border-radius:10px;border:1px solid var(--border);margin-bottom:12px;scroll-behavior:smooth}
+.ai-msg{display:flex;flex-direction:column;gap:4px}
+.ai-msg.user{align-items:flex-end}
+.ai-msg.agent{align-items:flex-start}
+.ai-bubble{padding:10px 14px;border-radius:10px;font-size:13px;line-height:1.65;max-width:84%;white-space:pre-wrap;word-break:break-word}
+.ai-msg.user .ai-bubble{background:var(--blue);color:#fff;border-bottom-right-radius:3px}
+.ai-msg.agent .ai-bubble{background:var(--card);border:1px solid var(--border);border-bottom-left-radius:3px;color:var(--text)}
+.ai-label{font-size:11px;color:var(--text3);margin-bottom:2px}
+.ai-input-row{display:flex;gap:8px}
+.ai-input{flex:1;padding:10px 14px;border:1px solid var(--border);border-radius:8px;font-size:13px;color:var(--text);background:var(--input);outline:none}
+.ai-input:focus{border-color:var(--blue)}
+.ai-send{padding:10px 18px;background:var(--blue);color:#fff;border:none;border-radius:8px;font-size:13px;cursor:pointer;font-weight:500}
+.ai-send:disabled{opacity:.4;cursor:not-allowed}
+.chips-row{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px}
+.chip{font-size:11px;padding:5px 12px;border-radius:99px;border:1px solid var(--border);cursor:pointer;color:var(--text2);background:var(--card);transition:all .15s}
+.chip:hover{background:var(--blue-light);border-color:var(--blue);color:var(--blue)}
+.thinking{display:flex;gap:4px;align-items:center;padding:10px 14px;background:var(--card);border:1px solid var(--border);border-radius:10px;width:fit-content}
+.thinking span{width:5px;height:5px;border-radius:50%;background:var(--text3);animation:blink 1.2s infinite}
+.thinking span:nth-child(2){animation-delay:.2s}.thinking span:nth-child(3){animation-delay:.4s}
+@keyframes blink{0%,80%,100%{opacity:.2}40%{opacity:1}}
+/* Misc */
 .btn{padding:8px 16px;border-radius:7px;font-size:13px;cursor:pointer;border:none;font-weight:500}
 .btn-primary{background:var(--blue);color:#fff}
-.btn-primary:hover{opacity:.9}
-.btn-secondary{background:var(--bg3);color:var(--text);border:1px solid var(--border)}
-
-/* Back */
-.back-btn{display:inline-flex;align-items:center;gap:6px;font-size:13px;color:var(--text2);cursor:pointer;margin-bottom:16px;background:none;border:none}
-.back-btn:hover{color:var(--blue)}
-.portfolio-name-big{font-size:24px;font-weight:700;color:var(--text);margin-bottom:4px}
-.portfolio-meta-small{font-size:13px;color:var(--text3);margin-bottom:20px}
-
-/* Compliance */
-.compliance-hero{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:32px;text-align:center;margin-bottom:20px}
-
-@media(max-width:900px){
-  .metric-grid{grid-template-columns:1fr 1fr}
-  .charts-grid{grid-template-columns:1fr}
-  .signals-grid{grid-template-columns:1fr}
-}
+.filter-btn{padding:5px 14px;border-radius:99px;border:1px solid var(--border);background:var(--card);font-size:12px;color:var(--text2);cursor:pointer;transition:all .15s}
+.filter-btn:hover,.filter-btn.active{background:var(--blue);color:#fff;border-color:var(--blue)}
+@media(max-width:900px){.metric-grid{grid-template-columns:1fr 1fr}.charts-grid{grid-template-columns:1fr}.signals-grid{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
@@ -204,112 +154,135 @@ tr:hover td{background:var(--hover);cursor:pointer}
   <div class="topbar">
     <div class="logo">
       <div class="logo-icon">H</div>
-      <div>
-        <div class="logo-text">Helix</div>
-        <div class="logo-sub">Risk & Analytics</div>
-      </div>
+      <div><div class="logo-text">Helix</div><div class="logo-sub">Risk & Analytics</div></div>
     </div>
-    <div class="search-bar">
-      <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
-      <input type="text" placeholder="Search portfolios, positions, scenarios..."/>
-    </div>
+    <div style="flex:1"></div>
     <div class="topbar-right">
-      <div class="nav-live"><div class="nav-dot"></div>Live · NAV as of 2026-05-11</div>
-      <button class="theme-toggle" onclick="toggleTheme()" id="theme-btn" title="Toggle theme">🌙</button>
+      <span class="demo-pill">DEMO</span>
+      <div class="nav-live"><div class="nav-dot"></div><span id="nav-time">Live</span></div>
+      <button class="theme-btn" onclick="toggleTheme()" id="theme-btn">🌙</button>
       <div class="avatar">KP</div>
     </div>
   </div>
 
   <!-- Sidebar -->
   <div class="sidebar">
-    <div class="nav-section">Analytics</div>
-    <div class="nav-item active" onclick="nav('overview')">
-      <svg class="nav-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>Overview
+    <div class="nav-section">Navigation</div>
+    <div class="nav-item active" onclick="nav('overview')" id="nav-overview">
+      <svg class="nav-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>Firm Overview
     </div>
-    <div class="nav-item" onclick="nav('upload')">
-      <svg class="nav-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>Upload Portfolio
-    </div>
-    <div class="nav-item" onclick="nav('risk')">
+    <div class="nav-item" onclick="nav('risk')" id="nav-risk">
       <svg class="nav-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>Risk
     </div>
-    <div class="nav-item" onclick="nav('compliance')">
+    <div class="nav-item" onclick="nav('compliance')" id="nav-compliance">
       <svg class="nav-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>Compliance
     </div>
-    <div class="nav-item" onclick="nav('ai')">
+    <div class="nav-item" onclick="nav('ai')" id="nav-ai">
       <svg class="nav-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 1v4M12 19v4M4.22 4.22l2.83 2.83M16.95 16.95l2.83 2.83M1 12h4M19 12h4M4.22 19.78l2.83-2.83M16.95 7.05l2.83-2.83"/></svg>AI Insights
     </div>
+
     <div class="sidebar-bottom">
-      <div class="sidebar-credit">Helix Analytics · POC<br/><em>Kshittiz Pahwa</em></div>
+      <div class="sidebar-credit">Helix Analytics · Demo<br/><em>Kshittiz Pahwa</em></div>
     </div>
   </div>
 
   <!-- Main -->
   <div class="main">
 
-    <!-- OVERVIEW -->
+    <!-- FIRM OVERVIEW -->
     <div class="screen active" id="screen-overview">
-      <div class="page-title">Overview</div>
-      <div class="page-sub">7 mandates · $6.84B AUM</div>
+      <div class="page-title">Firm Overview</div>
+      <div class="page-sub">7 mandates · $6.84B AUM · As of <span id="overview-date"></span></div>
       <div class="metric-grid">
         <div class="metric-card bt-blue"><div class="metric-label">Total AUM</div><div class="metric-value">$6.84B</div><div class="metric-sub">7 active portfolios</div></div>
-        <div class="metric-card bt-green"><div class="metric-label">Aggregate Day P&L</div><div class="metric-value">$4.21M</div><div class="metric-sub"><span class="up">↑ 0.06%</span> vs yesterday</div></div>
-        <div class="metric-card bt-green"><div class="metric-label">AUM-Weighted YTD</div><div class="metric-value">7.34%</div><div class="metric-sub"><span class="up">↑ 2.16%</span> vs 5.18% benchmark</div></div>
-        <div class="metric-card bt-amber"><div class="metric-label">Active Mandates</div><div class="metric-value">6</div><div class="metric-sub">1 ramping · 0 suspended</div></div>
+        <div class="metric-card bt-green"><div class="metric-label">Aggregate Day P&L</div><div class="metric-value up">$4.21M</div><div class="metric-sub"><span class="up">↑ 0.06%</span> vs yesterday</div></div>
+        <div class="metric-card bt-amber"><div class="metric-label">AUM-Weighted YTD</div><div class="metric-value up">7.34%</div><div class="metric-sub"><span class="up">↑ 2.16%</span> vs 5.18% benchmark</div></div>
+        <div class="metric-card bt-blue"><div class="metric-label">Active Mandates</div><div class="metric-value">6</div><div class="metric-sub">1 ramping · 0 suspended</div></div>
       </div>
+
+      <!-- Firm-level charts -->
+      <div class="charts-grid" id="firm-charts"></div>
+
+      <!-- Portfolio table -->
       <div class="card">
         <div class="card-header">
-          <div><div class="card-title">Portfolios</div><div class="card-sub">Click any row to view full analytics</div></div>
-          <div class="filter-row">
-            <input class="search-input" placeholder="Search portfolio, ID, manager..." oninput="filterPortfolios(this.value)"/>
-            <button class="filter-btn active" onclick="filterStrat('All',this)">All</button>
-            <button class="filter-btn" onclick="filterStrat('Multi-Asset',this)">Multi-Asset</button>
-            <button class="filter-btn" onclick="filterStrat('Equity',this)">Equity</button>
-            <button class="filter-btn" onclick="filterStrat('Fixed Income',this)">Fixed Income</button>
-            <button class="filter-btn" onclick="filterStrat('Macro',this)">Macro</button>
+          <div><div class="card-title">Portfolios</div><div class="card-sub">Click any row to view full holdings & analytics</div></div>
+          <div style="display:flex;gap:6px;flex-wrap:wrap" id="strat-filters">
+            <button class="filter-btn active" onclick="filterPortfolios('All',this)">All</button>
+            <button class="filter-btn" onclick="filterPortfolios('Multi-Asset',this)">Multi-Asset</button>
+            <button class="filter-btn" onclick="filterPortfolios('Equity',this)">Equity</button>
+            <button class="filter-btn" onclick="filterPortfolios('Fixed Income',this)">Fixed Income</button>
+            <button class="filter-btn" onclick="filterPortfolios('Macro',this)">Macro</button>
           </div>
         </div>
-        <div style="overflow-x:auto"><table><thead><tr><th>ID / Name</th><th>Strategy</th><th>Manager</th><th>AUM ↓</th><th>YTD</th><th>Day P&L</th><th>VaR 95%</th><th>Positions</th><th>Status</th></tr></thead><tbody id="ptbody"></tbody></table></div>
+        <div style="overflow-x:auto"><table>
+          <thead><tr>
+            <th>ID / Name</th><th>Strategy</th><th>Manager</th>
+            <th>AUM</th><th>YTD</th><th>Day P&L</th><th>VaR 95%</th>
+            <th>Positions</th><th>Avg Helix Score</th><th>Status</th>
+          </tr></thead>
+          <tbody id="portfolios-tbody"></tbody>
+        </table></div>
       </div>
     </div>
 
-    <!-- UPLOAD -->
-    <div class="screen" id="screen-upload">
-      <div class="page-title">Upload Portfolio</div>
-      <div class="page-sub">Upload your holdings file to get instant AI-powered analytics</div>
-      <label class="upload-zone">
-        <input type="file" accept=".xlsx,.xls,.csv" onchange="handleUpload(this)"/>
-        <div style="font-size:36px;margin-bottom:12px">📂</div>
-        <div style="font-size:15px;font-weight:600;color:var(--text);margin-bottom:6px" id="upload-title">Drop your portfolio file here</div>
-        <div style="font-size:13px;color:var(--text3)">Supports Excel (.xlsx, .xls) and CSV · Holdings, positions, or any portfolio data</div>
-      </label>
-      <div id="upload-result" style="display:none;margin-top:20px">
-        <div class="metric-grid" id="upload-metrics"></div>
-        <div class="card"><div class="card-header"><div class="card-title" id="upload-table-title">Holdings Preview</div><div class="card-sub">Showing first 50 rows</div></div><div style="overflow-x:auto"><table><thead id="upload-thead"></thead><tbody id="upload-tbody"></tbody></table></div></div>
-      </div>
-    </div>
-
-    <!-- DETAIL -->
+    <!-- PORTFOLIO DETAIL -->
     <div class="screen" id="screen-detail">
-      <button class="back-btn" onclick="nav('overview')">
-        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>All Portfolios
-      </button>
-      <div class="portfolio-name-big" id="d-name"></div>
-      <div class="portfolio-meta-small" id="d-meta"></div>
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:20px">
+        <button onclick="nav('overview')" style="background:none;border:none;color:var(--text2);cursor:pointer;font-size:13px;display:flex;align-items:center;gap:4px">
+          <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>All Portfolios
+        </button>
+        <span style="color:var(--border)">|</span>
+        <span class="badge badge-blue" id="d-id" style="font-size:12px"></span>
+      </div>
+      <div class="page-title" id="d-name"></div>
+      <div class="page-sub" id="d-meta"></div>
+
       <div class="metric-grid" id="d-metrics"></div>
       <div class="charts-grid" id="d-charts"></div>
-      <div class="card"><div class="card-header"><div class="card-title">Risk Assessment</div><div class="card-sub">1-day parametric</div></div><div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:20px;padding:20px" id="d-risk"></div></div>
+
       <div class="card">
         <div class="card-header">
-          <div class="card-title">Holdings</div>
-          <div class="filter-row">
-            <button class="filter-btn active" onclick="filterH('All',this)">All</button>
-            <button class="filter-btn" onclick="filterH('Equity',this)">Equity</button>
-            <button class="filter-btn" onclick="filterH('Fixed Income',this)">Fixed Income</button>
-            <button class="filter-btn" onclick="filterH('Derivative',this)">Derivative</button>
-            <button class="filter-btn" onclick="filterH('Cash',this)">Cash</button>
-          </div>
+          <div><div class="card-title">Holdings</div><div class="card-sub" id="d-holdings-sub"></div></div>
         </div>
-        <div style="overflow-x:auto"><table><thead><tr><th>Ticker</th><th>Name</th><th>Class</th><th>Sector</th><th>Region</th><th>Market Value</th><th>Weight</th><th>Day P&L</th><th>YTD P&L</th><th>Liq(D)</th></tr></thead><tbody id="d-holdings"></tbody></table></div>
+        <div style="overflow-x:auto"><table>
+          <thead><tr>
+            <th>Ticker</th><th>Name</th><th>Sector</th><th>Country</th>
+            <th>Price</th><th>Mkt Value</th><th>Weight</th>
+            <th>Day P&L</th><th>Day %</th><th>Target</th>
+            <th title="Yahoo Finance sell-side consensus">Yahoo Rating</th>
+            <th title="Helix quant score">⬡ Helix Rating</th>
+            <th>ESG</th><th>Beta</th><th>P/E</th>
+          </tr></thead>
+          <tbody id="d-holdings-tbody"></tbody>
+        </table></div>
+      </div>
+
+      <!-- Row 1: VaR metrics -->
+      <div class="metric-grid" style="grid-template-columns:repeat(5,1fr)" id="d-var-metrics"></div>
+
+      <!-- Row 2: Analyst + ESG -->
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:20px">
+        <div class="card">
+          <div class="card-header"><div class="card-title">Analyst Breakdown</div><div class="card-sub" id="d-analyst-sub"></div></div>
+          <div style="padding:16px 20px" id="d-analyst-bars"></div>
+        </div>
+        <div class="card">
+          <div class="card-header"><div class="card-title">ESG Distribution</div><div class="card-sub" id="d-esg-sub"></div></div>
+          <div style="padding:16px 20px" id="d-esg-bars"></div>
+        </div>
+      </div>
+
+      <!-- Row 3: Credit Quality + Liquidity -->
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+        <div class="card">
+          <div class="card-header"><div class="card-title">Credit Quality</div><div class="card-sub" id="d-credit-sub">Fixed income holdings · 1y default probability</div></div>
+          <div id="d-credit-content"></div>
+        </div>
+        <div class="card">
+          <div class="card-header"><div class="card-title">Liquidity Profile</div><div class="card-sub" id="d-liq-sub">Days to liquidate at normal market depth</div></div>
+          <div style="padding:16px 20px" id="d-liq-bars"></div>
+        </div>
       </div>
     </div>
 
@@ -342,14 +315,11 @@ tr:hover td{background:var(--hover);cursor:pointer}
         <div class="card">
           <div class="card-header"><div class="card-title">Liquidity Profile</div><div class="card-sub">Days to liquidate at normal market depth</div></div>
           <div style="padding:16px 20px">
-            <div class="risk-bar-wrap">
-              <div class="risk-bar-item"><div class="risk-bar-label"><span>≤ 1 day</span><span class="up">$1.12B · 71.4%</span></div><div class="risk-bar-track"><div class="risk-bar-fill" style="width:71.4%;background:var(--green)"></div></div></div>
-              <div class="risk-bar-item"><div class="risk-bar-label"><span>2–7 days</span><span style="color:var(--text2)">$198.4M · 12.6%</span></div><div class="risk-bar-track"><div class="risk-bar-fill" style="width:12.6%;background:var(--blue)"></div></div></div>
-              <div class="risk-bar-item"><div class="risk-bar-label"><span>8–30 days</span><span class="neutral">$48.2M · 3.1%</span></div><div class="risk-bar-track"><div class="risk-bar-fill" style="width:3.1%;background:var(--amber)"></div></div></div>
-              <div class="risk-bar-item"><div class="risk-bar-label"><span>31–90 days</span><span class="neutral">$78.4M · 5.0%</span></div><div class="risk-bar-track"><div class="risk-bar-fill" style="width:5%;background:var(--amber)"></div></div></div>
-              <div class="risk-bar-item"><div class="risk-bar-label"><span>&gt; 90 days</span><span class="down">$124.8M · 7.9%</span></div><div class="risk-bar-track"><div class="risk-bar-fill" style="width:7.9%;background:var(--red)"></div></div></div>
-            </div>
-            <p style="font-size:11px;color:var(--text2);margin-top:14px;line-height:1.5"><strong>Redemption coverage:</strong> 7-day liquid assets cover <span class="up" style="font-weight:600">72%</span> of NAV — above 25% prospectus floor.</p>
+            <div class="risk-bar-item"><div class="risk-bar-label"><span>≤ 1 day</span><span class="up">71.4% · $1.12B</span></div><div class="risk-bar-track"><div class="risk-bar-fill" style="width:71.4%;background:var(--green)"></div></div></div>
+            <div class="risk-bar-item"><div class="risk-bar-label"><span>2–7 days</span><span>12.6% · $198M</span></div><div class="risk-bar-track"><div class="risk-bar-fill" style="width:12.6%;background:var(--blue)"></div></div></div>
+            <div class="risk-bar-item"><div class="risk-bar-label"><span>8–30 days</span><span class="neutral">3.1% · $48M</span></div><div class="risk-bar-track"><div class="risk-bar-fill" style="width:3.1%;background:var(--amber)"></div></div></div>
+            <div class="risk-bar-item"><div class="risk-bar-label"><span>31–90 days</span><span class="neutral">5.0% · $78M</span></div><div class="risk-bar-track"><div class="risk-bar-fill" style="width:5%;background:var(--amber)"></div></div></div>
+            <div class="risk-bar-item"><div class="risk-bar-label"><span>> 90 days</span><span class="down">7.9% · $124M</span></div><div class="risk-bar-track"><div class="risk-bar-fill" style="width:7.9%;background:var(--red)"></div></div></div>
           </div>
         </div>
       </div>
@@ -365,11 +335,11 @@ tr:hover td{background:var(--hover);cursor:pointer}
         <div class="metric-card bt-green"><div class="metric-label">Resolved Today</div><div class="metric-value up">12</div><div class="metric-sub">Closed exceptions</div></div>
         <div class="metric-card bt-blue"><div class="metric-label">Breach Rate</div><div class="metric-value">1.8%</div><div class="metric-sub up">↓ 0.3% vs last month</div></div>
       </div>
-      <div class="compliance-hero">
+      <div class="card" style="padding:32px;text-align:center;margin-bottom:20px">
         <div style="font-size:36px;margin-bottom:12px">📋</div>
         <div style="font-size:16px;font-weight:600;color:var(--text);margin-bottom:6px">Exception Report Agent</div>
-        <div style="font-size:13px;color:var(--text2);margin-bottom:20px;line-height:1.7;max-width:500px;margin-left:auto;margin-right:auto">Generate AI-powered compliance reports for any portfolio, date range, or exception type. Upload your exceptions data and get audit-ready reports in seconds.</div>
-        <button class="btn btn-primary" onclick="nav('ai');setTimeout(()=>{document.getElementById('ai-input').value='Show me a compliance summary — which portfolios have the most open exceptions and what are the key risks?';aiSend();},300)">Ask Helix about Compliance →</button>
+        <div style="font-size:13px;color:var(--text2);margin-bottom:20px;line-height:1.7;max-width:500px;margin-left:auto;margin-right:auto">Generate AI-powered compliance reports for any portfolio or date range.</div>
+        <button class="btn btn-primary" onclick="nav('ai');setTimeout(()=>{document.getElementById('ai-input').value='Compliance summary — which portfolios have the most exceptions and what are the key risks to act on today?';aiSend();},300)">Ask Helix about Compliance →</button>
       </div>
       <div class="card">
         <div class="card-header"><div class="card-title">Recent Exceptions</div><div class="card-sub">Last 7 days · All portfolios</div></div>
@@ -388,31 +358,38 @@ tr:hover td{background:var(--hover);cursor:pointer}
     <!-- AI INSIGHTS -->
     <div class="screen" id="screen-ai">
       <div class="page-title">AI Insights</div>
-      <div class="page-sub">Natural-language analytics on your book <span style="display:flex;align-items:center;gap:4px;font-size:12px;color:var(--green)"><span style="width:6px;height:6px;border-radius:50%;background:var(--green);display:inline-block"></span>Model online</span></div>
+      <div class="page-sub">Natural-language analytics on your book
+        <span style="display:flex;align-items:center;gap:4px;font-size:12px;color:var(--green)">
+          <span style="width:6px;height:6px;border-radius:50%;background:var(--green);display:inline-block;animation:pulse 2s ease-in-out infinite"></span>Model online
+        </span>
+      </div>
       <div class="card" style="margin-bottom:20px">
         <div class="card-header">
           <div style="display:flex;align-items:center;gap:10px">
             <div style="width:32px;height:32px;background:var(--blue);border-radius:8px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:15px">✦</div>
-            <div><div class="card-title">Ask Helix</div><div class="card-sub">Grounded in your live positions and risk data</div></div>
+            <div><div class="card-title">Ask Helix</div><div class="card-sub" id="ai-card-sub">Grounded in live positions across all 7 mandates</div></div>
           </div>
         </div>
         <div style="padding:16px">
           <div class="chips-row">
-            <button class="chip" onclick="aiAsk(this.textContent)">What's my biggest concentration risk?</button>
-            <button class="chip" onclick="aiAsk(this.textContent)">Which portfolio has the highest VaR?</button>
-            <button class="chip" onclick="aiAsk(this.textContent)">Summarise credit risk on the fixed income book</button>
-            <button class="chip" onclick="aiAsk(this.textContent)">What positions suffer most if rates rise 100bps?</button>
-            <button class="chip" onclick="aiAsk(this.textContent)">Which portfolios are close to mandate limits?</button>
+            <button class="chip" onclick="aiAsk(this.textContent)">Which portfolio has the highest concentration risk?</button>
+            <button class="chip" onclick="aiAsk(this.textContent)">Which holdings have a Sell or Strong Sell rating?</button>
+            <button class="chip" onclick="aiAsk(this.textContent)">Show me ESG risk across all portfolios</button>
+            <button class="chip" onclick="aiAsk(this.textContent)">Which positions are most expensive on P/E?</button>
+            <button class="chip" onclick="aiAsk(this.textContent)">Compare Helix ratings vs Yahoo analyst ratings</button>
+            <button class="chip" onclick="aiAsk(this.textContent)">What are the top 3 firm-wide risks right now?</button>
           </div>
           <div class="ai-chat">
             <div class="ai-messages" id="ai-messages">
               <div class="ai-msg agent">
                 <div class="ai-label">✦ Helix</div>
-                <div class="ai-bubble">Hello! I'm Helix, your AI analytics assistant. I have full visibility into your 7 mandates across $6.84B AUM — positions, risk metrics, compliance exceptions, and market exposures.\n\nAsk me anything about your book.</div>
+                <div class="ai-bubble">Hello! I'm Helix — your AI portfolio analyst.
+
+I have full visibility into all 7 mandates across $6.84B AUM — positions, Helix quant scores, analyst ratings, ESG scores, sector exposure, and risk metrics. Ask me anything about your book.</div>
               </div>
             </div>
             <div class="ai-input-row">
-              <input class="ai-input" id="ai-input" placeholder="e.g. What's my exposure to European banks?" onkeydown="if(event.key==='Enter')aiSend()"/>
+              <input class="ai-input" id="ai-input" placeholder="Ask anything about your portfolios..." onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();aiSend();}"/>
               <button class="ai-send" id="ai-send-btn" onclick="aiSend()">Send ↗</button>
             </div>
           </div>
@@ -426,270 +403,598 @@ tr:hover td{background:var(--hover);cursor:pointer}
 </div>
 
 <script>
-const WORKER='https://proud-resonance-42fd.k-pahwa14-e82.workers.dev';
+const WORKER = 'https://proud-resonance-42fd.k-pahwa14-e82.workers.dev';
+const MODEL  = 'claude-sonnet-4-20250514';
+const PALETTE = ['#3b82f6','#22c55e','#f59e0b','#8b5cf6','#ef4444','#06b6d4','#f43f5e','#84cc16'];
 
-// Theme
-let dark=true;
-function toggleTheme(){
-  dark=!dark;
-  document.documentElement.setAttribute('data-theme',dark?'dark':'light');
-  document.getElementById('theme-btn').textContent=dark?'🌙':'☀️';
-}
+let dark=true, aiHist=[], aiRunning=false, activePortfolioId=null;
 
-// Data
-const portfolios=[
-  {id:'FIC-007',name:'Investment Grade Credit',strat:'Fixed Income',mgr:'Priya Natarajan',aum:'$1.84B',ytd:'+3.12%',pnl:'-$184.2K',var:'0.61%',pos:218,status:'Active',ytdN:3.12,pnlN:-184200},
-  {id:'GMA-001',name:'Global Multi-Asset Fund',strat:'Multi-Asset',mgr:'Helena Park',aum:'$1.52B',ytd:'+7.42%',pnl:'+$1.28M',var:'1.42%',pos:142,status:'Active',ytdN:7.42,pnlN:1280000},
-  {id:'EQL-014',name:'Global Equity Long-Only',strat:'Equity',mgr:'Marcus Chen',aum:'$1.12B',ytd:'+11.24%',pnl:'+$2.84M',var:'2.18%',pos:86,status:'Active',ytdN:11.24,pnlN:2840000},
-  {id:'MAC-003',name:'Global Macro',strat:'Macro',mgr:'James Whitfield',aum:'$892.4M',ytd:'+4.88%',pnl:'+$412K',var:'1.95%',pos:54,status:'Active',ytdN:4.88,pnlN:412000},
-  {id:'ALT-009',name:'Alternatives & Private Equity',strat:'Multi-Asset',mgr:'Sarah Okonkwo',aum:'$812.8M',ytd:'+2.31%',pnl:'+$89K',var:'0.98%',pos:38,status:'Active',ytdN:2.31,pnlN:89000},
-  {id:'EQL-022',name:'US Small Cap Growth',strat:'Equity',mgr:'David Kim',aum:'$484.2M',ytd:'+9.14%',pnl:'+$624K',var:'2.84%',pos:112,status:'Active',ytdN:9.14,pnlN:624000},
-  {id:'EQL-021',name:'EM Equity Growth',strat:'Equity',mgr:'Raj Patel',aum:'$163.4M',ytd:'-1.42%',pnl:'-$42K',var:'3.12%',pos:67,status:'Ramping',ytdN:-1.42,pnlN:-42000},
+/* ═══ DEMO DATA ═══════════════════════════════════════════════════════════
+   7 portfolios with realistic enriched holdings.
+   Each holding has: price, dayPct, marketValue, weight, targetPrice,
+   yahooRating, helixScore, helixRating, esgTotal, beta, peRatio, sector, country
+════════════════════════════════════════════════════════════════════════ */
+const PORTFOLIOS = [
+  {
+    id:'GMA-001', name:'Global Multi-Asset Fund', strategy:'Multi-Asset',
+    manager:'Helena Park', aum:'$1.52B', aumN:1520, ytd:'+7.42%', ytdN:7.42,
+    pnl:'+$1.28M', pnlN:1280000, var95:'1.42%', positions:14, status:'Active',
+    risk:{
+      var95:'1.42%', var95sub:'$21.6M at risk', var99:'2.18%', var99sub:'$33.1M at risk',
+      cvar:'1.74%', cvarsub:'Expected shortfall', vol:'9.84%', volsub:'30-day realised',
+      drawdown:'-7.20%', drawdownsub:'Beta 0.94',
+      credit:[
+        {rating:'AAA',cls:'badge-green',exp:'$312M',pct:'20.5%',pd:'0.01%'},
+        {rating:'AA+',cls:'badge-green',exp:'$142M',pct:'9.3%',pd:'0.03%'},
+        {rating:'A',  cls:'badge-green',exp:'$98M', pct:'6.4%',pd:'0.07%'},
+      ],
+      liq:[
+        {label:'≤ 1 day',  pct:68.4, col:'var(--green)', note:'$1.04B'},
+        {label:'2–7 days', pct:14.2, col:'var(--blue)',  note:'$216M'},
+        {label:'8–30 days',pct:8.8,  col:'var(--amber)', note:'$134M'},
+        {label:'31–90 days',pct:5.2, col:'var(--amber)', note:'$79M'},
+        {label:'> 90 days',pct:3.4,  col:'var(--red)',   note:'$52M'},
+      ],
+    },
+    holdings:[
+      {ticker:'MSFT',  name:'Microsoft Corp',        sector:'Technology',           country:'United States', price:415.20, dayPct:0.82,  mv:148200000, wt:9.75,  target:480.00, yahoo:'Buy',         helix:82, helixR:'Strong Buy', esg:14.2, beta:0.91, pe:34.2},
+      {ticker:'NVDA',  name:'NVIDIA Corporation',    sector:'Technology',           country:'United States', price:875.40, dayPct:2.14,  mv:122500000, wt:8.06,  target:1050.0, yahoo:'Strong Buy',  helix:88, helixR:'Strong Buy', esg:18.6, beta:1.72, pe:68.4},
+      {ticker:'JPM',   name:'JPMorgan Chase',        sector:'Financials',           country:'United States', price:198.60, dayPct:0.34,  mv:89400000,  wt:5.88,  target:220.00, yahoo:'Buy',         helix:71, helixR:'Buy',        esg:22.4, beta:1.12, pe:12.1},
+      {ticker:'ASML',  name:'ASML Holding NV',       sector:'Technology',           country:'Netherlands',   price:742.80, dayPct:-0.62, mv:78600000,  wt:5.17,  target:820.00, yahoo:'Buy',         helix:74, helixR:'Buy',        esg:16.8, beta:1.34, pe:38.6},
+      {ticker:'NESN',  name:'Nestlé SA',             sector:'Consumer Staples',     country:'Switzerland',   price:96.40,  dayPct:0.18,  mv:67200000,  wt:4.42,  target:105.00, yahoo:'Hold',        helix:52, helixR:'Hold',       esg:24.1, beta:0.54, pe:21.8},
+      {ticker:'NOVO-B',name:'Novo Nordisk A/S',      sector:'Health Care',          country:'Denmark',       price:118.60, dayPct:1.24,  mv:62400000,  wt:4.11,  target:145.00, yahoo:'Strong Buy',  helix:85, helixR:'Strong Buy', esg:12.4, beta:0.68, pe:41.2},
+      {ticker:'GOOGL', name:'Alphabet Inc',          sector:'Communication Services',country:'United States',price:172.40, dayPct:0.56,  mv:58800000,  wt:3.87,  target:210.00, yahoo:'Buy',         helix:78, helixR:'Strong Buy', esg:16.2, beta:1.06, pe:22.4},
+      {ticker:'BHP',   name:'BHP Group',             sector:'Materials',            country:'Australia',     price:44.20,  dayPct:-1.12, mv:48600000,  wt:3.20,  target:48.00,  yahoo:'Hold',        helix:48, helixR:'Hold',       esg:32.8, beta:0.96, pe:11.2},
+      {ticker:'TCS.NS',name:'Tata Consultancy Svcs', sector:'Technology',           country:'India',         price:3842.0, dayPct:0.74,  mv:42800000,  wt:2.82,  target:4200.0, yahoo:'Buy',         helix:69, helixR:'Buy',        esg:null, beta:0.72, pe:28.6},
+      {ticker:'SHEL',  name:'Shell PLC',             sector:'Energy',               country:'United Kingdom',price:28.40,  dayPct:-0.48, mv:38400000,  wt:2.53,  target:32.00,  yahoo:'Hold',        helix:44, helixR:'Hold',       esg:38.4, beta:0.82, pe:8.4},
+      {ticker:'AMZN',  name:'Amazon.com Inc',        sector:'Consumer Discretionary',country:'United States',price:186.40, dayPct:1.08,  mv:62400000,  wt:4.11,  target:225.00, yahoo:'Strong Buy',  helix:81, helixR:'Strong Buy', esg:22.8, beta:1.24, pe:44.2},
+      {ticker:'SAP',   name:'SAP SE',                sector:'Technology',           country:'Germany',       price:198.60, dayPct:0.42,  mv:44800000,  wt:2.95,  target:230.00, yahoo:'Buy',         helix:72, helixR:'Buy',        esg:14.6, beta:0.88, pe:32.4},
+      {ticker:'CASH',  name:'USD Cash',              sector:'Cash',                 country:'Global',        price:1.00,   dayPct:0.00,  mv:182400000, wt:12.0,  target:null,   yahoo:'N/A',         helix:null,helixR:'N/A',       esg:null, beta:0.00, pe:null},
+      {ticker:'UST10Y',name:'US Treasury 10Y',       sector:'Sovereign',            country:'United States', price:98.40,  dayPct:-0.12, mv:312000000, wt:20.53, target:null,   yahoo:'N/A',         helix:null,helixR:'N/A',       esg:null, beta:0.00, pe:null},
+    ]
+  },
+  {
+    id:'EQL-014', name:'Global Equity Long-Only', strategy:'Equity',
+    manager:'Marcus Chen', aum:'$1.12B', aumN:1120, ytd:'+11.24%', ytdN:11.24,
+    pnl:'+$2.84M', pnlN:2840000, var95:'2.18%', positions:12, status:'Active',
+    holdings:[
+      {ticker:'NVDA',  name:'NVIDIA Corporation',    sector:'Technology',           country:'United States', price:875.40, dayPct:2.14,  mv:98400000,  wt:8.79,  target:1050.0, yahoo:'Strong Buy',  helix:88, helixR:'Strong Buy', esg:18.6, beta:1.72, pe:68.4},
+      {ticker:'AAPL',  name:'Apple Inc',             sector:'Technology',           country:'United States', price:189.80, dayPct:0.62,  mv:84600000,  wt:7.55,  target:220.00, yahoo:'Buy',         helix:76, helixR:'Buy',        esg:11.8, beta:1.24, pe:29.8},
+      {ticker:'META',  name:'Meta Platforms',        sector:'Communication Services',country:'United States',price:498.20, dayPct:1.84,  mv:72400000,  wt:6.46,  target:580.00, yahoo:'Strong Buy',  helix:84, helixR:'Strong Buy', esg:28.4, beta:1.38, pe:26.2},
+      {ticker:'MSFT',  name:'Microsoft Corp',        sector:'Technology',           country:'United States', price:415.20, dayPct:0.82,  mv:68800000,  wt:6.14,  target:480.00, yahoo:'Buy',         helix:82, helixR:'Strong Buy', esg:14.2, beta:0.91, pe:34.2},
+      {ticker:'TSLA',  name:'Tesla Inc',             sector:'Consumer Discretionary',country:'United States',price:182.60, dayPct:-1.42, mv:48400000,  wt:4.32,  target:210.00, yahoo:'Hold',        helix:38, helixR:'Sell',       esg:24.6, beta:2.14, pe:52.8},
+      {ticker:'NOVO-B',name:'Novo Nordisk A/S',      sector:'Health Care',          country:'Denmark',       price:118.60, dayPct:1.24,  mv:62400000,  wt:5.57,  target:145.00, yahoo:'Strong Buy',  helix:85, helixR:'Strong Buy', esg:12.4, beta:0.68, pe:41.2},
+      {ticker:'ASML',  name:'ASML Holding NV',       sector:'Technology',           country:'Netherlands',   price:742.80, dayPct:-0.62, mv:58600000,  wt:5.23,  target:820.00, yahoo:'Buy',         helix:74, helixR:'Buy',        esg:16.8, beta:1.34, pe:38.6},
+      {ticker:'MC.PA', name:'LVMH Moët Hennessy',    sector:'Consumer Discretionary',country:'France',       price:628.40, dayPct:-0.28, mv:44200000,  wt:3.95,  target:720.00, yahoo:'Buy',         helix:68, helixR:'Buy',        esg:20.4, beta:1.12, pe:22.8},
+      {ticker:'INFY.NS',name:'Infosys Ltd',          sector:'Technology',           country:'India',         price:1724.0, dayPct:0.86,  mv:38400000,  wt:3.43,  target:1950.0, yahoo:'Buy',         helix:66, helixR:'Buy',        esg:null, beta:0.68, pe:24.2},
+      {ticker:'RELIANCE.NS',name:'Reliance Industries',sector:'Energy',             country:'India',         price:2842.0, dayPct:0.42,  mv:34200000,  wt:3.05,  target:3200.0, yahoo:'Buy',         helix:62, helixR:'Buy',        esg:null, beta:0.84, pe:26.4},
+      {ticker:'BRK-B', name:'Berkshire Hathaway',    sector:'Financials',           country:'United States', price:384.20, dayPct:0.24,  mv:52400000,  wt:4.68,  target:420.00, yahoo:'Hold',        helix:64, helixR:'Buy',        esg:28.8, beta:0.82, pe:21.4},
+      {ticker:'CASH',  name:'USD Cash',              sector:'Cash',                 country:'Global',        price:1.00,   dayPct:0.00,  mv:57600000,  wt:5.14,  target:null,   yahoo:'N/A',         helix:null,helixR:'N/A',       esg:null, beta:0.00, pe:null},
+    ]
+  },
+  {
+    id:'FIC-007', name:'Investment Grade Credit', strategy:'Fixed Income',
+    manager:'Priya Natarajan', aum:'$1.84B', aumN:1840, ytd:'+3.12%', ytdN:3.12,
+    pnl:'-$184K', pnlN:-184000, var95:'0.61%', positions:10, status:'Active',
+    holdings:[
+      {ticker:'UST10Y', name:'US Treasury 10Y',      sector:'Sovereign',            country:'United States', price:98.40,  dayPct:-0.12, mv:312000000, wt:16.96, target:null,   yahoo:'N/A',         helix:null,helixR:'N/A',       esg:null, beta:0.08, pe:null},
+      {ticker:'UST5Y',  name:'US Treasury 5Y',       sector:'Sovereign',            country:'United States', price:99.20,  dayPct:-0.08, mv:248000000, wt:13.48, target:null,   yahoo:'N/A',         helix:null,helixR:'N/A',       esg:null, beta:0.04, pe:null},
+      {ticker:'BUND10Y',name:'German Bund 10Y',      sector:'Sovereign',            country:'Germany',       price:104.80, dayPct:0.22,  mv:184000000, wt:10.00, target:null,   yahoo:'N/A',         helix:null,helixR:'N/A',       esg:null, beta:0.06, pe:null},
+      {ticker:'MSFT4.2',name:'Microsoft 4.2% 2035',  sector:'Technology',           country:'United States', price:101.20, dayPct:-0.04, mv:142000000, wt:7.72,  target:null,   yahoo:'N/A',         helix:null,helixR:'N/A',       esg:14.2, beta:0.12, pe:null},
+      {ticker:'JPM3.9', name:'JPMorgan 3.9% 2032',   sector:'Financials',           country:'United States', price:98.80,  dayPct:-0.06, mv:124000000, wt:6.74,  target:null,   yahoo:'N/A',         helix:null,helixR:'N/A',       esg:22.4, beta:0.14, pe:null},
+      {ticker:'AAPL3.7',name:'Apple 3.7% 2033',      sector:'Technology',           country:'United States', price:100.40, dayPct:-0.02, mv:98400000,  wt:5.35,  target:null,   yahoo:'N/A',         helix:null,helixR:'N/A',       esg:11.8, beta:0.10, pe:null},
+      {ticker:'GILTS',  name:'UK Gilt 4.25% 2034',   sector:'Sovereign',            country:'United Kingdom',price:102.60, dayPct:0.14,  mv:84200000,  wt:4.58,  target:null,   yahoo:'N/A',         helix:null,helixR:'N/A',       esg:null, beta:0.07, pe:null},
+      {ticker:'NESN3.5',name:'Nestlé 3.5% 2031',     sector:'Consumer Staples',     country:'Switzerland',   price:99.60,  dayPct:-0.02, mv:62400000,  wt:3.39,  target:null,   yahoo:'N/A',         helix:null,helixR:'N/A',       esg:24.1, beta:0.08, pe:null},
+      {ticker:'SHEL3.8',name:'Shell 3.8% 2030',      sector:'Energy',               country:'United Kingdom',price:100.80, dayPct:0.04,  mv:48200000,  wt:2.62,  target:null,   yahoo:'N/A',         helix:null,helixR:'N/A',       esg:38.4, beta:0.10, pe:null},
+      {ticker:'CASH',   name:'USD Cash',              sector:'Cash',                 country:'Global',        price:1.00,   dayPct:0.00,  mv:436800000, wt:23.74, target:null,   yahoo:'N/A',         helix:null,helixR:'N/A',       esg:null, beta:0.00, pe:null},
+    ]
+  },
+  {
+    id:'MAC-003', name:'Global Macro Opportunities', strategy:'Macro',
+    manager:'James Wellington', aum:'$0.94B', aumN:940, ytd:'+4.82%', ytdN:4.82,
+    pnl:'+$0.62M', pnlN:620000, var95:'1.86%', positions:11, status:'Active',
+    holdings:[
+      {ticker:'GLD',   name:'SPDR Gold Trust',       sector:'Commodities',          country:'Global',        price:218.40, dayPct:0.84,  mv:84600000,  wt:9.00,  target:240.00, yahoo:'N/A',         helix:null,helixR:'N/A',       esg:null, beta:0.12, pe:null},
+      {ticker:'TLT',   name:'iShares 20Y+ Treasury', sector:'Sovereign',            country:'United States', price:88.60,  dayPct:-0.42, mv:72400000,  wt:7.70,  target:null,   yahoo:'N/A',         helix:null,helixR:'N/A',       esg:null, beta:-0.28,pe:null},
+      {ticker:'JPM',   name:'JPMorgan Chase',        sector:'Financials',           country:'United States', price:198.60, dayPct:0.34,  mv:62400000,  wt:6.64,  target:220.00, yahoo:'Buy',         helix:71, helixR:'Buy',        esg:22.4, beta:1.12, pe:12.1},
+      {ticker:'XOM',   name:'Exxon Mobil Corp',      sector:'Energy',               country:'United States', price:112.40, dayPct:-0.58, mv:54200000,  wt:5.77,  target:118.00, yahoo:'Hold',        helix:46, helixR:'Hold',       esg:42.8, beta:0.94, pe:13.4},
+      {ticker:'GS',    name:'Goldman Sachs',         sector:'Financials',           country:'United States', price:448.60, dayPct:0.62,  mv:48600000,  wt:5.17,  target:510.00, yahoo:'Buy',         helix:68, helixR:'Buy',        esg:24.6, beta:1.34, pe:14.8},
+      {ticker:'HSBA.L',name:'HSBC Holdings',         sector:'Financials',           country:'United Kingdom',price:684.40, dayPct:0.28,  mv:44800000,  wt:4.77,  target:740.00, yahoo:'Hold',        helix:54, helixR:'Hold',       esg:28.2, beta:0.86, pe:9.2},
+      {ticker:'BABA',  name:'Alibaba Group',         sector:'Consumer Discretionary',country:'China',        price:82.40,  dayPct:-1.84, mv:38200000,  wt:4.06,  target:100.00, yahoo:'Buy',         helix:42, helixR:'Hold',       esg:null, beta:1.48, pe:12.8},
+      {ticker:'VWO',   name:'Vanguard EM ETF',       sector:'Emerging Markets',     country:'Global',        price:42.60,  dayPct:-0.62, mv:34800000,  wt:3.70,  target:null,   yahoo:'N/A',         helix:null,helixR:'N/A',       esg:null, beta:1.12, pe:null},
+      {ticker:'IEMG',  name:'iShares EM ETF',        sector:'Emerging Markets',     country:'Global',        price:48.20,  dayPct:-0.48, mv:28600000,  wt:3.04,  target:null,   yahoo:'N/A',         helix:null,helixR:'N/A',       esg:null, beta:1.08, pe:null},
+      {ticker:'UUP',   name:'USD Bull ETF',          sector:'FX',                   country:'Global',        price:28.40,  dayPct:0.14,  mv:24800000,  wt:2.64,  target:null,   yahoo:'N/A',         helix:null,helixR:'N/A',       esg:null, beta:-0.14,pe:null},
+      {ticker:'CASH',  name:'USD Cash',              sector:'Cash',                 country:'Global',        price:1.00,   dayPct:0.00,  mv:246400000, wt:26.21, target:null,   yahoo:'N/A',         helix:null,helixR:'N/A',       esg:null, beta:0.00, pe:null},
+    ]
+  },
+  {
+    id:'EQL-021', name:'Asia Pacific Growth', strategy:'Equity',
+    manager:'Raj Patel', aum:'$0.68B', aumN:680, ytd:'+9.14%', ytdN:9.14,
+    pnl:'+$1.12M', pnlN:1120000, var95:'2.42%', positions:12, status:'Active',
+    holdings:[
+      {ticker:'TCS.NS',    name:'Tata Consultancy Svcs',  sector:'Technology',       country:'India',         price:3842.0, dayPct:0.74,  mv:68400000,  wt:10.06, target:4200.0, yahoo:'Buy',        helix:69, helixR:'Buy',        esg:null, beta:0.72, pe:28.6},
+      {ticker:'RELIANCE.NS',name:'Reliance Industries',   sector:'Energy',           country:'India',         price:2842.0, dayPct:0.42,  mv:58200000,  wt:8.56,  target:3200.0, yahoo:'Buy',        helix:62, helixR:'Buy',        esg:null, beta:0.84, pe:26.4},
+      {ticker:'INFY.NS',   name:'Infosys Ltd',            sector:'Technology',       country:'India',         price:1724.0, dayPct:0.86,  mv:48600000,  wt:7.15,  target:1950.0, yahoo:'Buy',        helix:66, helixR:'Buy',        esg:null, beta:0.68, pe:24.2},
+      {ticker:'PERSISTENT.NS',name:'Persistent Systems',  sector:'Technology',       country:'India',         price:4824.0, dayPct:1.24,  mv:42400000,  wt:6.24,  target:5400.0, yahoo:'Buy',        helix:72, helixR:'Buy',        esg:null, beta:0.88, pe:42.8},
+      {ticker:'BHARTIARTL.NS',name:'Bharti Airtel',       sector:'Communication Services',country:'India',    price:1284.0, dayPct:0.62,  mv:38200000,  wt:5.62,  target:1450.0, yahoo:'Buy',        helix:64, helixR:'Buy',        esg:null, beta:0.74, pe:32.4},
+      {ticker:'005930.KS', name:'Samsung Electronics',    sector:'Technology',       country:'South Korea',   price:72400, dayPct:-0.42,  mv:48800000,  wt:7.18,  target:82000,  yahoo:'Buy',        helix:58, helixR:'Hold',       esg:null, beta:1.14, pe:16.8},
+      {ticker:'9988.HK',   name:'Alibaba Group HK',       sector:'Consumer Discretionary',country:'China',   price:82.40,  dayPct:-1.84, mv:34200000,  wt:5.03,  target:100.00, yahoo:'Buy',        helix:42, helixR:'Hold',       esg:null, beta:1.48, pe:12.8},
+      {ticker:'TSM',       name:'Taiwan Semiconductor',   sector:'Technology',       country:'Taiwan',        price:168.40, dayPct:0.96,  mv:52400000,  wt:7.71,  target:200.00, yahoo:'Strong Buy', helix:80, helixR:'Strong Buy', esg:null, beta:1.28, pe:28.4},
+      {ticker:'HDFC.NS',   name:'HDFC Bank',              sector:'Financials',       country:'India',         price:1642.0, dayPct:0.28,  mv:38400000,  wt:5.65,  target:1850.0, yahoo:'Buy',        helix:68, helixR:'Buy',        esg:null, beta:0.92, pe:19.8},
+      {ticker:'BAJFINANCE.NS',name:'Bajaj Finance',       sector:'Financials',       country:'India',         price:6842.0, dayPct:0.84,  mv:28800000,  wt:4.24,  target:7800.0, yahoo:'Buy',        helix:70, helixR:'Buy',        esg:null, beta:1.24, pe:26.8},
+      {ticker:'CBA.AX',    name:'Commonwealth Bank AU',   sector:'Financials',       country:'Australia',     price:128.40, dayPct:0.14,  mv:24800000,  wt:3.65,  target:135.00, yahoo:'Hold',       helix:52, helixR:'Hold',       esg:null, beta:0.86, pe:22.4},
+      {ticker:'CASH',      name:'AUD/USD Cash',           sector:'Cash',             country:'Global',        price:1.00,   dayPct:0.00,  mv:96000000,  wt:14.12, target:null,   yahoo:'N/A',        helix:null,helixR:'N/A',      esg:null, beta:0.00, pe:null},
+    ]
+  },
+  {
+    id:'ALT-009', name:'Real Assets & Alternatives', strategy:'Multi-Asset',
+    manager:'Sarah Okonkwo', aum:'$0.48B', aumN:480, ytd:'+2.84%', ytdN:2.84,
+    pnl:'-$0.24M', pnlN:-240000, var95:'1.24%', positions:10, status:'Active',
+    holdings:[
+      {ticker:'VNQ',    name:'Vanguard REIT ETF',     sector:'Real Estate',          country:'United States', price:84.20,  dayPct:-0.42, mv:62400000,  wt:13.00, target:null,   yahoo:'N/A',        helix:null,helixR:'N/A',       esg:null, beta:0.84, pe:null},
+      {ticker:'SGOL',   name:'Aberdeen Gold ETF',     sector:'Commodities',          country:'Global',        price:22.84,  dayPct:0.86,  mv:48200000,  wt:10.04, target:null,   yahoo:'N/A',        helix:null,helixR:'N/A',       esg:null, beta:0.10, pe:null},
+      {ticker:'PROLOGIS',name:'Prologis Inc',         sector:'Real Estate',          country:'United States', price:112.40, dayPct:-0.28, mv:42400000,  wt:8.83,  target:130.00, yahoo:'Buy',        helix:58, helixR:'Hold',       esg:18.4, beta:0.96, pe:32.4},
+      {ticker:'AMT',    name:'American Tower Corp',   sector:'Real Estate',          country:'United States', price:184.60, dayPct:-0.14, mv:38200000,  wt:7.96,  target:210.00, yahoo:'Buy',        helix:62, helixR:'Buy',        esg:16.8, beta:0.88, pe:28.6},
+      {ticker:'BX',     name:'Blackstone Inc',        sector:'Financials',           country:'United States', price:128.40, dayPct:0.42,  mv:34800000,  wt:7.25,  target:152.00, yahoo:'Buy',        helix:66, helixR:'Buy',        esg:28.4, beta:1.42, pe:22.8},
+      {ticker:'WOOD',   name:'iShares Global Timber', sector:'Materials',            country:'Global',        price:68.40,  dayPct:0.14,  mv:28600000,  wt:5.96,  target:null,   yahoo:'N/A',        helix:null,helixR:'N/A',       esg:null, beta:0.72, pe:null},
+      {ticker:'INDU',   name:'Global Infrastructure ETF',sector:'Industrials',      country:'Global',        price:38.20,  dayPct:0.08,  mv:24800000,  wt:5.17,  target:null,   yahoo:'N/A',        helix:null,helixR:'N/A',       esg:null, beta:0.62, pe:null},
+      {ticker:'CCL',    name:'Carnival Corporation',  sector:'Consumer Discretionary',country:'United States',price:18.40,  dayPct:-1.24, mv:18400000,  wt:3.83,  target:22.00,  yahoo:'Hold',       helix:32, helixR:'Sell',       esg:34.2, beta:1.84, pe:18.6},
+      {ticker:'GS',     name:'Goldman Sachs',         sector:'Financials',           country:'United States', price:448.60, dayPct:0.62,  mv:24800000,  wt:5.17,  target:510.00, yahoo:'Buy',        helix:68, helixR:'Buy',        esg:24.6, beta:1.34, pe:14.8},
+      {ticker:'CASH',   name:'USD Cash',              sector:'Cash',                 country:'Global',        price:1.00,   dayPct:0.00,  mv:155400000, wt:32.38, target:null,   yahoo:'N/A',        helix:null,helixR:'N/A',       esg:null, beta:0.00, pe:null},
+    ]
+  },
+  {
+    id:'HYB-012', name:'High Yield & Credit', strategy:'Fixed Income',
+    manager:'Elena Vasquez', aum:'$0.28B', aumN:280, ytd:'+5.68%', ytdN:5.68,
+    pnl:'+$0.48M', pnlN:480000, var95:'1.82%', positions:9, status:'Ramping',
+    holdings:[
+      {ticker:'HYG',    name:'iShares HY Corporate',  sector:'Fixed Income',         country:'United States', price:76.40,  dayPct:0.14,  mv:48400000,  wt:17.29, target:null,   yahoo:'N/A',        helix:null,helixR:'N/A',       esg:null, beta:0.58, pe:null},
+      {ticker:'JNK',    name:'SPDR HY Bond ETF',      sector:'Fixed Income',         country:'United States', price:92.60,  dayPct:0.18,  mv:42200000,  wt:15.07, target:null,   yahoo:'N/A',        helix:null,helixR:'N/A',       esg:null, beta:0.62, pe:null},
+      {ticker:'TSLA5.3',name:'Tesla 5.3% 2028',       sector:'Consumer Discretionary',country:'United States',price:98.40,  dayPct:-0.24, mv:28600000,  wt:10.21, target:null,   yahoo:'N/A',        helix:null,helixR:'N/A',       esg:24.6, beta:0.84, pe:null},
+      {ticker:'FORD5.1',name:'Ford Motor 5.1% 2029',  sector:'Consumer Discretionary',country:'United States',price:97.80,  dayPct:-0.12, mv:24800000,  wt:8.86,  target:null,   yahoo:'N/A',        helix:null,helixR:'N/A',       esg:32.4, beta:0.92, pe:null},
+      {ticker:'BABA4.4',name:'Alibaba 4.4% 2031',     sector:'Consumer Discretionary',country:'China',        price:96.20,  dayPct:-0.34, mv:22400000,  wt:8.00,  target:null,   yahoo:'N/A',        helix:null,helixR:'N/A',       esg:null, beta:0.68, pe:null},
+      {ticker:'CCL5.75',name:'Carnival 5.75% 2027',   sector:'Consumer Discretionary',country:'United States',price:99.40,  dayPct:0.08,  mv:18600000,  wt:6.64,  target:null,   yahoo:'N/A',        helix:null,helixR:'N/A',       esg:34.2, beta:0.74, pe:null},
+      {ticker:'EMHY',   name:'EM High Yield Bond ETF',sector:'Emerging Markets',     country:'Global',        price:42.60,  dayPct:-0.42, mv:24400000,  wt:8.71,  target:null,   yahoo:'N/A',        helix:null,helixR:'N/A',       esg:null, beta:0.88, pe:null},
+      {ticker:'ANGL',   name:'Fallen Angel Bond ETF', sector:'Fixed Income',         country:'United States', price:28.40,  dayPct:0.06,  mv:18800000,  wt:6.71,  target:null,   yahoo:'N/A',        helix:null,helixR:'N/A',       esg:null, beta:0.64, pe:null},
+      {ticker:'CASH',   name:'USD Cash',              sector:'Cash',                 country:'Global',        price:1.00,   dayPct:0.00,  mv:29800000,  wt:10.64, target:null,   yahoo:'N/A',        helix:null,helixR:'N/A',       esg:null, beta:0.00, pe:null},
+    ]
+  },
 ];
 
-const holdings=[
-  {ticker:'UST10Y',name:'US Treasury 10Y 4.25%',cls:'Fixed Income',sector:'Sovereign',region:'North America',val:'$312M',wt:'20.52%',dpnl:'-$125K',ytdpnl:'+$1.84M',liq:1},
-  {ticker:'MSFT',name:'Microsoft Corp',cls:'Equity',sector:'Technology',region:'North America',val:'$124.8M',wt:'8.21%',dpnl:'+$3.2M',ytdpnl:'+$18.4M',liq:1},
-  {ticker:'NVDA',name:'NVIDIA Corporation',cls:'Equity',sector:'Technology',region:'North America',val:'$98.4M',wt:'6.47%',dpnl:'+$5.8M',ytdpnl:'+$42.1M',liq:1},
-  {ticker:'BUND10Y',name:'German Bund 10Y 2.5%',cls:'Fixed Income',sector:'Sovereign',region:'Europe',val:'$84.2M',wt:'5.54%',dpnl:'+$420K',ytdpnl:'+$2.8M',liq:1},
-  {ticker:'ASML',name:'ASML Holding NV',cls:'Equity',sector:'Technology',region:'Europe',val:'$68.4M',wt:'4.50%',dpnl:'+$1.8M',ytdpnl:'+$8.4M',liq:1},
-  {ticker:'GLD',name:'SPDR Gold Shares ETF',cls:'Derivative',sector:'Commodity',region:'Global',val:'$62.8M',wt:'4.13%',dpnl:'+$1.2M',ytdpnl:'+$9.2M',liq:1},
-  {ticker:'JPY/USD',name:'Japanese Yen FX Forward',cls:'Derivative',sector:'Currency',region:'Asia',val:'$48.4M',wt:'3.18%',dpnl:'-$312K',ytdpnl:'-$1.8M',liq:2},
-  {ticker:'GOOGL',name:'Alphabet Inc Class A',cls:'Equity',sector:'Technology',region:'North America',val:'$44.2M',wt:'2.91%',dpnl:'+$924K',ytdpnl:'+$6.2M',liq:1},
-  {ticker:'TLT',name:'iShares 20Y Treasury ETF',cls:'Fixed Income',sector:'Sovereign',region:'North America',val:'$38.4M',wt:'2.53%',dpnl:'-$84K',ytdpnl:'+$1.2M',liq:1},
-  {ticker:'CASH',name:'USD Cash & Equivalents',cls:'Cash',sector:'Cash',region:'Global',val:'$257.4M',wt:'16.93%',dpnl:'$0',ytdpnl:'$0',liq:1},
-];
+/* ═══ PER-PORTFOLIO RISK DATA ════════════════════════════════════════════
+   Realistic hardcoded risk metrics per mandate.
+   Derived from strategy type, AUM size and beta of holdings.
+════════════════════════════════════════════════════════════════════════ */
+const PORTFOLIO_RISK = {
+  'GMA-001': {
+    var95:'1.42%', var95amt:'$21.6M', var99:'2.18%', var99amt:'$33.1M',
+    cvar:'1.74%', vol:'9.84%', drawdown:'-7.20%', beta:'0.94',
+    credit:[
+      {rating:'AAA',cls:'badge-green',exp:'$312M',pct:'20.5%',pd:'0.01%'},
+      {rating:'AA+',cls:'badge-green',exp:'$142M',pct:'9.3%', pd:'0.03%'},
+      {rating:'A',  cls:'badge-green',exp:'$98M', pct:'6.4%', pd:'0.07%'},
+    ],
+    liq:[
+      {l:'≤ 1 day',   p:68.4, c:'var(--green)', n:'$1.04B'},
+      {l:'2–7 days',  p:14.2, c:'var(--blue)',  n:'$216M'},
+      {l:'8–30 days', p:8.8,  c:'var(--amber)', n:'$134M'},
+      {l:'31–90 days',p:5.2,  c:'var(--amber)', n:'$79M'},
+      {l:'> 90 days', p:3.4,  c:'var(--red)',   n:'$52M'},
+    ],
+  },
+  'EQL-014': {
+    var95:'2.18%', var95amt:'$24.4M', var99:'3.12%', var99amt:'$34.9M',
+    cvar:'2.64%', vol:'14.2%', drawdown:'-11.80%', beta:'1.24',
+    credit:[],  // equity only — no credit ratings
+    liq:[
+      {l:'≤ 1 day',   p:86.4, c:'var(--green)', n:'$968M'},
+      {l:'2–7 days',  p:9.8,  c:'var(--blue)',  n:'$110M'},
+      {l:'8–30 days', p:2.4,  c:'var(--amber)', n:'$27M'},
+      {l:'31–90 days',p:1.4,  c:'var(--amber)', n:'$16M'},
+    ],
+  },
+  'FIC-007': {
+    var95:'0.61%', var95amt:'$11.2M', var99:'0.92%', var99amt:'$16.9M',
+    cvar:'0.78%', vol:'4.12%', drawdown:'-3.40%', beta:'0.08',
+    credit:[
+      {rating:'AAA',cls:'badge-green',exp:'$744M',pct:'40.4%',pd:'0.01%'},
+      {rating:'AA+',cls:'badge-green',exp:'$432M',pct:'23.5%',pd:'0.03%'},
+      {rating:'AA', cls:'badge-green',exp:'$248M',pct:'13.5%',pd:'0.05%'},
+      {rating:'A',  cls:'badge-green',exp:'$142M',pct:'7.7%', pd:'0.07%'},
+      {rating:'BBB',cls:'badge-amber',exp:'$98M', pct:'5.3%', pd:'0.28%'},
+    ],
+    liq:[
+      {l:'≤ 1 day',   p:42.8, c:'var(--green)', n:'$787M'},
+      {l:'2–7 days',  p:28.4, c:'var(--blue)',  n:'$522M'},
+      {l:'8–30 days', p:18.6, c:'var(--amber)', n:'$342M'},
+      {l:'31–90 days',p:8.2,  c:'var(--amber)', n:'$151M'},
+      {l:'> 90 days', p:2.0,  c:'var(--red)',   n:'$37M'},
+    ],
+  },
+  'MAC-003': {
+    var95:'1.86%', var95amt:'$17.5M', var99:'2.74%', var99amt:'$25.8M',
+    cvar:'2.24%', vol:'11.8%', drawdown:'-9.40%', beta:'0.72',
+    credit:[
+      {rating:'AA',cls:'badge-green',exp:'$72M', pct:'7.7%', pd:'0.05%'},
+      {rating:'A', cls:'badge-green',exp:'$48M', pct:'5.1%', pd:'0.07%'},
+    ],
+    liq:[
+      {l:'≤ 1 day',   p:74.2, c:'var(--green)', n:'$697M'},
+      {l:'2–7 days',  p:16.4, c:'var(--blue)',  n:'$154M'},
+      {l:'8–30 days', p:6.8,  c:'var(--amber)', n:'$64M'},
+      {l:'31–90 days',p:2.6,  c:'var(--amber)', n:'$24M'},
+    ],
+  },
+  'EQL-021': {
+    var95:'2.42%', var95amt:'$16.5M', var99:'3.48%', var99amt:'$23.7M',
+    cvar:'2.96%', vol:'16.4%', drawdown:'-14.20%', beta:'0.96',
+    credit:[],
+    liq:[
+      {l:'≤ 1 day',   p:72.4, c:'var(--green)', n:'$492M'},
+      {l:'2–7 days',  p:16.8, c:'var(--blue)',  n:'$114M'},
+      {l:'8–30 days', p:7.2,  c:'var(--amber)', n:'$49M'},
+      {l:'31–90 days',p:3.6,  c:'var(--red)',   n:'$24M'},
+    ],
+  },
+  'ALT-009': {
+    var95:'1.24%', var95amt:'$5.9M', var99:'1.86%', var99amt:'$8.9M',
+    cvar:'1.48%', vol:'8.4%', drawdown:'-12.80%', beta:'0.84',
+    credit:[
+      {rating:'BBB',cls:'badge-amber',exp:'$62M', pct:'12.9%',pd:'0.28%'},
+      {rating:'BB', cls:'badge-amber',exp:'$34M', pct:'7.1%', pd:'1.40%'},
+    ],
+    liq:[
+      {l:'≤ 1 day',   p:48.4, c:'var(--green)', n:'$232M'},
+      {l:'2–7 days',  p:18.6, c:'var(--blue)',  n:'$89M'},
+      {l:'8–30 days', p:12.4, c:'var(--amber)', n:'$60M'},
+      {l:'31–90 days',p:8.8,  c:'var(--amber)', n:'$42M'},
+      {l:'> 90 days', p:11.8, c:'var(--red)',   n:'$57M'},
+    ],
+  },
+  'HYB-012': {
+    var95:'1.82%', var95amt:'$5.1M', var99:'2.64%', var99amt:'$7.4M',
+    cvar:'2.18%', vol:'7.8%', drawdown:'-6.40%', beta:'0.62',
+    credit:[
+      {rating:'BBB',cls:'badge-amber',exp:'$48M', pct:'17.1%',pd:'0.28%'},
+      {rating:'BB+',cls:'badge-amber',exp:'$62M', pct:'22.1%',pd:'1.10%'},
+      {rating:'BB', cls:'badge-amber',exp:'$84M', pct:'30.0%',pd:'1.80%'},
+      {rating:'B+', cls:'badge-red',  exp:'$42M', pct:'15.0%',pd:'3.40%'},
+      {rating:'B',  cls:'badge-red',  exp:'$14M', pct:'5.0%', pd:'5.20%'},
+    ],
+    liq:[
+      {l:'≤ 1 day',   p:58.4, c:'var(--green)', n:'$163M'},
+      {l:'2–7 days',  p:24.6, c:'var(--blue)',  n:'$69M'},
+      {l:'8–30 days', p:12.4, c:'var(--amber)', n:'$35M'},
+      {l:'31–90 days',p:4.6,  c:'var(--red)',   n:'$13M'},
+    ],
+  },
+};
+function toggleTheme(){dark=!dark;document.documentElement.setAttribute('data-theme',dark?'dark':'light');document.getElementById('theme-btn').textContent=dark?'🌙':'☀️';}
+setInterval(()=>{document.getElementById('nav-time').textContent='Live · '+new Date().toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'});},1000);
+document.getElementById('overview-date').textContent=new Date().toLocaleDateString('en-GB',{weekday:'short',day:'numeric',month:'short',year:'numeric'});
 
-const signals=[
-  {type:'alert',title:'Tech concentration above target',body:'Technology sector now represents 8.9% of NAV vs. 6.5% policy target. NVIDIA contributed 67% of YTD tech gains — consider partial trim to rebalance.',ctx:'Tech at 8.9% vs 6.5% target. NVIDIA drove 67% of tech gains. What should I do?'},
-  {type:'risk',title:'Liquidity bucket >90d trending up',body:'Illiquid alternatives (Private RE + PE) reached 16.1% of NAV, approaching the 18% prospectus limit. New PE capital calls due Q3 2026.',ctx:'Illiquid bucket at 16.1% approaching 18% limit. PE capital calls due Q3 2026. What is the risk?'},
-  {type:'opportunity',title:'Duration mismatch vs. benchmark',body:'Portfolio duration is 1.4y shorter than benchmark. With Fed pivoting dovish in May FOMC minutes, extending duration via UST10Y could add ~30bps of carry.',ctx:'Duration is 1.4y short of benchmark. Fed is turning dovish. Should I extend duration?'},
-  {type:'news',title:'ASML — China export controls update',body:'Reuters reports new EUV restrictions effective Q3. Modelled impact: −4 to −7% on ASML revenue. Position currently +5.8% YTD, size $68.4M.',ctx:'ASML faces new China EUV export restrictions from Q3. Our position is $68.4M, +5.8% YTD. What should I do?'},
-];
-
-// Nav
-function nav(s,data){
+/* ═══ NAV ════════════════════════════════════════════════════════════════ */
+function nav(s){
   document.querySelectorAll('.screen').forEach(x=>x.classList.remove('active'));
   document.querySelectorAll('.nav-item').forEach(x=>x.classList.remove('active'));
   document.getElementById('screen-'+s).classList.add('active');
-  document.querySelectorAll('.nav-item').forEach(x=>{if(x.getAttribute('onclick')?.includes("'"+s+"'"))x.classList.add('active');});
-  if(s==='detail'&&data)loadDetail(data);
+  const ni=document.getElementById('nav-'+s);if(ni)ni.classList.add('active');
 }
 
-// Portfolios
-function renderP(list){
-  document.getElementById('ptbody').innerHTML=list.map(p=>`
-    <tr onclick='nav("detail",${JSON.stringify(p).replace(/'/g,"&#39;")})'>
-      <td><div style="font-weight:600;color:var(--blue)">${p.id}</div><div style="font-size:11px;color:var(--text3)">${p.name}</div></td>
-      <td>${p.strat}</td><td>${p.mgr}</td>
-      <td style="font-weight:600">${p.aum}</td>
-      <td class="${p.ytdN>=0?'up':'down'}" style="font-weight:500">${p.ytd}</td>
-      <td class="${p.pnlN>=0?'up':'down'}" style="font-weight:500">${p.pnl}</td>
-      <td>${p.var}</td><td>${p.pos}</td>
-      <td><span class="badge ${p.status==='Active'?'badge-green':'badge-blue'}">${p.status}</span></td>
-    </tr>`).join('');
-}
+/* ═══ FORMAT HELPERS ═════════════════════════════════════════════════════ */
+function fmtCcy(v){if(v==null||isNaN(v))return'—';const s=v<0?'-':'',a=Math.abs(v);return s+(a>=1e9?(a/1e9).toFixed(2)+'B':a>=1e6?(a/1e6).toFixed(2)+'M':a>=1e3?(a/1e3).toFixed(1)+'K':a.toFixed(2));}
+function fmtPct(v){return v==null?'—':(v>=0?'+':'')+v.toFixed(2)+'%';}
+function fmtPrice(v,ccy=''){if(!v&&v!==0)return'—';const d=v<10?4:v<100?3:2;return v.toLocaleString(undefined,{minimumFractionDigits:d,maximumFractionDigits:d})+(ccy?' '+ccy:'');}
+function escHtml(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\n/g,'<br>');}
 
-function filterPortfolios(q){
-  renderP(portfolios.filter(p=>[p.id,p.name,p.mgr].some(v=>v.toLowerCase().includes(q.toLowerCase()))));
+/* ═══ BADGE HELPERS ══════════════════════════════════════════════════════ */
+function analystBadge(r){
+  if(!r||r==='N/A')return'<span style="color:var(--text3);font-size:11px">N/A</span>';
+  const cls={'Strong Buy':'badge-green','Buy':'badge-green','Hold':'badge-amber','Sell':'badge-red','Strong Sell':'badge-red'}[r]||'badge-blue';
+  return`<span class="badge ${cls}" style="font-size:10px">${r}</span>`;
 }
-
-function filterStrat(s,btn){
-  document.querySelectorAll('#screen-overview .filter-btn').forEach(b=>b.classList.remove('active'));
-  btn.classList.add('active');
-  renderP(s==='All'?portfolios:portfolios.filter(p=>p.strat===s));
+function helixBadge(score,rating){
+  if(score==null||rating==='N/A')return'<span style="color:var(--text3);font-size:11px">—</span>';
+  const cls={'Strong Buy':'badge-green','Buy':'badge-green','Hold':'badge-amber','Sell':'badge-red','Strong Sell':'badge-red'}[rating]||'badge-gray';
+  return`<span class="badge ${cls}" style="font-size:10px" title="Helix Quant Score: ${score}/100">${rating} (${score})</span>`;
 }
-
-// Detail
-function loadDetail(p){
-  document.getElementById('d-name').textContent=p.name;
-  document.getElementById('d-meta').textContent=`${p.id} · ${p.strat} · PM ${p.mgr}`;
-  document.getElementById('d-metrics').innerHTML=`
-    <div class="metric-card bt-blue"><div class="metric-label">AUM</div><div class="metric-value">${p.aum}</div><div class="metric-sub">Net asset value</div></div>
-    <div class="metric-card ${p.pnlN>=0?'bt-green':'bt-red'}"><div class="metric-label">Day P&L</div><div class="metric-value">${p.pnl}</div><div class="metric-sub"><span class="${p.pnlN>=0?'up':'down'}">↑ 0.08%</span> vs yesterday</div></div>
-    <div class="metric-card bt-green"><div class="metric-label">YTD Return</div><div class="metric-value">${p.ytd}</div><div class="metric-sub"><span class="up">↑ 2.16%</span> vs benchmark</div></div>
-    <div class="metric-card bt-amber"><div class="metric-label">VaR 95% · 1D</div><div class="metric-value">${p.var}</div><div class="metric-sub">${p.pos} positions</div></div>`;
-  document.getElementById('d-charts').innerHTML=
-    donut('Sector Exposure',[['Sovereign',39.9,'#3b82f6'],['Cash',16.9,'#22c55e'],['Technology',12.8,'#8b5cf6'],['Private Equity',10.9,'#f59e0b'],['Commodity',6.1,'#ef4444'],['Real Estate',5,'#06b6d4'],['Other',8.4,'#94a3b8']])+
-    donut('Region Exposure',[['North America',48.7,'#3b82f6'],['Global',31,'#22c55e'],['Europe',12.1,'#f59e0b'],['Emerging',5.5,'#8b5cf6'],['Asia',2.7,'#ef4444']])+
-    donut('Currency Exposure',[['USD',88.4,'#3b82f6'],['EUR',8.8,'#22c55e'],['GBP',1.2,'#f59e0b'],['JPY',1.0,'#8b5cf6'],['CHF',0.6,'#ef4444']]);
-  document.getElementById('d-risk').innerHTML=`
-    <div>
-      <div style="font-size:13px;font-weight:600;color:var(--text);margin-bottom:12px">Value at Risk</div>
-      <div class="risk-bar-wrap">
-        <div class="risk-bar-item"><div class="risk-bar-label"><span>VaR 95%</span><span class="neutral" style="font-weight:600">${p.var}</span></div><div class="risk-bar-track"><div class="risk-bar-fill" style="width:${p.var};background:var(--amber)"></div></div></div>
-        <div class="risk-bar-item"><div class="risk-bar-label"><span>VaR 99%</span><span class="down" style="font-weight:600">2.14%</span></div><div class="risk-bar-track"><div class="risk-bar-fill" style="width:35%;background:var(--red)"></div></div></div>
-        <div class="risk-bar-item"><div class="risk-bar-label"><span>CVaR 95%</span><span style="font-weight:500">1.82%</span></div><div class="risk-bar-track"><div class="risk-bar-fill" style="width:28%;background:var(--blue)"></div></div></div>
-        <div class="risk-bar-item"><div class="risk-bar-label"><span>Volatility (ann.)</span><span style="font-weight:500">8.94%</span></div></div>
-      </div>
-    </div>
-    <div>
-      <div style="font-size:13px;font-weight:600;color:var(--text);margin-bottom:12px">Credit Quality</div>
-      <table style="font-size:12px"><thead><tr><th>Rating</th><th>Exposure</th><th>PD 1Y</th></tr></thead><tbody>
-        <tr><td><span class="badge badge-green">AAA</span></td><td>$412.4M</td><td>0.01%</td></tr>
-        <tr><td><span class="badge badge-green">AA+</span></td><td>$68.2M</td><td>0.03%</td></tr>
-        <tr><td><span class="badge badge-amber">BB+</span></td><td>$28.4M</td><td>1.10%</td></tr>
-        <tr><td><span class="badge badge-amber">BB</span></td><td>$19.6M</td><td>1.80%</td></tr>
-      </tbody></table>
-    </div>
-    <div>
-      <div style="font-size:13px;font-weight:600;color:var(--text);margin-bottom:12px">Liquidity</div>
-      <div class="risk-bar-wrap">
-        <div class="risk-bar-item"><div class="risk-bar-label"><span>Highly Liquid</span><span class="up">71.4%</span></div><div class="risk-bar-track"><div class="risk-bar-fill" style="width:71.4%;background:var(--green)"></div></div></div>
-        <div class="risk-bar-item"><div class="risk-bar-label"><span>Mod. Liquid</span><span>12.6%</span></div><div class="risk-bar-track"><div class="risk-bar-fill" style="width:12.6%;background:var(--blue)"></div></div></div>
-        <div class="risk-bar-item"><div class="risk-bar-label"><span>Less Liquid</span><span class="neutral">8.1%</span></div><div class="risk-bar-track"><div class="risk-bar-fill" style="width:8.1%;background:var(--amber)"></div></div></div>
-        <div class="risk-bar-item"><div class="risk-bar-label"><span>Illiquid</span><span class="down">7.9%</span></div><div class="risk-bar-track"><div class="risk-bar-fill" style="width:7.9%;background:var(--red)"></div></div></div>
-      </div>
-    </div>`;
-  renderH('All');
+function esgPill(s){
+  if(s==null)return'<span style="color:var(--text3);font-size:11px">N/A</span>';
+  const col=s<15?'var(--green)':s<25?'var(--amber)':'var(--red)';
+  return`<span style="font-size:11px;font-weight:600;color:${col}" title="ESG Risk (lower=better)">${s.toFixed(1)}</span>`;
 }
-
-function renderH(cls){
-  const f=cls==='All'?holdings:holdings.filter(h=>h.cls===cls);
-  document.getElementById('d-holdings').innerHTML=f.map(h=>`
-    <tr>
-      <td style="font-weight:600">${h.ticker}</td>
-      <td style="color:var(--text3);font-size:12px">${h.name}</td>
-      <td>${h.cls}</td><td>${h.sector}</td><td>${h.region}</td>
-      <td style="font-weight:500">${h.val}</td><td>${h.wt}</td>
-      <td class="${h.dpnl.startsWith('-')?'down':'up'}">${h.dpnl}</td>
-      <td class="${h.ytdpnl.startsWith('-')?'down':'up'}">${h.ytdpnl}</td>
-      <td>${h.liq}</td>
-    </tr>`).join('');
+function targetDelta(h){
+  if(!h.target||!h.price)return'—';
+  const d=((h.target-h.price)/h.price)*100;
+  return`<span style="font-size:11px;color:var(--text2)">${fmtPrice(h.target)}</span> <span style="font-size:10px;color:${d>=0?'var(--green)':'var(--red)'}">${fmtPct(d)}</span>`;
 }
+function statusBadge(s){return s==='Active'?'<span class="badge badge-green">Active</span>':s==='Ramping'?'<span class="badge badge-blue">Ramping</span>':'<span class="badge badge-gray">'+s+'</span>';}
 
-function filterH(cls,btn){
-  document.querySelectorAll('#screen-detail .filter-btn').forEach(b=>b.classList.remove('active'));
-  btn.classList.add('active');
-  renderH(cls);
-}
-
-// Donut
+/* ═══ DONUT CHART ════════════════════════════════════════════════════════ */
 function donut(title,data){
-  const r=38,cx=45,cy=45,circ=2*Math.PI*r;
-  let off=0;
+  if(!data.length)return`<div class="chart-card"><div class="chart-title">${title}</div><div style="color:var(--text3);font-size:12px;padding:20px 0">No data</div></div>`;
+  const r=38,cx=45,cy=45,circ=2*Math.PI*r,total=data.reduce((s,[,v])=>s+v,0);
+  let offset=0;
   const slices=data.map(([lbl,pct,col])=>{
-    const dash=circ*pct/100,gap=circ-dash;
-    const s=`<circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="${col}" stroke-width="14" stroke-dasharray="${dash} ${gap}" stroke-dashoffset="${-off}"/>`;
-    off+=dash;
-    return {s,lbl,pct,col};
+    const dl=circ*(total>0?pct/total:0),gl=circ-dl,off=-offset+(circ/4);
+    const s=`<circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="${col}" stroke-width="13" stroke-dasharray="${dl.toFixed(2)} ${gl.toFixed(2)}" stroke-dashoffset="${off.toFixed(2)}" stroke-linecap="butt"/>`;
+    offset+=dl;return{s,lbl,pct,col};
   });
-  return `<div class="chart-card"><div class="chart-title">${title}</div><div class="donut-wrap">
-    <div class="donut"><svg viewBox="0 0 90 90" width="90" height="90" style="transform:rotate(-90deg)">${slices.map(s=>s.s).join('')}</svg></div>
-    <div class="legend">${slices.map(s=>`<div class="legend-item"><div class="legend-left"><div class="legend-dot" style="background:${s.col}"></div>${s.lbl}</div><span style="font-weight:500">${s.pct}%</span></div>`).join('')}</div>
+  return`<div class="chart-card"><div class="chart-title">${title}</div><div class="donut-wrap">
+    <div style="width:90px;height:90px;flex-shrink:0"><svg viewBox="0 0 90 90" width="90" height="90">${slices.map(s=>s.s).join('')}</svg></div>
+    <div class="legend">${slices.map(s=>`<div class="legend-item"><div class="legend-left"><div class="legend-dot" style="background:${s.col}"></div><span style="max-width:90px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${s.lbl}</span></div><span style="font-weight:500;margin-left:4px">${s.pct}%</span></div>`).join('')}</div>
   </div></div>`;
 }
 
-// Stress
-const stressData=[
-  {l:'2008 GFC',v:-17.8,c:'#ef4444'},{l:'COVID Mar 2020',v:-11.2,c:'#ef4444'},
-  {l:'Rates +200bps',v:-4.8,c:'#f59e0b'},{l:'EM Crisis',v:-3.9,c:'#f59e0b'},
-  {l:'Tech −30%',v:-3.2,c:'#f59e0b'},{l:'USD +10%',v:-2.8,c:'#f59e0b'},
-];
-const maxS=Math.max(...stressData.map(s=>Math.abs(s.v)));
-document.getElementById('stress-bars').innerHTML=stressData.map(s=>{
-  const h=Math.round(Math.abs(s.v)/maxS*120);
-  return `<div class="stress-col"><div class="stress-val" style="color:${s.c}">${s.v}%</div><div style="width:100%;height:${h}px;background:${s.c};border-radius:4px 4px 0 0"></div><div class="stress-label">${s.l}</div></div>`;
-}).join('');
-
-// Signals
-document.getElementById('signals-grid').innerHTML=signals.map(s=>`
-  <div class="signal-card">
-    <div style="display:flex;justify-content:space-between;align-items:flex-start">
-      <span class="signal-tag ${s.type}">${s.type.toUpperCase()}</span>
-      <span class="signal-time">2h ago</span>
-    </div>
-    <div class="signal-title">${s.title}</div>
-    <div class="signal-body">${s.body}</div>
-    <div class="signal-actions">
-      <span class="signal-investigate" onclick="investigateSignal('${s.ctx.replace(/'/g,"\\'")}')">Investigate →</span>
-      <span class="signal-dismiss" onclick="this.closest('.signal-card').style.opacity='.3'">Dismiss</span>
-    </div>
-  </div>`).join('');
-
-// Upload
-function handleUpload(input){
-  const file=input.files[0];if(!file)return;
-  document.getElementById('upload-title').textContent=file.name+' — reading...';
-  const reader=new FileReader();
-  reader.onload=e=>{
-    try{
-      const wb=XLSX.read(e.target.result,{type:'array',cellDates:true});
-      const ws=wb.Sheets[wb.SheetNames[0]];
-      const data=XLSX.utils.sheet_to_json(ws,{defval:''});
-      if(!data.length){alert('File appears empty');return;}
-      const cols=Object.keys(data[0]);
-      document.getElementById('upload-title').textContent=file.name+' · '+data.length+' rows';
-      document.getElementById('upload-metrics').innerHTML=`
-        <div class="metric-card bt-blue"><div class="metric-label">Records</div><div class="metric-value">${data.length}</div></div>
-        <div class="metric-card bt-green"><div class="metric-label">Columns</div><div class="metric-value">${cols.length}</div></div>
-        <div class="metric-card bt-blue"><div class="metric-label">File</div><div class="metric-value" style="font-size:14px">${file.name}</div></div>
-        <div class="metric-card bt-green"><div class="metric-label">Sheet</div><div class="metric-value" style="font-size:14px">${wb.SheetNames[0]}</div></div>`;
-      document.getElementById('upload-thead').innerHTML='<tr>'+cols.map(c=>`<th>${c}</th>`).join('')+'</tr>';
-      document.getElementById('upload-tbody').innerHTML=data.slice(0,50).map(r=>`<tr>${cols.map(c=>`<td>${r[c]||'—'}</td>`).join('')}</tr>`).join('');
-      document.getElementById('upload-result').style.display='block';
-    }catch(err){alert('Could not read file: '+err.message);}
-  };
-  reader.readAsArrayBuffer(file);
+/* ═══ PORTFOLIO TABLE (firm overview) ════════════════════════════════════ */
+let visiblePortfolios = PORTFOLIOS;
+function filterPortfolios(strat, btn){
+  document.querySelectorAll('#strat-filters .filter-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  visiblePortfolios = strat==='All' ? PORTFOLIOS : PORTFOLIOS.filter(p=>p.strategy===strat);
+  renderPortfolioTable();
+}
+function renderPortfolioTable(){
+  document.getElementById('portfolios-tbody').innerHTML = visiblePortfolios.map(p=>{
+    const equityHoldings = p.holdings.filter(h=>h.helix!=null);
+    const avgHelix = equityHoldings.length
+      ? Math.round(equityHoldings.reduce((s,h)=>s+h.helix,0)/equityHoldings.length)
+      : null;
+    const helixColor = avgHelix>=70?'var(--green)':avgHelix>=50?'var(--amber)':avgHelix!=null?'var(--red)':'var(--text3)';
+    return`<tr style="cursor:pointer" onclick="loadPortfolio('${p.id}')">
+      <td><span style="font-weight:600;color:var(--blue)">${p.id}</span><br/><span style="font-size:12px;color:var(--text)">${p.name}</span></td>
+      <td><span class="badge badge-blue" style="font-size:10px">${p.strategy}</span></td>
+      <td style="color:var(--text)">${p.manager}</td>
+      <td style="font-weight:600;color:var(--text)">${p.aum}</td>
+      <td class="${p.ytdN>=0?'up':'down'}" style="font-weight:600">${p.ytd}</td>
+      <td class="${p.pnlN>=0?'up':'down'}">${p.pnl}</td>
+      <td class="neutral">${p.var95}</td>
+      <td>${p.positions}</td>
+      <td><span style="font-weight:600;color:${helixColor}">${avgHelix!=null?avgHelix+'/100':'—'}</span></td>
+      <td>${statusBadge(p.status)}</td>
+    </tr>`;
+  }).join('');
 }
 
-// AI
-let aiHist=[],aiRunning=false;
-const AI_CTX=`You are Helix, an AI assistant for an institutional portfolio management and risk analytics platform called Helix.
+/* ═══ PORTFOLIO DETAIL ═══════════════════════════════════════════════════ */
+function loadPortfolio(id){
+  const p = PORTFOLIOS.find(x=>x.id===id);
+  if(!p) return;
+  activePortfolioId = id;
+
+  // Header
+  document.getElementById('d-id').textContent = p.id;
+  document.getElementById('d-name').textContent = p.name;
+  document.getElementById('d-meta').textContent = `${p.strategy} · PM ${p.manager} · ${p.positions} positions`;
+  document.getElementById('d-holdings-sub').textContent = `${p.holdings.length} positions · Total ${p.aum}`;
+
+  // Metrics
+  const totalMV = p.holdings.reduce((s,h)=>s+h.mv,0);
+  const totalDayPnl = p.holdings.reduce((s,h)=>s+(h.price*(h.dayPct/100)*h.mv/h.price),0);
+  const equityHoldings = p.holdings.filter(h=>h.helix!=null);
+  const avgHelix = equityHoldings.length ? Math.round(equityHoldings.reduce((s,h)=>s+h.helix,0)/equityHoldings.length) : null;
+  const withBeta = p.holdings.filter(h=>h.beta!=null&&h.beta!==0&&h.mv>0);
+  const wBeta = withBeta.length ? withBeta.reduce((s,h)=>s+h.beta*(h.mv/totalMV),0).toFixed(2) : 'N/A';
+
+  document.getElementById('d-metrics').innerHTML=`
+    <div class="metric-card bt-blue"><div class="metric-label">AUM</div><div class="metric-value">${p.aum}</div><div class="metric-sub">Net asset value</div></div>
+    <div class="metric-card ${p.pnlN>=0?'bt-green':'bt-red'}"><div class="metric-label">Day P&L</div><div class="metric-value ${p.pnlN>=0?'up':'down'}">${p.pnl}</div><div class="metric-sub">vs yesterday's close</div></div>
+    <div class="metric-card bt-green"><div class="metric-label">YTD Return</div><div class="metric-value up">${p.ytd}</div><div class="metric-sub">vs benchmark</div></div>
+    <div class="metric-card bt-amber"><div class="metric-label">VaR 95%</div><div class="metric-value">${p.var95}</div><div class="metric-sub">Beta ${wBeta} · ${p.positions} positions</div></div>`;
+
+  // Charts
+  const sm={};p.holdings.forEach(h=>{const s=h.sector||'Unknown';sm[s]=(sm[s]||0)+h.mv;});
+  const sd=Object.entries(sm).sort((a,b)=>b[1]-a[1]).slice(0,6).map(([k,v],i)=>[k,+((v/totalMV)*100).toFixed(1),PALETTE[i]]);
+  const ro=['Strong Buy','Buy','Hold','Sell','N/A'],rc=['#22c55e','#86efac','#f59e0b','#ef4444','#64748b'];
+  const rm=Object.fromEntries(ro.map(r=>[r,0]));
+  p.holdings.forEach(h=>{const r=h.yahoo||'N/A';if(rm[r]!==undefined)rm[r]++;});
+  const ad=ro.filter(r=>rm[r]>0).map((r,i)=>[r,+((rm[r]/p.holdings.length)*100).toFixed(1),rc[i]]);
+  const cm={};p.holdings.forEach(h=>{const c=h.country||'Unknown';cm[c]=(cm[c]||0)+h.mv;});
+  const cd=Object.entries(cm).sort((a,b)=>b[1]-a[1]).slice(0,6).map(([k,v],i)=>[k,+((v/totalMV)*100).toFixed(1),PALETTE[i]]);
+  document.getElementById('d-charts').innerHTML=donut('Sector Exposure',sd)+donut('Yahoo Analyst Consensus',ad)+donut('Country Exposure',cd);
+
+  // Holdings table
+  document.getElementById('d-holdings-tbody').innerHTML = p.holdings.map(h=>`<tr>
+    <td><span class="ticker-cell">${h.ticker}</span></td>
+    <td style="max-width:160px;overflow:hidden;text-overflow:ellipsis;color:var(--text)">${h.name}</td>
+    <td style="font-size:11px;color:var(--text3)">${h.sector}</td>
+    <td style="font-size:11px;color:var(--text3)">${h.country}</td>
+    <td style="font-family:monospace;font-size:12px">${fmtPrice(h.price)}</td>
+    <td style="font-weight:500;color:var(--text)">${fmtCcy(h.mv)}</td>
+    <td>${h.wt.toFixed(2)}%</td>
+    <td class="${h.dayPct>=0?'up':'down'}">${fmtCcy(h.mv*h.dayPct/100)}</td>
+    <td class="${h.dayPct>=0?'up':'down'}" style="font-weight:600">${fmtPct(h.dayPct)}</td>
+    <td>${targetDelta(h)}</td>
+    <td>${analystBadge(h.yahoo)}</td>
+    <td>${helixBadge(h.helix,h.helixR)}</td>
+    <td>${esgPill(h.esg)}</td>
+    <td style="font-family:monospace;font-size:12px">${h.beta!=null?h.beta.toFixed(2):'—'}</td>
+    <td style="font-family:monospace;font-size:12px">${h.pe!=null?h.pe.toFixed(1)+'x':'—'}</td>
+  </tr>`).join('');
+
+  // VaR metrics row
+  const rk = PORTFOLIO_RISK[p.id] || {};
+  document.getElementById('d-var-metrics').innerHTML=`
+    <div class="metric-card bt-amber"><div class="metric-label">VaR 95% · 1D</div><div class="metric-value" style="font-size:20px">${rk.var95||'—'}</div><div class="metric-sub">${rk.var95amt||''} at risk</div></div>
+    <div class="metric-card bt-red"><div class="metric-label">VaR 99% · 1D</div><div class="metric-value" style="font-size:20px">${rk.var99||'—'}</div><div class="metric-sub">${rk.var99amt||''} at risk</div></div>
+    <div class="metric-card bt-amber"><div class="metric-label">CVaR 95%</div><div class="metric-value" style="font-size:20px">${rk.cvar||'—'}</div><div class="metric-sub">Expected shortfall</div></div>
+    <div class="metric-card bt-blue"><div class="metric-label">Volatility (ann.)</div><div class="metric-value" style="font-size:20px">${rk.vol||'—'}</div><div class="metric-sub">30-day realised</div></div>
+    <div class="metric-card bt-red"><div class="metric-label">Max Drawdown</div><div class="metric-value" style="font-size:20px">${rk.drawdown||'—'}</div><div class="metric-sub">Beta ${rk.beta||wBeta}</div></div>`;
+  const cats=['Strong Buy','Buy','Hold','Sell','Strong Sell','N/A'],cols=['#22c55e','#86efac','#f59e0b','#ef4444','#dc2626','#64748b'];
+  const cnts=Object.fromEntries(cats.map(c=>[c,0]));
+  p.holdings.forEach(h=>{const r=h.yahoo||'N/A';if(cnts[r]!==undefined)cnts[r]++;});
+  document.getElementById('d-analyst-sub').textContent=`${p.holdings.length} positions · Yahoo sell-side`;
+  document.getElementById('d-analyst-bars').innerHTML=cats.filter(c=>cnts[c]>0).map(c=>{
+    const pct=((cnts[c]/p.holdings.length)*100).toFixed(1);
+    return`<div class="risk-bar-item"><div class="risk-bar-label"><span>${analystBadge(c)} <span style="color:var(--text3);font-size:11px">${cnts[c]}</span></span><span style="font-weight:600">${pct}%</span></div><div class="risk-bar-track"><div class="risk-bar-fill" style="width:${pct}%;background:${cols[cats.indexOf(c)]}"></div></div></div>`;
+  }).join('')||'<div style="color:var(--text3);font-size:13px;padding:20px 0;text-align:center">No analyst data</div>';
+
+  // ESG bars
+  const withESG=p.holdings.filter(h=>h.esg!=null);
+  if(!withESG.length){
+    document.getElementById('d-esg-sub').textContent='No ESG data for this portfolio';
+    document.getElementById('d-esg-bars').innerHTML='<div style="color:var(--text3);font-size:13px;padding:20px 0;text-align:center">ESG scores only available for large-cap US/EU stocks</div>';
+  }else{
+    const avg=withESG.reduce((s,h)=>s+h.esg,0)/withESG.length;
+    document.getElementById('d-esg-sub').textContent=`${withESG.length} of ${p.holdings.length} positions · avg ${avg.toFixed(1)} · lower=better`;
+    document.getElementById('d-esg-bars').innerHTML=[...withESG].sort((a,b)=>b.esg-a.esg).slice(0,8).map(h=>{
+      const pct=Math.min((h.esg/50)*100,100),col=h.esg<15?'var(--green)':h.esg<25?'var(--amber)':'var(--red)';
+      return`<div class="risk-bar-item"><div class="risk-bar-label"><span style="font-weight:500">${h.ticker}</span><span style="font-weight:600;color:${col}">${h.esg.toFixed(1)}</span></div><div class="risk-bar-track"><div class="risk-bar-fill" style="width:${pct}%;background:${col}"></div></div></div>`;
+    }).join('');
+  }
+
+  // Credit quality
+  const credit = rk.credit || [];
+  document.getElementById('d-credit-sub').textContent = credit.length
+    ? `${credit.length} rating buckets · investment grade focus`
+    : p.strategy === 'Equity' ? 'Equity-only mandate — no fixed income holdings' : 'No credit data';
+  document.getElementById('d-credit-content').innerHTML = credit.length
+    ? `<table><thead><tr><th>Rating</th><th>Exposure</th><th>% Portfolio</th><th>PD 1Y</th></tr></thead><tbody>
+        ${credit.map(c=>`<tr><td><span class="badge ${c.cls}">${c.rating}</span></td><td>${c.exp}</td><td>${c.pct}</td><td>${c.pd}</td></tr>`).join('')}
+       </tbody></table>`
+    : `<div style="padding:20px;color:var(--text3);font-size:13px;text-align:center">${p.strategy==='Equity'?'Equity-only mandate — credit ratings not applicable':'No credit holdings'}</div>`;
+
+  // Liquidity profile
+  const liq = rk.liq || [];
+  document.getElementById('d-liq-sub').textContent = `${p.aum} NAV · days to liquidate`;
+  document.getElementById('d-liq-bars').innerHTML = liq.map(l=>`
+    <div class="risk-bar-item">
+      <div class="risk-bar-label"><span>${l.l}</span><span style="color:${l.c};font-weight:600">${l.p.toFixed(1)}% · ${l.n}</span></div>
+      <div class="risk-bar-track"><div class="risk-bar-fill" style="width:${l.p}%;background:${l.c}"></div></div>
+    </div>`).join('');
+
+  // Switch AI context and navigate
+  updateAIContext(p);
+  nav('detail');
+}
+
+/* ═══ FIRM OVERVIEW CHARTS ════════════════════════════════════════════════ */
+function buildFirmCharts(){
+  // Aggregate all holdings across all portfolios
+  const all=PORTFOLIOS.flatMap(p=>p.holdings);
+  const totalMV=all.reduce((s,h)=>s+h.mv,0);
+  const sm={};all.forEach(h=>{const s=h.sector||'Unknown';sm[s]=(sm[s]||0)+h.mv;});
+  const sd=Object.entries(sm).sort((a,b)=>b[1]-a[1]).slice(0,6).map(([k,v],i)=>[k,+((v/totalMV)*100).toFixed(1),PALETTE[i]]);
+  const stratM={};PORTFOLIOS.forEach(p=>{stratM[p.strategy]=(stratM[p.strategy]||0)+p.aumN;});
+  const stratD=Object.entries(stratM).map(([k,v],i)=>[k,+((v/PORTFOLIOS.reduce((s,p)=>s+p.aumN,0))*100).toFixed(1),PALETTE[i]]);
+  const cm={};all.forEach(h=>{const c=h.country||'Unknown';cm[c]=(cm[c]||0)+h.mv;});
+  const cd=Object.entries(cm).sort((a,b)=>b[1]-a[1]).slice(0,6).map(([k,v],i)=>[k,+((v/totalMV)*100).toFixed(1),PALETTE[i]]);
+  document.getElementById('firm-charts').innerHTML=donut('Strategy Mix',stratD)+donut('Top Sector Exposure',sd)+donut('Country Exposure',cd);
+}
+
+/* ═══ AI ══════════════════════════════════════════════════════════════════ */
+let aiContext=buildFirmAIContext();
+
+function buildFirmAIContext(){
+  const all=PORTFOLIOS.flatMap(p=>p.holdings.map(h=>({...h,portfolioId:p.id,portfolioName:p.name})));
+  const totalAUM=PORTFOLIOS.reduce((s,p)=>s+p.aumN,0);
+  return`You are Helix, an expert AI portfolio analyst for an institutional asset management firm.
 
 FIRM OVERVIEW:
-- Total AUM: $6.84B across 7 mandates
-- Portfolios: FIC-007 (Investment Grade Credit, $1.84B, PM Priya Natarajan, YTD +3.12%, VaR 0.61%), GMA-001 (Global Multi-Asset, $1.52B, PM Helena Park, YTD +7.42%, VaR 1.42%), EQL-014 (Global Equity Long-Only, $1.12B, PM Marcus Chen, YTD +11.24%, VaR 2.18%), MAC-003 (Global Macro, $892.4M, PM James Whitfield, YTD +4.88%, VaR 1.95%), ALT-009 (Alternatives & PE, $812.8M, PM Sarah Okonkwo, YTD +2.31%, VaR 0.98%), EQL-022 (US Small Cap Growth, $484.2M, PM David Kim, YTD +9.14%, VaR 2.84%), EQL-021 (EM Equity Growth, $163.4M, PM Raj Patel, YTD -1.42%, VaR 3.12%)
-- Firm VaR 95%: 1.38% ($19.2M), VaR 99%: 2.14% ($29.8M), Volatility: 8.94%, Max Drawdown: -8.40%
-- Liquidity: 71.4% highly liquid, 7.9% illiquid (>90 days)
-- Open compliance exceptions: 23, Pending: 8, Breach rate: 1.8%
-- Active signals: Tech concentration 8.9% vs 6.5% target; Illiquid bucket 16.1% approaching 18% limit; Duration 1.4y short of benchmark; ASML facing China EUV export restrictions ($68.4M position)
-- Top holdings GMA-001: UST10Y $312M, MSFT $124.8M, NVDA $98.4M, BUND10Y $84.2M, ASML $68.4M, GLD $62.8M
+- Total AUM: $${totalAUM}B across 7 mandates
+- Day P&L: +$4.21M (+0.06%)
+- YTD AUM-weighted return: +7.34% vs 5.18% benchmark
+- Open compliance exceptions: 23
 
-Respond concisely and professionally like a senior risk analyst. Use specific numbers. Be direct and actionable. Maximum 4-5 sentences unless a detailed breakdown is needed.`;
+PORTFOLIOS:
+${PORTFOLIOS.map(p=>{
+  const eq=p.holdings.filter(h=>h.helix!=null);
+  const avgH=eq.length?Math.round(eq.reduce((s,h)=>s+h.helix,0)/eq.length):null;
+  return`- ${p.id} (${p.name}): ${p.aum} AUM | YTD ${p.ytd} | Day ${p.pnl} | VaR ${p.var95} | PM ${p.manager} | Avg Helix: ${avgH!=null?avgH+'/100':'N/A (fixed income)'}`;
+}).join('\n')}
 
-function aiAsk(q){document.getElementById('ai-input').value=q;aiSend();}
+TOP EQUITY HOLDINGS ACROSS ALL PORTFOLIOS (with Helix quant scores):
+${all.filter(h=>h.helix!=null).sort((a,b)=>b.mv-a.mv).slice(0,15).map(h=>`- ${h.ticker} (${h.name}) in ${h.portfolioId}: ${fmtCcy(h.mv)} | Yahoo: ${h.yahoo} | Helix: ${h.helix}/100 → ${h.helixR} | ESG: ${h.esg!=null?h.esg.toFixed(1):'N/A'} | Beta: ${h.beta.toFixed(2)} | P/E: ${h.pe!=null?h.pe.toFixed(1)+'x':'N/A'} | ${h.sector} | ${h.country}`).join('\n')}
 
-function investigateSignal(ctx){
-  nav('ai');
-  setTimeout(()=>{document.getElementById('ai-input').value=ctx;aiSend();},300);
+HELIX QUANT METHODOLOGY: Score 0-100 across Valuation 30% (P/E vs sector bands) · Growth 25% (rev growth, 52w position) · Quality 25% (ROE, gross margin, D/E) · Momentum 20% (target upside, day return). 78+=Strong Buy · 62+=Buy · 44+=Hold · 28+=Sell · <28=Strong Sell.
+
+Be a senior portfolio analyst — precise, data-driven, actionable. Reference specific tickers, portfolios and numbers. Explain Yahoo vs Helix rating divergences when relevant.`;
 }
+
+function updateAIContext(p){
+  const totalMV=p.holdings.reduce((s,h)=>s+h.mv,0);
+  const eq=p.holdings.filter(h=>h.helix!=null);
+  const avgH=eq.length?Math.round(eq.reduce((s,h)=>s+h.helix,0)/eq.length):null;
+  const withBeta=p.holdings.filter(h=>h.beta!=null&&h.beta!==0&&h.mv>0);
+  const wBeta=withBeta.length?withBeta.reduce((s,h)=>s+h.beta*(h.mv/totalMV),0).toFixed(2):'N/A';
+  aiContext=`You are Helix, an expert AI portfolio analyst.
+
+ACTIVE PORTFOLIO: ${p.id} — ${p.name}
+STRATEGY: ${p.strategy} | PM: ${p.manager}
+AUM: ${p.aum} | YTD: ${p.ytd} | Day P&L: ${p.pnl} | VaR 95%: ${p.var95}
+WEIGHTED BETA: ${wBeta} | AVG HELIX SCORE: ${avgH!=null?avgH+'/100':'N/A'}
+
+HOLDINGS (${p.holdings.length} positions):
+${p.holdings.map(h=>`- ${h.ticker} (${h.name}): ${fmtCcy(h.mv)} | ${h.wt.toFixed(1)}% wt | Day ${fmtPct(h.dayPct)} | Yahoo: ${h.yahoo} | Helix: ${h.helix!=null?h.helix+'/100 → '+h.helixR:'N/A (bond/ETF)'} | Target: ${h.target?fmtPrice(h.target):'N/A'} | ESG: ${h.esg!=null?h.esg.toFixed(1):'N/A'} | Beta: ${h.beta!=null?h.beta.toFixed(2):'N/A'} | P/E: ${h.pe!=null?h.pe.toFixed(1)+'x':'N/A'} | ${h.sector} | ${h.country}`).join('\n')}
+
+HELIX QUANT METHODOLOGY: Score 0-100 across Valuation 30% · Growth 25% · Quality 25% · Momentum 20%. 78+=Strong Buy · 62+=Buy · 44+=Hold · 28+=Sell · <28=Strong Sell.
+Be precise, data-driven, actionable. Reference tickers and numbers. Note: bonds/ETFs/cash show N/A for Helix score — not enough fundamental data.`;
+  aiHist=[];
+  document.getElementById('ai-messages').innerHTML=`<div class="ai-msg agent"><div class="ai-label">✦ Helix</div>
+    <div class="ai-bubble">Now analysing <strong>${p.id} — ${p.name}</strong>.\n\n${p.aum} AUM · YTD ${p.ytd} · Day P&L ${p.pnl}${avgH!=null?'\nAvg Helix Score: '+avgH+'/100':''} · Beta: ${wBeta}\n\nAsk me anything about this portfolio.</div>
+  </div>`;
+  document.getElementById('ai-card-sub').textContent=`Analysing ${p.id} — ${p.name} · ${p.holdings.length} positions`;
+}
+
+function aiAsk(text){document.getElementById('ai-input').value=text;aiSend();}
+function investigateSignal(ctx){nav('ai');setTimeout(()=>{document.getElementById('ai-input').value=ctx;aiSend();},300);}
 
 async function aiSend(){
   if(aiRunning)return;
-  const inp=document.getElementById('ai-input');
-  const msg=inp.value.trim();if(!msg)return;
-  inp.value='';aiRunning=true;
-  document.getElementById('ai-send-btn').disabled=true;
+  const inp=document.getElementById('ai-input'),msg=inp.value.trim();if(!msg)return;
+  inp.value='';aiRunning=true;document.getElementById('ai-send-btn').disabled=true;
   const chat=document.getElementById('ai-messages');
-  const ud=document.createElement('div');ud.className='ai-msg user';
-  ud.innerHTML=`<div class="ai-bubble">${msg}</div>`;chat.appendChild(ud);
-  const td=document.createElement('div');td.className='ai-msg agent';td.id='ai-think';
-  td.innerHTML=`<div class="ai-label">✦ Helix</div><div class="thinking"><span></span><span></span><span></span></div>`;
-  chat.appendChild(td);chat.scrollTop=chat.scrollHeight;
+  const uel=document.createElement('div');uel.className='ai-msg user';
+  uel.innerHTML=`<div class="ai-bubble">${escHtml(msg)}</div>`;chat.appendChild(uel);
+  const tel=document.createElement('div');tel.className='ai-msg agent';tel.id='ai-think';
+  tel.innerHTML=`<div class="ai-label">✦ Helix</div><div class="thinking"><span></span><span></span><span></span></div>`;
+  chat.appendChild(tel);chat.scrollTop=chat.scrollHeight;
   aiHist.push({role:'user',content:msg});
   try{
     const res=await fetch(WORKER,{method:'POST',headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({model:'claude-sonnet-4-5',max_tokens:1000,system:AI_CTX,messages:aiHist})});
+      body:JSON.stringify({model:MODEL,max_tokens:1200,system:aiContext,messages:aiHist})});
+    if(!res.ok)throw new Error('HTTP '+res.status);
     const data=await res.json();
     document.getElementById('ai-think')?.remove();
-    const text=data.content?.[0]?.text||'Sorry, no response received.';
+    const text=data.content?.[0]?.text||'No response.';
     aiHist.push({role:'assistant',content:text});
-    const ad=document.createElement('div');ad.className='ai-msg agent';
-    ad.innerHTML=`<div class="ai-label">✦ Helix</div><div class="ai-bubble">${text}</div>`;
-    chat.appendChild(ad);
+    const ael=document.createElement('div');ael.className='ai-msg agent';
+    ael.innerHTML=`<div class="ai-label">✦ Helix</div><div class="ai-bubble">${escHtml(text)}</div>`;
+    chat.appendChild(ael);
   }catch(e){
     document.getElementById('ai-think')?.remove();
-    const ad=document.createElement('div');ad.className='ai-msg agent';
-    ad.innerHTML=`<div class="ai-label">✦ Helix</div><div class="ai-bubble">Connection error. Please try again.</div>`;
-    chat.appendChild(ad);
+    const eel=document.createElement('div');eel.className='ai-msg agent';
+    eel.innerHTML=`<div class="ai-label">✦ Helix</div><div class="ai-bubble" style="color:var(--red)">Connection error: ${escHtml(e.message)}</div>`;
+    chat.appendChild(eel);
   }
-  chat.scrollTop=chat.scrollHeight;
-  aiRunning=false;document.getElementById('ai-send-btn').disabled=false;
+  chat.scrollTop=chat.scrollHeight;aiRunning=false;document.getElementById('ai-send-btn').disabled=false;inp.focus();
 }
 
-// Init
-renderP(portfolios);
+/* ═══ STRESS BARS ════════════════════════════════════════════════════════ */
+const SD=[{l:'2008 GFC',v:-17.8,c:'#ef4444'},{l:'COVID Mar 2020',v:-11.2,c:'#ef4444'},{l:'Rates +200bps',v:-4.8,c:'#f59e0b'},{l:'EM Crisis',v:-3.9,c:'#f59e0b'},{l:'Tech −30%',v:-3.2,c:'#f59e0b'},{l:'USD +10%',v:-2.8,c:'#f59e0b'}];
+const maxSD=Math.max(...SD.map(s=>Math.abs(s.v)));
+document.getElementById('stress-bars').innerHTML=SD.map(s=>{const h=Math.round(Math.abs(s.v)/maxSD*110);return`<div class="stress-col"><div class="stress-val" style="color:${s.c}">${s.v}%</div><div style="width:100%;height:${h}px;background:${s.c};border-radius:4px 4px 0 0"></div><div class="stress-label">${s.l}</div></div>`;}).join('');
+
+/* ═══ SIGNALS ════════════════════════════════════════════════════════════ */
+const SG=[
+  {type:'alert',  title:'Tech concentration above target',  body:'GMA-001 tech sector at 8.9% of NAV vs 6.5% policy target. NVIDIA contributed 67% of YTD tech gains.',ctx:'GMA-001 tech sector is 8.9% of NAV vs 6.5% target. NVIDIA drove most gains. What should I do?'},
+  {type:'risk',   title:'Illiquid bucket approaching limit', body:'ALT-009 illiquid alternatives at 16.1% of NAV, approaching 18% prospectus limit.',ctx:'ALT-009 illiquid bucket at 16.1% approaching 18% limit. What action should I take?'},
+  {type:'opportunity',title:'Duration mismatch vs benchmark',body:'FIC-007 duration 1.4y shorter than benchmark. Fed pivoting dovish — extending could add ~30bps carry.',ctx:'FIC-007 duration 1.4y short of benchmark. Fed turning dovish. Should I extend duration?'},
+  {type:'news',   title:'ASML — China export controls',     body:'New EUV restrictions effective Q3. Modelled impact −4 to −7% on ASML revenue. GMA-001 position +5.8% YTD.',ctx:'ASML faces China EUV restrictions from Q3. GMA-001 holds $78.6M +5.8% YTD. What should I do?'},
+];
+document.getElementById('signals-grid').innerHTML=SG.map(s=>`
+  <div class="signal-card">
+    <div style="display:flex;justify-content:space-between;align-items:flex-start"><span class="signal-tag ${s.type}">${s.type.toUpperCase()}</span><span style="font-size:11px;color:var(--text3)">2h ago</span></div>
+    <div class="signal-title">${s.title}</div><div class="signal-body">${s.body}</div>
+    <div class="signal-actions">
+      <span class="signal-investigate" onclick="investigateSignal('${s.ctx.replace(/'/g,"\\'")}')">Investigate →</span>
+      <span class="signal-dismiss" onclick="this.closest('.signal-card').remove()">Dismiss</span>
+    </div>
+  </div>`).join('');
+
+/* ═══ INIT ════════════════════════════════════════════════════════════════ */
+renderPortfolioTable();
+buildFirmCharts();
 </script>
 </body>
 </html>
